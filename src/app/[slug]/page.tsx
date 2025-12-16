@@ -63,7 +63,7 @@ export default async function PostPage({
             )}
             {post?.authors && post.authors.length > 0 && (
               <div className="flex gap-4 items-start border-t border-gray-200 pt-4">
-                {post.authors.map((author: Author, i) => (
+                {post.authors.map((author: Author, i: number) => (
                   <div key={i} className="flex items-center gap-3">
                     {author.image && (
                       <img
