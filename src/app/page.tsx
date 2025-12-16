@@ -14,6 +14,15 @@ const POSTS_QUERY = defineQuery(`*[
   "authors": authors[]->{"name": name, "title": title}
 }`);
 
+type Post = {
+  _id: string;
+  title: string;
+  slug: { current: string };
+  publishedAt: string;
+  body?: string;
+  authors?: { name: string; title?: string }[];
+};
+
 export default async function IndexPage() {
   const { data: posts } = await sanityFetch({ query: POSTS_QUERY });
 
@@ -36,7 +45,7 @@ export default async function IndexPage() {
           </div>
         ) : (
           <div className="space-y-8">
-            {posts.map((post) => {
+            {posts.map((post: Post) => {
               // Extract single line summary from markdown body
               const summary = typeof post.body === 'string'
                 ? post.body
