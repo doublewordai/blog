@@ -6,8 +6,6 @@ import Link from "next/link";
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 
-export const runtime = 'edge';
-
 const POST_QUERY = defineQuery(`*[_type == "post" && slug.current == $slug][0]{
   ...,
   "authors": authors[]->{"name": name, "title": title, "image": image}
