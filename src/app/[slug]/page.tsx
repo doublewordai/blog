@@ -11,6 +11,12 @@ const POST_QUERY = defineQuery(`*[_type == "post" && slug.current == $slug][0]{
   "authors": authors[]->{"name": name, "title": title, "image": image}
 }`);
 
+type Author = {
+  name: string;
+  title?: string;
+  image?: SanityImageSource;
+};
+
 const { projectId, dataset } = client.config();
 const urlFor = (source: SanityImageSource) =>
   projectId && dataset
@@ -57,7 +63,7 @@ export default async function PostPage({
             )}
             {post?.authors && post.authors.length > 0 && (
               <div className="flex gap-4 items-start border-t border-gray-200 pt-4">
-                {post.authors.map((author, i) => (
+                {post.authors.map((author: Author, i) => (
                   <div key={i} className="flex items-center gap-3">
                     {author.image && (
                       <img
