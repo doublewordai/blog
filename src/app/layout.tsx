@@ -20,9 +20,6 @@ const spaceGrotesk = Space_Grotesk({
 export const metadata: Metadata = {
   title: "Doubleword blog",
   description: "Notes on building AI systems",
-  icons: {
-    icon: "/doubleword-icon.png",
-  },
 };
 
 export default async function RootLayout({
