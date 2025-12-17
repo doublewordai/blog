@@ -118,23 +118,21 @@ export default async function IndexPage({
         {/* Pagination */}
         {totalPages > 1 && (
           <nav className="mt-12 pt-8 border-t border-gray-300">
-            <div className="flex justify-center items-center gap-2">
-              {/* Previous Button */}
+            <div className="flex justify-center items-center gap-6 text-sm">
+              {/* Previous Link */}
               {currentPage > 1 ? (
                 <Link
                   href={currentPage === 2 ? "/" : `/?page=${currentPage - 1}`}
-                  className="px-4 py-2 rounded-md border border-gray-300 hover:bg-gray-50 transition-colors"
+                  className="text-gray-600 hover:text-accent transition-colors"
                 >
-                  Previous
+                  ← Previous
                 </Link>
               ) : (
-                <span className="px-4 py-2 rounded-md border border-gray-200 text-gray-400 cursor-not-allowed">
-                  Previous
-                </span>
+                <span className="text-gray-400">← Previous</span>
               )}
 
               {/* Page Numbers */}
-              <div className="flex gap-1">
+              <div className="flex items-center gap-2">
                 {Array.from({ length: totalPages }, (_, i) => i + 1).map(
                   (page) => {
                     // Show first page, last page, current page, and pages around current
@@ -155,10 +153,7 @@ export default async function IndexPage({
 
                     if (showEllipsisBefore || showEllipsisAfter) {
                       return (
-                        <span
-                          key={`ellipsis-${page}`}
-                          className="px-3 py-2 text-gray-400"
-                        >
+                        <span key={`ellipsis-${page}`} className="text-gray-400">
                           ...
                         </span>
                       );
@@ -168,10 +163,10 @@ export default async function IndexPage({
                       <Link
                         key={page}
                         href={page === 1 ? "/" : `/?page=${page}`}
-                        className={`px-4 py-2 rounded-md transition-colors ${
+                        className={`px-2 py-1 transition-colors ${
                           currentPage === page
-                            ? "bg-accent text-white font-semibold"
-                            : "border border-gray-300 hover:bg-gray-50"
+                            ? "text-accent font-semibold underline"
+                            : "text-gray-600 hover:text-accent"
                         }`}
                       >
                         {page}
@@ -181,25 +176,23 @@ export default async function IndexPage({
                 )}
               </div>
 
-              {/* Next Button */}
+              {/* Next Link */}
               {currentPage < totalPages ? (
                 <Link
                   href={`/?page=${currentPage + 1}`}
-                  className="px-4 py-2 rounded-md border border-gray-300 hover:bg-gray-50 transition-colors"
+                  className="text-gray-600 hover:text-accent transition-colors"
                 >
-                  Next
+                  Next →
                 </Link>
               ) : (
-                <span className="px-4 py-2 rounded-md border border-gray-200 text-gray-400 cursor-not-allowed">
-                  Next
-                </span>
+                <span className="text-gray-400">Next →</span>
               )}
             </div>
 
             {/* Page Info */}
-            <p className="text-center text-sm text-gray-500 mt-4">
-              Page {currentPage} of {totalPages} ({totalPosts} post
-              {totalPosts === 1 ? "" : "s"})
+            <p className="text-center text-xs text-gray-500 mt-4">
+              Page {currentPage} of {totalPages} · {totalPosts} post
+              {totalPosts === 1 ? "" : "s"}
             </p>
           </nav>
         )}
