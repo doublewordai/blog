@@ -5,6 +5,22 @@
   --background: #ffffff;
   --foreground: #111111;
   --accent: #71717a;
+
+  /* Code and syntax highlighting colors */
+  --code-bg: #f5f5f5;
+  --code-text: #eb5757;
+  --pre-bg: #fafafa;
+  --pre-border: #e5e5e5;
+
+  /* Syntax highlighting colors */
+  --syntax-base: #24292f;
+  --syntax-keyword: #cf222e;
+  --syntax-string: #0a3069;
+  --syntax-function: #8250df;
+  --syntax-number: #0550ae;
+  --syntax-comment: #6e7781;
+  --syntax-variable: #953800;
+  --syntax-tag: #116329;
 }
 
 @theme inline {
@@ -33,4 +49,201 @@ body {
   line-height: 1.5;
   vertical-align: baseline;
   position: relative;
+}
+
+/* ============================================
+   Heading Anchors
+   ============================================ */
+
+.prose h2[id],
+.prose h3[id],
+.prose h4[id] {
+  scroll-margin-top: 2rem;
+  position: relative;
+}
+
+.prose h2[id] a.anchor,
+.prose h3[id] a.anchor,
+.prose h4[id] a.anchor {
+  text-decoration: none;
+  color: inherit;
+  position: relative;
+}
+
+.prose h2[id] a.anchor::before,
+.prose h3[id] a.anchor::before,
+.prose h4[id] a.anchor::before {
+  content: "#";
+  position: absolute;
+  left: -1.5rem;
+  color: var(--accent);
+  font-weight: normal;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.prose h2[id]:hover a.anchor::before,
+.prose h3[id]:hover a.anchor::before,
+.prose h4[id]:hover a.anchor::before {
+  opacity: 1;
+}
+
+/* ============================================
+   Code Blocks and Syntax Highlighting
+   ============================================ */
+
+/* Inline code */
+.prose :not(pre) > code {
+  background: var(--code-bg);
+  color: var(--code-text);
+  padding: 0.2em 0.4em;
+  border-radius: 6px;
+  font-size: 0.875em;
+  font-weight: 600;
+}
+
+/* Code blocks */
+.prose pre {
+  background: var(--pre-bg);
+  border: 1px solid var(--pre-border);
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.03), 0 1px 2px rgba(0, 0, 0, 0.05);
+  border-radius: 12px;
+  overflow-x: auto;
+  padding: 1.5rem;
+  margin: 1.5rem 0;
+}
+
+.prose pre code {
+  background: transparent;
+  padding: 0;
+  font-size: 0.875rem;
+  line-height: 1.7;
+  color: var(--syntax-base);
+}
+
+/* Syntax highlighting using CSS custom properties */
+.hljs {
+  background: var(--pre-bg);
+  color: var(--syntax-base);
+}
+
+/* Keywords, types, built-ins, commands */
+.hljs-keyword,
+.hljs-selector-tag,
+.hljs-type,
+.hljs-doctag,
+.hljs-template-tag,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-section,
+.hljs-meta-keyword {
+  color: var(--syntax-keyword);
+}
+
+/* Strings, template strings */
+.hljs-string,
+.hljs-regexp,
+.hljs-meta .hljs-string,
+.hljs-template-string {
+  color: var(--syntax-string);
+}
+
+/* Functions, classes, titles */
+.hljs-title,
+.hljs-title.class_,
+.hljs-title.function_,
+.hljs-title.function.invoke__,
+.hljs-name {
+  color: var(--syntax-function);
+}
+
+/* Numbers, literals, booleans, constants */
+.hljs-number,
+.hljs-literal,
+.hljs-boolean,
+.hljs-link,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-meta {
+  color: var(--syntax-number);
+}
+
+/* Comments */
+.hljs-comment,
+.hljs-code,
+.hljs-formula,
+.hljs-quote {
+  color: var(--syntax-comment);
+  font-style: italic;
+}
+
+/* Variables, parameters, attributes, properties */
+.hljs-variable,
+.hljs-attr,
+.hljs-attribute,
+.hljs-params,
+.hljs-property {
+  color: var(--syntax-variable);
+}
+
+/* Operators, punctuation - keep default color */
+.hljs-operator,
+.hljs-punctuation {
+  color: var(--syntax-base);
+}
+
+/* Tags, selectors in markup/CSS */
+.hljs-tag,
+.hljs-selector-class,
+.hljs-selector-id,
+.hljs-selector-pseudo {
+  color: var(--syntax-tag);
+}
+
+/* Additions/deletions in diffs */
+.hljs-addition {
+  color: var(--syntax-tag);
+  background-color: rgba(34, 134, 58, 0.15);
+}
+
+.hljs-deletion {
+  color: var(--syntax-keyword);
+  background-color: rgba(207, 34, 46, 0.15);
+}
+
+/* Code block wrapper with copy button */
+.code-block-wrapper {
+  position: relative;
+  margin: 1.5rem 0;
+}
+
+.code-block-wrapper pre {
+  margin: 0;
+}
+
+.copy-button {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid var(--pre-border);
+  border-radius: 6px;
+  padding: 0.5rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  opacity: 0;
+  color: var(--syntax-base);
+}
+
+.code-block-wrapper:hover .copy-button {
+  opacity: 1;
+}
+
+.copy-button:hover {
+  background: white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.copy-button:active {
+  transform: scale(0.95);
 }

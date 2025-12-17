@@ -3,12 +3,20 @@ import { createImageUrlBuilder, type SanityImageSource } from "@sanity/image-url
 import { client } from "@/sanity/client";
 import { sanityFetch } from "@/sanity/live";
 import Link from "next/link";
-import ReactMarkdown from 'react-markdown';
-import remarkGfm from 'remark-gfm';
+import MarkdownRenderer from "@/components/MarkdownRenderer";
 
 const POST_QUERY = defineQuery(`*[_type == "post" && slug.current == $slug][0]{
   ...,
-  "authors": authors[]->{"name": name, "title": title, "image": image}
+  "authors": authors[]->{"name": name, "title": title, "image": image},
+  images[]{
+    filename,
+    asset->{
+      _id,
+      url
+    },
+    alt,
+    caption
+  }
 }`);
 
 type Author = {
@@ -122,19 +130,6 @@ export default async function PostPage({
             prose-a:text-accent
             prose-a:no-underline
             hover:prose-a:underline
-            prose-code:text-black
-            prose-code:bg-gray-100
-            prose-code:px-1.5
-            prose-code:py-0.5
-            prose-code:rounded
-            prose-code:font-mono
-            prose-code:text-sm
-            prose-code:before:content-['']
-            prose-code:after:content-['']
-            prose-pre:bg-black
-            prose-pre:text-white
-            prose-pre:p-4
-            prose-pre:overflow-x-auto
             prose-ul:my-4
             prose-ol:my-4
             prose-li:my-1
@@ -145,9 +140,7 @@ export default async function PostPage({
             prose-img:rounded-lg
             prose-img:shadow-md">
             {typeof post?.body === 'string' && (
-              <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                {post.body}
-              </ReactMarkdown>
+              <MarkdownRenderer content={post.body} images={post.images} />
             )}
           </div>
 
