@@ -129,7 +129,7 @@ export default async function PostPage({
             prose-p:leading-relaxed
             prose-a:text-accent
             prose-a:no-underline
-            hover:prose-a:underline
+            prose-a:hover:underline
             prose-ul:my-4
             prose-ol:my-4
             prose-li:my-1
