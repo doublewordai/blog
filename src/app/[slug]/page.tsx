@@ -1,49 +1,102 @@
-import { defineQuery } from "next-sanity";
-import { createImageUrlBuilder, type SanityImageSource } from "@sanity/image-url";
-import { client } from "@/sanity/client";
-import { sanityFetch } from "@/sanity/live";
-import Link from "next/link";
-import MarkdownRenderer from "@/components/MarkdownRenderer";
+import type {Metadata} from 'next'
+import {notFound} from 'next/navigation'
+import Link from 'next/link'
+import {sanityFetch} from '@/sanity/lib/client'
+import {POST_QUERY, POST_SLUGS_QUERY} from '@/sanity/lib/queries'
+import type {Post} from '@/sanity/types'
+import {MarkdownRenderer} from '@/components/MarkdownRenderer'
+import {createImageUrlBuilder, type SanityImageSource} from '@sanity/image-url'
+import {projectId, dataset} from '@/sanity/env'
 
-const POST_QUERY = defineQuery(`*[_type == "post" && slug.current == $slug][0]{
-  ...,
-  "authors": authors[]->{"name": name, "title": title, "image": image},
-  images[]{
-    filename,
-    asset->{
-      _id,
-      url
-    },
-    alt,
-    caption
-  }
-}`);
+const SITE_URL = 'https://blog.doubleword.ai'
 
-type Author = {
-  name: string;
-  title?: string;
-  image?: SanityImageSource;
-};
-
-const { projectId, dataset } = client.config();
 const urlFor = (source: SanityImageSource) =>
-  projectId && dataset
-    ? createImageUrlBuilder({ projectId, dataset }).image(source)
-    : null;
+  projectId && dataset ? createImageUrlBuilder({projectId, dataset}).image(source) : null
 
-export default async function PostPage({
-  params,
-}: {
-  params: Promise<{ slug: string }>;
-}) {
-  const { data: post } = await sanityFetch({
+/**
+ * Generate static params for all posts
+ * This enables full static site generation (SSG)
+ */
+export async function generateStaticParams() {
+  const posts = (await sanityFetch({
+    query: POST_SLUGS_QUERY,
+    tags: [],
+  })) as Array<{slug: string}>
+
+  return posts.map((post) => ({
+    slug: post.slug,
+  }))
+}
+
+interface Props {
+  params: Promise<{slug: string}>
+}
+
+/**
+ * Generate metadata for SEO
+ */
+export async function generateMetadata({params}: Props): Promise<Metadata> {
+  const {slug} = await params
+
+  const post = (await sanityFetch({
     query: POST_QUERY,
-    params: await params
-  });
+    params: {slug},
+    tags: ['post'],
+  })) as Post
 
-  const postImageUrl = post?.image
-    ? urlFor(post.image)?.width(1200).height(630).url()
-    : null;
+  if (!post) {
+    return {
+      title: 'Not Found',
+    }
+  }
+
+  const canonicalUrl = `${SITE_URL}/${slug}`
+  const title = `${post.title} | Doubleword Blog`
+  const description = post.body
+    ? post.body
+        .replace(/^#.*$/gm, '')
+        .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
+        .replace(/[*_`]/g, '')
+        .trim()
+        .split('\n')[0]
+        .substring(0, 160)
+    : 'Notes on building AI systems'
+
+  return {
+    title,
+    description,
+    alternates: {
+      canonical: canonicalUrl,
+    },
+    openGraph: {
+      title,
+      description,
+      url: canonicalUrl,
+      siteName: 'Doubleword Blog',
+      type: 'article',
+    },
+    twitter: {
+      card: 'summary',
+      title,
+      description,
+    },
+  }
+}
+
+export default async function PostPage({params}: Props) {
+  const {slug} = await params
+
+  const post = (await sanityFetch({
+    query: POST_QUERY,
+    params: {slug},
+    tags: ['post'],
+  })) as Post
+
+  if (!post) {
+    notFound()
+  }
+
+  const postImageUrl = post.image ? urlFor(post.image)?.width(1200).height(630).url() : null
 
   return (
     <div className="min-h-screen">
@@ -57,21 +110,19 @@ export default async function PostPage({
 
           {/* Article Header - tight spacing */}
           <header className="mb-8">
-            <h1 className="text-4xl font-bold mb-2 leading-tight">
-              {post?.title}
-            </h1>
-            {post?.publishedAt && (
+            <h1 className="text-4xl font-bold mb-2 leading-tight">{post.title}</h1>
+            {post.publishedAt && (
               <time className="text-sm text-gray-500 block mb-4">
                 {new Date(post.publishedAt).toLocaleDateString('en-US', {
                   year: 'numeric',
                   month: 'long',
-                  day: 'numeric'
+                  day: 'numeric',
                 })}
               </time>
             )}
-            {post?.authors && post.authors.length > 0 && (
+            {post.authors && post.authors.length > 0 && (
               <div className="flex gap-4 items-start border-t border-gray-200 pt-4">
-                {post.authors.map((author: Author, i: number) => (
+                {post.authors.map((author, i) => (
                   <div key={i} className="flex items-center gap-3">
                     {author.image && (
                       <img
@@ -82,9 +133,7 @@ export default async function PostPage({
                     )}
                     <div>
                       <div className="font-medium text-black">{author.name}</div>
-                      {author.title && (
-                        <div className="text-sm text-gray-600">{author.title}</div>
-                      )}
+                      {author.title && <div className="text-sm text-gray-600">{author.title}</div>}
                     </div>
                   </div>
                 ))}
@@ -93,7 +142,7 @@ export default async function PostPage({
           </header>
 
           {/* Video Embed */}
-          {post?.videoUrl && (
+          {post.videoUrl && (
             <div className="mb-8 aspect-video">
               <iframe
                 src={post.videoUrl}
@@ -107,18 +156,13 @@ export default async function PostPage({
           {/* Featured Image */}
           {postImageUrl && (
             <figure className="mb-8">
-              <img
-                src={postImageUrl}
-                alt={post?.title}
-                className="w-full"
-                width="1200"
-                height="630"
-              />
+              <img src={postImageUrl} alt={post.title} className="w-full" width="1200" height="630" />
             </figure>
           )}
 
           {/* Article Content - Tufte typography */}
-          <div className="prose prose-lg max-w-none
+          <div
+            className="prose prose-lg max-w-none
             prose-headings:font-semibold
             prose-headings:mt-8
             prose-headings:mb-3
@@ -138,8 +182,9 @@ export default async function PostPage({
             prose-blockquote:pl-4
             prose-blockquote:italic
             prose-img:rounded-lg
-            prose-img:shadow-md">
-            {typeof post?.body === 'string' && (
+            prose-img:shadow-md"
+          >
+            {typeof post.body === 'string' && (
               <MarkdownRenderer content={post.body} images={post.images} />
             )}
           </div>
@@ -153,5 +198,5 @@ export default async function PostPage({
         </article>
       </div>
     </div>
-  );
+  )
 }

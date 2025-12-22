@@ -1,0 +1,38 @@
+import {createClient, type QueryParams} from 'next-sanity'
+import {apiVersion, dataset, projectId} from '../env'
+
+export const client = createClient({
+  projectId,
+  dataset,
+  apiVersion,
+  // Set to false for static site generation (SSG) and ISR
+  useCdn: false,
+})
+
+/**
+ * Fetch data from Sanity with Next.js caching and revalidation support.
+ *
+ * For webhook-based revalidation:
+ * - Pass tags array to enable tag-based cache invalidation
+ * - revalidate will be set to false when tags are provided
+ * - Use revalidateTag() in webhook API route to bust cache on-demand
+ */
+export async function sanityFetch<const QueryString extends string>({
+  query,
+  params = {},
+  revalidate = 60,
+  tags = [],
+}: {
+  query: QueryString
+  params?: QueryParams
+  revalidate?: number | false
+  tags?: string[]
+}) {
+  return client.fetch(query, params, {
+    cache: 'force-cache',
+    next: {
+      revalidate: tags.length ? false : revalidate,
+      tags,
+    },
+  })
+}

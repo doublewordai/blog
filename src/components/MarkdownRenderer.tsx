@@ -1,126 +1,134 @@
-"use client";
-
-import ReactMarkdown from "react-markdown";
-import remarkGfm from "remark-gfm";
-import rehypeHighlight from "rehype-highlight";
-import rehypeRaw from "rehype-raw";
-import rehypeSlug from "rehype-slug";
-import rehypeAutolinkHeadings from "rehype-autolink-headings";
-import { useMemo } from "react";
-import CopyButton from "./CopyButton";
+import {MarkdownAsync} from 'react-markdown'
+import remarkGfm from 'remark-gfm'
+import remarkUnwrapImages from 'remark-unwrap-images'
+import rehypeShiki from '@shikijs/rehype'
+import rehypeRaw from 'rehype-raw'
+import rehypeSlug from 'rehype-slug'
+import rehypeAutolinkHeadings from 'rehype-autolink-headings'
+import CopyButton from './CopyButton'
 
 type ImageData = {
-  filename: string;
+  filename: string
   asset: {
-    _id: string;
-    url: string;
-  };
-  alt?: string;
-  caption?: string;
-};
+    _id: string
+    url: string
+  }
+  alt?: string
+  caption?: string
+}
 
-export default function MarkdownRenderer({
+export async function MarkdownRenderer({
   content,
-  images
+  images,
 }: {
-  content: string;
-  images?: ImageData[];
+  content: string
+  images?: ImageData[]
 }) {
-  // Create a map of filename -> image data (URL, alt, caption)
-  const imageMap = useMemo(() => {
-    if (!images) return new Map();
-    return new Map(images.filter(img => img.filename).map(img => [img.filename, img]));
-  }, [images]);
-
   // Replace image filenames with Sanity CDN URLs
-  const processedContent = useMemo(() => {
-    if (!images || images.length === 0) return content;
+  let processedContent = content
+  if (images && images.length > 0) {
+    const imageMap = new Map(images.filter((img) => img.filename).map((img) => [img.filename, img]))
 
-    let processed = content;
     imageMap.forEach((imageData, filename) => {
-      // Match markdown image syntax: ![alt](filename)
-      const regex = new RegExp(`!\\[([^\\]]*)\\]\\(${filename}\\)`, 'g');
-      processed = processed.replace(regex, `![$1](${imageData.asset.url})`);
-    });
-
-    return processed;
-  }, [content, images, imageMap]);
+      const regex = new RegExp(`!\\[([^\\]]*)\\]\\(${filename}\\)`, 'g')
+      processedContent = processedContent.replace(regex, `![$1](${imageData.asset.url})`)
+    })
+  }
 
   // Custom image component that uses Sanity metadata
-  const ImageComponent = ({ src, alt, ...props }: React.ImgHTMLAttributes<HTMLImageElement>) => {
-    // Find the matching image data from Sanity
-    const srcString = typeof src === 'string' ? src : undefined;
-    const imageData = images?.find(img => srcString?.includes(img.asset._id) || srcString === img.asset.url);
+  const ImageComponent = ({src, alt, ...props}: React.ImgHTMLAttributes<HTMLImageElement>) => {
+    const srcString = typeof src === 'string' ? src : undefined
+    const imageData = images?.find(
+      (img) => srcString?.includes(img.asset._id) || srcString === img.asset.url
+    )
 
-    // Use Sanity's alt text if available, otherwise fall back to markdown alt
-    const altText = imageData?.alt || alt || '';
-    const caption = imageData?.caption;
+    const altText = imageData?.alt || alt || ''
+    const caption = imageData?.caption
 
     if (caption) {
       return (
         <figure className="my-6">
-          <img src={srcString} alt={altText} className="rounded-lg w-full" {...props} />
-          <figcaption className="mt-2 text-sm text-gray-600 text-center italic">
-            {caption}
-          </figcaption>
+          <img src={srcString} alt={altText} className="rounded-lg w-full shadow-md" {...props} />
+          <figcaption className="mt-2 text-sm text-gray-600 text-center italic">{caption}</figcaption>
         </figure>
-      );
+      )
     }
 
-    return <img src={srcString} alt={altText} className="rounded-lg w-full my-6" {...props} />;
-  };
+    return <img src={srcString} alt={altText} className="rounded-lg w-full my-6 shadow-md" {...props} />
+  }
 
   // Helper function to extract text from React children recursively
-  const extractText = (node: any): string => {
+  const extractText = (node: unknown): string => {
     if (typeof node === 'string') {
-      return node;
+      return node
     }
     if (Array.isArray(node)) {
-      return node.map(extractText).join('');
+      return node.map(extractText).join('')
     }
-    if (node && typeof node === 'object') {
-      if (node.props && node.props.children) {
-        return extractText(node.props.children);
+    if (node && typeof node === 'object' && 'props' in node) {
+      const props = (node as {props?: {children?: unknown}}).props
+      if (props && props.children) {
+        return extractText(props.children)
       }
     }
-    return '';
-  };
+    return ''
+  }
 
   // Custom pre component that adds a copy button
-  const PreComponent = ({ children, ...props }: React.HTMLAttributes<HTMLPreElement>) => {
-    const codeString = extractText(children);
+  const PreComponent = ({children, ...props}: React.HTMLAttributes<HTMLPreElement>) => {
+    const codeString = extractText(children)
 
     return (
       <div className="code-block-wrapper">
         <pre {...props}>{children}</pre>
-        {codeString && <CopyButton code={codeString} />}
+        {codeString && <CopyButton />}
       </div>
-    );
-  };
+    )
+  }
 
   return (
-    <div suppressHydrationWarning>
-      <ReactMarkdown
-        remarkPlugins={[remarkGfm]}
-        rehypePlugins={[
-          rehypeSlug,
-          [
-            rehypeAutolinkHeadings,
-            {
-              behavior: "wrap",
-              properties: { className: ["anchor"] },
-            },
-          ],
-          rehypeHighlight,
-          rehypeRaw,
-        ]}
-        components={{
-          img: ImageComponent,
-          pre: PreComponent,
-        }}
-      >
-        {processedContent}
-      </ReactMarkdown>
-    </div>
-  );
+    <MarkdownAsync
+      remarkPlugins={[remarkGfm, remarkUnwrapImages]}
+      rehypePlugins={[
+        rehypeSlug,
+        [
+          rehypeAutolinkHeadings,
+          {
+            behavior: 'wrap',
+            properties: {className: ['anchor']},
+          },
+        ],
+        [
+          rehypeShiki,
+          {
+            theme: 'github-light',
+            langs: [
+              'javascript',
+              'typescript',
+              'python',
+              'bash',
+              'json',
+              'jsx',
+              'tsx',
+              'yaml',
+              'shell',
+              'go',
+              'rust',
+              'sql',
+              'html',
+              'css',
+              'markdown',
+            ],
+          },
+        ],
+        rehypeRaw,
+      ]}
+      components={{
+        img: ImageComponent,
+        pre: PreComponent,
+      }}
+    >
+      {processedContent}
+    </MarkdownAsync>
+  )
 }

@@ -1,22 +1,24 @@
-'use client';
+'use client'
 
-import { useState } from 'react';
+import {useState, useRef} from 'react'
 
-interface CopyButtonProps {
-  code: string;
-}
-
-export default function CopyButton({ code }: CopyButtonProps) {
-  const [copied, setCopied] = useState(false);
+export default function CopyButton() {
+  const [copied, setCopied] = useState(false)
+  const buttonRef = useRef<HTMLButtonElement>(null)
 
   const handleCopy = async () => {
-    await navigator.clipboard.writeText(code);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
-  };
+    const wrapper = buttonRef.current?.closest('.code-block-wrapper')
+    const codeElement = wrapper?.querySelector('pre code') || wrapper?.querySelector('pre')
+    const code = codeElement?.textContent || ''
+
+    await navigator.clipboard.writeText(code)
+    setCopied(true)
+    setTimeout(() => setCopied(false), 2000)
+  }
 
   return (
     <button
+      ref={buttonRef}
       onClick={handleCopy}
       className="copy-button"
       aria-label="Copy code to clipboard"
@@ -52,5 +54,5 @@ export default function CopyButton({ code }: CopyButtonProps) {
         </svg>
       )}
     </button>
-  );
+  )
 }
