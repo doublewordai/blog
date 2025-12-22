@@ -1,19 +1,26 @@
 import type {Metadata} from 'next'
-import {Lora, Space_Grotesk} from 'next/font/google'
+import {Crimson_Pro, JetBrains_Mono, Source_Sans_3} from 'next/font/google'
 import {Analytics} from '@vercel/analytics/react'
 import {SpeedInsights} from '@vercel/speed-insights/next'
 import './globals.css'
 
-const lora = Lora({
-  variable: '--font-lora',
+const crimsonPro = Crimson_Pro({
+  variable: '--font-serif',
   subsets: ['latin'],
   weight: ['400', '500', '600', '700'],
+  style: ['normal', 'italic'],
 })
 
-const spaceGrotesk = Space_Grotesk({
-  variable: '--font-space-grotesk',
+const sourceSans = Source_Sans_3({
+  variable: '--font-sans',
   subsets: ['latin'],
-  weight: ['400', '500', '600', '700'],
+  weight: ['400', '500', '600'],
+})
+
+const jetbrainsMono = JetBrains_Mono({
+  variable: '--font-mono',
+  subsets: ['latin'],
+  weight: ['400', '500'],
 })
 
 export const metadata: Metadata = {
@@ -28,9 +35,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${lora.variable} ${spaceGrotesk.variable} font-serif antialiased bg-white text-black`}
-      >
+      <body className={`${crimsonPro.variable} ${sourceSans.variable} ${jetbrainsMono.variable} antialiased`}>
         {children}
         <Analytics />
         <SpeedInsights />

@@ -1,30 +1,70 @@
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
 
-:root {
-  --background: #ffffff;
-  --foreground: #111111;
-  --accent: #71717a;
+/* ============================================
+   Tufte-Inspired Design System — Refined
+   ============================================ */
 
-  /* Code block colors */
-  --code-bg: #f5f5f5;
-  --code-text: #eb5757;
-  --pre-bg: #fafafa;
-  --pre-border: #e5e5e5;
+:root {
+  /* Tufte's signature warm white */
+  --background: #fffff8;
+  --foreground: #111111;
+
+  /* Deep, warm red - classic Tufte accent */
+  --accent: #a00000;
+  --accent-muted: rgba(160, 0, 0, 0.15);
+  --accent-subtle: rgba(160, 0, 0, 0.08);
+
+  /* Muted tones */
+  --muted: #555555;
+  --muted-light: #888888;
+  --rule: #c8c8c8;
+  --rule-light: #e8e8e8;
+
+  /* Code colors - warm tones */
+  --code-bg: #f7f6f0;
+  --code-text: #a00000;
+  --pre-bg: #faf9f4;
+  --pre-border: #e8e6dd;
+
+  /* Vertical rhythm base */
+  --baseline: 1.75rem;
+
+  /* Layout widths */
+  --content-width: 55%;
+  --margin-width: 35%;
+
+  /* Animation curves */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-accent: var(--accent);
-  --font-serif: var(--font-lora);
-  --font-sans: var(--font-space-grotesk);
+  --color-muted: var(--muted);
+  --color-rule: var(--rule);
+  --font-serif: var(--font-serif);
+  --font-sans: var(--font-sans);
+  --font-mono: var(--font-mono);
+}
+
+/* ============================================
+   Base Styles
+   ============================================ */
+
+html {
+  font-size: 19px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 html, body {
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-lora), Georgia, serif;
+  font-family: var(--font-serif), 'Crimson Pro', Georgia, serif;
   overflow-x: hidden;
   width: 100%;
   max-width: 100vw;
@@ -32,6 +72,145 @@ html, body {
 
 body {
   position: relative;
+  line-height: 1.75;
+}
+
+/* Noise texture overlay for warmth */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  opacity: 0.025;
+  pointer-events: none;
+  z-index: 9999;
+}
+
+/* ============================================
+   Typography - Refined Tufte Style
+   ============================================ */
+
+/* Base links - no underline by default */
+a {
+  color: inherit;
+  text-decoration: none;
+  transition: color 0.25s var(--ease-out-quart);
+}
+
+/* Prose links - subtle underlines only in article content */
+.prose a {
+  color: var(--accent);
+  text-decoration: underline;
+  text-decoration-color: var(--accent-muted);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+  transition: text-decoration-color 0.25s var(--ease-out-quart);
+}
+
+.prose a:hover {
+  text-decoration-color: var(--accent);
+}
+
+/* Small caps utility */
+.small-caps {
+  font-family: var(--font-sans), 'Source Sans 3', system-ui, sans-serif;
+  font-variant: small-caps;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: lowercase;
+}
+
+/* Sans utility for UI elements */
+.font-ui {
+  font-family: var(--font-sans), 'Source Sans 3', system-ui, sans-serif;
+}
+
+/* Newthought - Tufte's section opener */
+.newthought {
+  font-variant: small-caps;
+  font-size: 1.1em;
+  letter-spacing: 0.05em;
+}
+
+/* Drop cap for article openings */
+.prose > p:first-of-type::first-letter {
+  float: left;
+  font-size: 3.5em;
+  line-height: 0.8;
+  padding-right: 0.12em;
+  margin-top: 0.05em;
+  font-weight: 600;
+  color: var(--accent);
+}
+
+/* Epigraph styling */
+.epigraph {
+  margin: 3rem 0 3rem 0;
+  padding-left: 1.5rem;
+  font-style: italic;
+}
+
+.epigraph footer {
+  font-style: normal;
+  font-size: 0.875rem;
+  color: var(--muted);
+  margin-top: 0.75rem;
+}
+
+.epigraph footer::before {
+  content: "\2014\00a0";
+}
+
+/* ============================================
+   Sidenotes & Margin Notes
+   ============================================ */
+
+.sidenote,
+.marginnote {
+  float: right;
+  clear: right;
+  margin-right: -45%;
+  width: 40%;
+  margin-top: 0.25rem;
+  margin-bottom: 1rem;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: var(--muted);
+  position: relative;
+}
+
+.sidenote-number {
+  font-size: 0.75rem;
+  position: relative;
+  top: -0.4rem;
+  color: var(--accent);
+  font-weight: 500;
+}
+
+.sidenote::before {
+  content: counter(sidenote-counter) " ";
+  font-size: 0.75rem;
+  position: relative;
+  top: -0.4rem;
+  color: var(--accent);
+  font-weight: 500;
+}
+
+.sidenote { counter-increment: sidenote-counter; }
+
+/* Sidenote responsive collapse */
+@media (max-width: 1200px) {
+  .sidenote,
+  .marginnote {
+    float: none;
+    clear: both;
+    margin: 1.5rem 0;
+    width: 100%;
+    padding: 1rem 1.25rem;
+    background: var(--pre-bg);
+    border-left: 2px solid var(--accent);
+    font-size: 0.9rem;
+  }
 }
 
 /* ============================================
@@ -41,7 +220,7 @@ body {
 .prose h2[id],
 .prose h3[id],
 .prose h4[id] {
-  scroll-margin-top: 2rem;
+  scroll-margin-top: 2.5rem;
   position: relative;
 }
 
@@ -56,62 +235,105 @@ body {
 .prose h2[id] a.anchor::before,
 .prose h3[id] a.anchor::before,
 .prose h4[id] a.anchor::before {
-  content: "#";
+  content: "\00A7";
   position: absolute;
-  left: -1.5rem;
-  color: var(--accent);
+  left: -1.75rem;
+  color: var(--rule);
   font-weight: normal;
   opacity: 0;
-  transition: opacity 0.2s;
+  transition: opacity 0.25s var(--ease-out-quart), color 0.25s var(--ease-out-quart);
 }
 
 .prose h2[id]:hover a.anchor::before,
 .prose h3[id]:hover a.anchor::before,
 .prose h4[id]:hover a.anchor::before {
   opacity: 1;
+  color: var(--accent);
 }
 
 /* ============================================
-   Code Blocks (Shiki uses inline styles)
+   Code Blocks - Warm Theme
    ============================================ */
 
 /* Inline code */
 .prose :not(pre) > code {
   background: var(--code-bg);
   color: var(--code-text);
-  padding: 0.2em 0.4em;
-  border-radius: 6px;
-  font-size: 0.875em;
-  font-weight: 600;
+  padding: 0.15em 0.4em;
+  border-radius: 4px;
+  font-size: 0.85em;
+  font-weight: 500;
+  font-family: var(--font-mono), 'JetBrains Mono', 'Fira Code', monospace;
 }
 
 /* Code blocks */
 .prose pre {
   background: var(--pre-bg);
   border: 1px solid var(--pre-border);
-  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.03), 0 1px 2px rgba(0, 0, 0, 0.05);
-  border-radius: 12px;
+  border-radius: 8px;
   overflow-x: auto;
-  padding: 1.5rem;
-  margin: 1.5rem 0;
+  padding: 1.25rem 1.5rem;
+  margin: var(--baseline) 0;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.02);
 }
 
 .prose pre code {
   background: transparent;
   padding: 0;
-  font-size: 0.875rem;
-  line-height: 1.7;
+  font-size: 0.825rem;
+  line-height: 1.65;
+  font-family: var(--font-mono), 'JetBrains Mono', 'Fira Code', monospace;
 }
 
-/* Shiki code blocks - override background */
+/* Shiki code blocks - warm overrides */
 .prose pre.shiki {
   background: var(--pre-bg) !important;
+}
+
+/* Override Shiki token colors for warmer feel */
+.prose pre.shiki .line {
+  color: #403a32;
+}
+
+.prose pre.shiki [style*="color:#24292e"],
+.prose pre.shiki [style*="color: #24292e"] {
+  color: #403a32 !important;
+}
+
+.prose pre.shiki [style*="color:#6f42c1"],
+.prose pre.shiki [style*="color: #6f42c1"] {
+  color: #8b5a2b !important;
+}
+
+.prose pre.shiki [style*="color:#005cc5"],
+.prose pre.shiki [style*="color: #005cc5"] {
+  color: #7c5e3c !important;
+}
+
+.prose pre.shiki [style*="color:#d73a49"],
+.prose pre.shiki [style*="color: #d73a49"] {
+  color: #a00000 !important;
+}
+
+.prose pre.shiki [style*="color:#22863a"],
+.prose pre.shiki [style*="color: #22863a"] {
+  color: #5a7356 !important;
+}
+
+.prose pre.shiki [style*="color:#032f62"],
+.prose pre.shiki [style*="color: #032f62"] {
+  color: #6b5839 !important;
+}
+
+.prose pre.shiki [style*="color:#6a737d"],
+.prose pre.shiki [style*="color: #6a737d"] {
+  color: #8a8578 !important;
 }
 
 /* Code block wrapper with copy button */
 .code-block-wrapper {
   position: relative;
-  margin: 1.5rem 0;
+  margin: var(--baseline) 0;
 }
 
 .code-block-wrapper pre {
@@ -120,16 +342,18 @@ body {
 
 .copy-button {
   position: absolute;
-  top: 0.75rem;
-  right: 0.75rem;
-  background: rgba(255, 255, 255, 0.9);
+  top: 0.625rem;
+  right: 0.625rem;
+  background: var(--background);
   border: 1px solid var(--pre-border);
-  border-radius: 6px;
-  padding: 0.5rem;
+  border-radius: 5px;
+  padding: 0.4rem 0.5rem;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all 0.2s var(--ease-out-quart);
   opacity: 0;
-  color: var(--foreground);
+  color: var(--muted);
+  font-size: 0.75rem;
+  font-family: var(--font-sans), system-ui, sans-serif;
 }
 
 .code-block-wrapper:hover .copy-button {
@@ -138,9 +362,344 @@ body {
 
 .copy-button:hover {
   background: white;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border-color: var(--rule);
+  color: var(--foreground);
 }
 
 .copy-button:active {
   transform: scale(0.95);
+}
+
+/* ============================================
+   Blockquotes - Refined
+   ============================================ */
+
+.prose blockquote {
+  border-left: 3px solid var(--rule);
+  margin: var(--baseline) 0;
+  padding: 0.25rem 0 0.25rem 1.5rem;
+  font-style: italic;
+  color: var(--muted);
+}
+
+.prose blockquote p:first-child {
+  margin-top: 0;
+}
+
+.prose blockquote p:last-child {
+  margin-bottom: 0;
+}
+
+/* ============================================
+   Figures & Images
+   ============================================ */
+
+.prose figure {
+  margin: calc(var(--baseline) * 1.5) 0;
+}
+
+.prose figcaption {
+  font-size: 0.875rem;
+  color: var(--muted);
+  margin-top: 0.75rem;
+  line-height: 1.5;
+}
+
+/* Full-width figures */
+.prose figure.fullwidth {
+  max-width: 100vw;
+  margin-left: calc(-50vw + 50%);
+  margin-right: calc(-50vw + 50%);
+}
+
+.prose figure.fullwidth img {
+  width: 100%;
+}
+
+/* Margin figures */
+.prose figure.margin {
+  float: right;
+  clear: right;
+  margin-right: -45%;
+  width: 40%;
+  margin-top: 0;
+  margin-bottom: 1rem;
+}
+
+@media (max-width: 1200px) {
+  .prose figure.margin {
+    float: none;
+    clear: both;
+    margin: var(--baseline) 0;
+    width: 100%;
+  }
+}
+
+/* ============================================
+   Horizontal Rules - Ornamental
+   ============================================ */
+
+.prose hr {
+  border: none;
+  height: auto;
+  text-align: center;
+  margin: calc(var(--baseline) * 2.5) 0;
+  background: transparent;
+}
+
+.prose hr::before {
+  content: "§";
+  display: inline-block;
+  color: var(--rule);
+  font-size: 1.25rem;
+  letter-spacing: 0.5em;
+}
+
+/* Simple rule variant */
+.rule-simple {
+  height: 1px !important;
+  background: var(--rule-light) !important;
+}
+
+.rule-simple::before {
+  display: none !important;
+}
+
+/* ============================================
+   Tables - Tufte Style
+   ============================================ */
+
+.prose table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: var(--baseline) 0;
+  font-size: 0.9rem;
+}
+
+.prose thead {
+  border-bottom: 2px solid var(--foreground);
+}
+
+.prose th {
+  font-weight: 600;
+  text-align: left;
+  padding: 0.5rem 1rem 0.5rem 0;
+  font-variant: small-caps;
+  letter-spacing: 0.03em;
+  text-transform: lowercase;
+}
+
+.prose td {
+  padding: 0.5rem 1rem 0.5rem 0;
+  border-bottom: 1px solid var(--rule-light);
+}
+
+.prose tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* ============================================
+   Lists - Refined
+   ============================================ */
+
+.prose ul,
+.prose ol {
+  padding-left: 1.25rem;
+  margin: 1rem 0;
+}
+
+.prose li {
+  margin: 0.35rem 0;
+  padding-left: 0.25rem;
+}
+
+.prose li::marker {
+  color: var(--muted-light);
+}
+
+/* ============================================
+   Selection
+   ============================================ */
+
+::selection {
+  background: var(--accent-muted);
+  color: var(--foreground);
+}
+
+/* ============================================
+   Post Card - Clean Style
+   ============================================ */
+
+.post-card {
+  position: relative;
+  padding: 1.25rem 0;
+}
+
+.post-card:first-child {
+  padding-top: 0;
+}
+
+/* Post title hover */
+.post-card h2 {
+  transition: color 0.2s ease;
+}
+
+.post-card:hover h2 {
+  color: var(--accent);
+}
+
+/* Post index number */
+.post-index {
+  font-family: var(--font-sans), system-ui, sans-serif;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--rule);
+  letter-spacing: 0.05em;
+}
+
+/* ============================================
+   Header - Brand Typography
+   ============================================ */
+
+.brand-title {
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+
+.brand-title-double {
+  color: var(--foreground);
+}
+
+.brand-title-word {
+  color: var(--accent);
+}
+
+.brand-tagline {
+  font-family: var(--font-sans), system-ui, sans-serif;
+  font-variant: small-caps;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: lowercase;
+}
+
+/* ============================================
+   Footer
+   ============================================ */
+
+.site-footer {
+  border-top: 1px solid var(--rule-light);
+  padding: 2.5rem 0;
+  margin-top: 4rem;
+}
+
+.footer-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: var(--font-sans), system-ui, sans-serif;
+  font-size: 0.8rem;
+  color: var(--muted-light);
+}
+
+.footer-links {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.footer-links a {
+  color: var(--muted-light);
+  transition: color 0.25s var(--ease-out-quart);
+}
+
+.footer-links a:hover {
+  color: var(--accent);
+}
+
+/* ============================================
+   Author Card
+   ============================================ */
+
+.author-card {
+  display: flex;
+  align-items: center;
+  gap: 0.875rem;
+}
+
+.author-avatar {
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 50%;
+  object-fit: cover;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+/* ============================================
+   Transitions & Animations
+   ============================================ */
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.4s var(--ease-out-expo) forwards;
+}
+
+/* Staggered animation delays - subtle timing */
+.animate-delay-0 { animation-delay: 0s; opacity: 0; }
+.animate-delay-1 { animation-delay: 0.05s; opacity: 0; }
+.animate-delay-2 { animation-delay: 0.1s; opacity: 0; }
+.animate-delay-3 { animation-delay: 0.15s; opacity: 0; }
+.animate-delay-4 { animation-delay: 0.2s; opacity: 0; }
+.animate-delay-5 { animation-delay: 0.25s; opacity: 0; }
+.animate-delay-6 { animation-delay: 0.3s; opacity: 0; }
+.animate-delay-7 { animation-delay: 0.35s; opacity: 0; }
+.animate-delay-8 { animation-delay: 0.4s; opacity: 0; }
+.animate-delay-9 { animation-delay: 0.45s; opacity: 0; }
+.animate-delay-10 { animation-delay: 0.5s; opacity: 0; }
+.animate-delay-11 { animation-delay: 0.55s; opacity: 0; }
+.animate-delay-12 { animation-delay: 0.6s; opacity: 0; }
+
+/* Header animations - subtle */
+.animate-header-logo {
+  animation: fadeIn 0.4s var(--ease-out-expo) forwards;
+  opacity: 0;
+}
+
+.animate-header-title {
+  animation: fadeIn 0.4s var(--ease-out-expo) forwards;
+  animation-delay: 0.05s;
+  opacity: 0;
+}
+
+.animate-header-tagline {
+  animation: fadeIn 0.4s var(--ease-out-expo) forwards;
+  animation-delay: 0.1s;
+  opacity: 0;
+}
+
+/* ============================================
+   Utility Classes
+   ============================================ */
+
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
