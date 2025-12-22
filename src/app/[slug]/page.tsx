@@ -1,12 +1,13 @@
 import type {Metadata} from 'next'
 import {notFound} from 'next/navigation'
-import Link from 'next/link'
 import {sanityFetch} from '@/sanity/lib/client'
 import {POST_QUERY, POST_SLUGS_QUERY} from '@/sanity/lib/queries'
 import type {Post} from '@/sanity/types'
 import {MarkdownRenderer} from '@/components/MarkdownRenderer'
 import {createImageUrlBuilder, type SanityImageSource} from '@sanity/image-url'
 import {projectId, dataset} from '@/sanity/env'
+import {BackLink} from '@/components/BackLink'
+import {getPostHogClient} from '@/lib/posthog-server'
 
 const SITE_URL = 'https://blog.doubleword.ai'
 
@@ -96,6 +97,20 @@ export default async function PostPage({params}: Props) {
     notFound()
   }
 
+  // Capture server-side post_viewed event
+  const posthog = getPostHogClient()
+  posthog.capture({
+    distinctId: 'anonymous',
+    event: 'post_viewed',
+    properties: {
+      post_title: post.title,
+      post_slug: slug,
+      post_published_at: post.publishedAt,
+      post_authors: post.authors?.map((a) => a.name).join(', '),
+      $current_url: `${SITE_URL}/${slug}`,
+    },
+  })
+
   const postImageUrl = post.image ? urlFor(post.image)?.width(1200).height(630).url() : null
 
   return (
@@ -104,9 +119,14 @@ export default async function PostPage({params}: Props) {
       <div className="max-w-[90rem] mx-auto px-8 py-16">
         <article className="max-w-[48rem] mx-auto">
           {/* Minimal back link */}
-          <Link href="/" className="text-sm text-gray-500 hover:text-black mb-8 inline-block">
+          <BackLink
+            href="/"
+            fromPostSlug={slug}
+            fromPostTitle={post.title}
+            className="text-sm text-gray-500 hover:text-black mb-8 inline-block"
+          >
             ← Back
-          </Link>
+          </BackLink>
 
           {/* Article Header - tight spacing */}
           <header className="mb-8">
@@ -191,9 +211,14 @@ export default async function PostPage({params}: Props) {
 
           {/* Minimal footer */}
           <footer className="mt-16 pt-8 border-t border-gray-300">
-            <Link href="/" className="text-sm text-gray-500 hover:text-black">
+            <BackLink
+              href="/"
+              fromPostSlug={slug}
+              fromPostTitle={post.title}
+              className="text-sm text-gray-500 hover:text-black"
+            >
               ← All articles
-            </Link>
+            </BackLink>
           </footer>
         </article>
       </div>

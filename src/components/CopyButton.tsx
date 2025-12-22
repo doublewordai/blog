@@ -1,6 +1,7 @@
 'use client'
 
 import {useState, useRef} from 'react'
+import posthog from 'posthog-js'
 
 export default function CopyButton() {
   const [copied, setCopied] = useState(false)
@@ -14,6 +15,12 @@ export default function CopyButton() {
     await navigator.clipboard.writeText(code)
     setCopied(true)
     setTimeout(() => setCopied(false), 2000)
+
+    // Capture code copy event in PostHog
+    posthog.capture('code_copied', {
+      code_length: code.length,
+      current_url: window.location.href,
+    })
   }
 
   return (

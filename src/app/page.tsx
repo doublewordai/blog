@@ -1,7 +1,8 @@
-import Link from 'next/link'
 import {sanityFetch} from '@/sanity/lib/client'
 import {POSTS_QUERY, POSTS_COUNT_QUERY} from '@/sanity/lib/queries'
 import type {PostForList} from '@/sanity/types'
+import {PostLink} from '@/components/PostLink'
+import {PaginationLink} from '@/components/PaginationLink'
 
 const POSTS_PER_PAGE = 12
 
@@ -63,7 +64,11 @@ export default async function IndexPage({
 
               return (
                 <article key={post._id} className="group">
-                  <Link href={`/${post.slug.current}`}>
+                  <PostLink
+                    href={`/${post.slug.current}`}
+                    postTitle={post.title}
+                    postId={post._id}
+                  >
                     <h2 className="text-2xl font-semibold mb-1 group-hover:text-accent transition-colors">
                       {post.title}
                     </h2>
@@ -85,7 +90,7 @@ export default async function IndexPage({
                       )}
                     </div>
                     {summary && <p className="text-gray-600 text-sm truncate">{summary}</p>}
-                  </Link>
+                  </PostLink>
                 </article>
               )
             })}
@@ -98,12 +103,15 @@ export default async function IndexPage({
             <div className="flex justify-center items-center gap-6 text-sm">
               {/* Previous Link */}
               {currentPage > 1 ? (
-                <Link
+                <PaginationLink
                   href={currentPage === 2 ? '/' : `/?page=${currentPage - 1}`}
+                  targetPage={currentPage - 1}
+                  currentPage={currentPage}
+                  totalPages={totalPages}
                   className="text-gray-600 hover:text-accent transition-colors"
                 >
                   ← Previous
-                </Link>
+                </PaginationLink>
               ) : (
                 <span className="text-gray-400">← Previous</span>
               )}
@@ -132,9 +140,12 @@ export default async function IndexPage({
                   }
 
                   return (
-                    <Link
+                    <PaginationLink
                       key={page}
                       href={page === 1 ? '/' : `/?page=${page}`}
+                      targetPage={page}
+                      currentPage={currentPage}
+                      totalPages={totalPages}
                       className={`px-2 py-1 transition-colors ${
                         currentPage === page
                           ? 'text-accent font-semibold underline'
@@ -142,19 +153,22 @@ export default async function IndexPage({
                       }`}
                     >
                       {page}
-                    </Link>
+                    </PaginationLink>
                   )
                 })}
               </div>
 
               {/* Next Link */}
               {currentPage < totalPages ? (
-                <Link
+                <PaginationLink
                   href={`/?page=${currentPage + 1}`}
+                  targetPage={currentPage + 1}
+                  currentPage={currentPage}
+                  totalPages={totalPages}
                   className="text-gray-600 hover:text-accent transition-colors"
                 >
                   Next →
-                </Link>
+                </PaginationLink>
               ) : (
                 <span className="text-gray-400">Next →</span>
               )}
