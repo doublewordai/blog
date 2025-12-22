@@ -1,5 +1,7 @@
 import type {Metadata} from 'next'
 import {Lora, Space_Grotesk} from 'next/font/google'
+import {Analytics} from '@vercel/analytics/react'
+import {SpeedInsights} from '@vercel/speed-insights/next'
 import './globals.css'
 
 const lora = Lora({
@@ -30,6 +32,8 @@ export default function RootLayout({
         className={`${lora.variable} ${spaceGrotesk.variable} font-serif antialiased bg-white text-black`}
       >
         {children}
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   )
