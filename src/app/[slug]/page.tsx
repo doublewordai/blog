@@ -122,14 +122,14 @@ export default async function PostPage({params}: Props) {
             href="/"
             fromPostSlug={slug}
             fromPostTitle={post.title}
-            className="inline-flex items-center gap-2 text-[0.875rem] font-ui text-[--muted] hover:text-[--accent] no-underline mb-12 transition-colors animate-fade-in group"
+            className="inline-flex items-center gap-2 text-[0.875rem] font-ui text-[--muted] hover:text-[--accent] no-underline mb-6 sm:mb-10 transition-colors animate-fade-in group"
           >
             <span className="transition-transform group-hover:-translate-x-1">&larr;</span>
             <span>All articles</span>
           </BackLink>
 
           {/* Article Header */}
-          <header className="mb-14 animate-fade-in animate-delay-1">
+          <header className="mb-8 sm:mb-12 animate-fade-in animate-delay-1">
             {/* Date in small caps */}
             {post.publishedAt && (
               <time className="small-caps text-[0.85rem] text-[--muted-light] block mb-4">
@@ -142,7 +142,7 @@ export default async function PostPage({params}: Props) {
             )}
 
             {/* Title */}
-            <h1 className="text-[2.25rem] sm:text-[2.75rem] lg:text-[3.25rem] font-semibold leading-[1.1] tracking-tight mb-8">
+            <h1 className="text-[2.25rem] sm:text-[2.75rem] lg:text-[3.25rem] font-semibold leading-[1.1] tracking-tight mb-5 sm:mb-6">
               {post.title}
             </h1>
 
@@ -176,7 +176,7 @@ export default async function PostPage({params}: Props) {
 
           {/* Video Embed */}
           {post.videoUrl && (
-            <div className="mb-12 aspect-video animate-fade-in animate-delay-2">
+            <div className="mb-8 aspect-video animate-fade-in animate-delay-2">
               <iframe
                 src={post.videoUrl}
                 className="w-full h-full rounded-lg shadow-lg"
@@ -188,7 +188,7 @@ export default async function PostPage({params}: Props) {
 
           {/* Featured Image */}
           {postImageUrl && (
-            <figure className="mb-14 animate-fade-in animate-delay-2">
+            <figure className="mb-8 animate-fade-in animate-delay-2">
               <img
                 src={postImageUrl}
                 alt={post.title}
@@ -205,10 +205,10 @@ export default async function PostPage({params}: Props) {
             prose-headings:font-semibold
             prose-headings:tracking-tight
             prose-headings:text-[--foreground]
-            prose-h1:text-[2rem] prose-h1:mt-14 prose-h1:mb-4
-            prose-h2:text-[1.5rem] prose-h2:mt-14 prose-h2:mb-4
-            prose-h3:text-[1.25rem] prose-h3:mt-10 prose-h3:mb-3
-            prose-h4:text-[1.1rem] prose-h4:mt-8 prose-h4:mb-2
+            prose-h1:text-[2rem] prose-h1:mt-10 prose-h1:mb-3
+            prose-h2:text-[1.5rem] prose-h2:mt-10 prose-h2:mb-3
+            prose-h3:text-[1.25rem] prose-h3:mt-8 prose-h3:mb-2
+            prose-h4:text-[1.1rem] prose-h4:mt-6 prose-h4:mb-2
             prose-p:text-[1.05rem]
             prose-p:leading-[1.85]
             prose-p:mb-[1.5em]
@@ -221,9 +221,9 @@ export default async function PostPage({params}: Props) {
             prose-strong:font-semibold
             prose-strong:text-[--foreground]
             prose-em:text-[--foreground]
-            prose-ul:my-6
-            prose-ol:my-6
-            prose-li:my-2
+            prose-ul:my-4
+            prose-ol:my-4
+            prose-li:my-1
             prose-li:text-[1.05rem]
             prose-li:leading-[1.75]
             prose-blockquote:border-l-[3px]
@@ -233,9 +233,9 @@ export default async function PostPage({params}: Props) {
             prose-blockquote:text-[--muted]
             prose-blockquote:not-italic
             prose-img:rounded-lg
-            prose-img:my-10
+            prose-img:my-6
             prose-hr:border-[--rule]
-            prose-hr:my-16"
+            prose-hr:my-10"
           >
             {typeof post.body === 'string' && (
               <MarkdownRenderer content={post.body} images={post.images} />
@@ -243,7 +243,7 @@ export default async function PostPage({params}: Props) {
           </div>
 
           {/* Footer navigation */}
-          <footer className="mt-24 pt-10 border-t border-[--rule-light] animate-fade-in animate-delay-4">
+          <footer className="mt-12 sm:mt-16 pt-6 sm:pt-8 border-t border-[--rule-light] animate-fade-in animate-delay-4">
             <BackLink
               href="/"
               fromPostSlug={slug}
