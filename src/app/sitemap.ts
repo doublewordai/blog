@@ -1,5 +1,5 @@
 import type {MetadataRoute} from 'next'
-import {sanityFetch} from '@/sanity/lib/client'
+import {client} from '@/sanity/lib/client'
 import {ALL_POSTS_SITEMAP_QUERY} from '@/sanity/lib/queries'
 
 const SITE_URL = 'https://blog.doubleword.ai'
@@ -10,10 +10,8 @@ type PostResult = {
 }
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const posts = (await sanityFetch({
-    query: ALL_POSTS_SITEMAP_QUERY,
-    tags: ['post'],
-  })) as PostResult[]
+  // Use client directly for sitemap (no live needed)
+  const posts = await client.fetch<PostResult[]>(ALL_POSTS_SITEMAP_QUERY)
 
   // Homepage
   const staticRoutes: MetadataRoute.Sitemap = [

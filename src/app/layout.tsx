@@ -1,7 +1,10 @@
 import type {Metadata} from 'next'
+import {draftMode} from 'next/headers'
 import {Crimson_Pro, JetBrains_Mono, Source_Sans_3} from 'next/font/google'
+import {VisualEditing} from 'next-sanity/visual-editing'
 import {Analytics} from '@vercel/analytics/react'
 import {SpeedInsights} from '@vercel/speed-insights/next'
+import {SanityLive} from '@/sanity/lib/live'
 import './globals.css'
 
 const crimsonPro = Crimson_Pro({
@@ -28,7 +31,7 @@ export const metadata: Metadata = {
   description: 'Notes on building AI systems',
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode
@@ -39,6 +42,8 @@ export default function RootLayout({
         {children}
         <Analytics />
         <SpeedInsights />
+        <SanityLive />
+        {(await draftMode()).isEnabled && <VisualEditing />}
       </body>
     </html>
   )

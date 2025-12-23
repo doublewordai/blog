@@ -1,6 +1,7 @@
 import type {Metadata} from 'next'
 import {notFound} from 'next/navigation'
-import {sanityFetch} from '@/sanity/lib/client'
+import {sanityFetch} from '@/sanity/lib/live'
+import {client} from '@/sanity/lib/client'
 import {POST_QUERY, POST_SLUGS_QUERY} from '@/sanity/lib/queries'
 import type {Post} from '@/sanity/types'
 import {MarkdownRenderer} from '@/components/MarkdownRenderer'
@@ -19,10 +20,8 @@ const urlFor = (source: SanityImageSource) =>
  * This enables full static site generation (SSG)
  */
 export async function generateStaticParams() {
-  const posts = (await sanityFetch({
-    query: POST_SLUGS_QUERY,
-    tags: [],
-  })) as Array<{slug: string}>
+  // Use client directly for static generation (no stega, no live)
+  const posts = await client.fetch<Array<{slug: string}>>(POST_SLUGS_QUERY)
 
   return posts.map((post) => ({
     slug: post.slug,
@@ -39,11 +38,12 @@ interface Props {
 export async function generateMetadata({params}: Props): Promise<Metadata> {
   const {slug} = await params
 
-  const post = (await sanityFetch({
+  // Use stega: false for metadata to avoid invisible characters in SEO
+  const { data: post } = await sanityFetch({
     query: POST_QUERY,
     params: {slug},
-    tags: ['post'],
-  })) as Post
+    stega: false,
+  })
 
   if (!post) {
     return {
@@ -87,11 +87,10 @@ export async function generateMetadata({params}: Props): Promise<Metadata> {
 export default async function PostPage({params}: Props) {
   const {slug} = await params
 
-  const post = (await sanityFetch({
+  const { data: post } = await sanityFetch({
     query: POST_QUERY,
     params: {slug},
-    tags: ['post'],
-  })) as Post
+  }) as { data: Post | null }
 
   if (!post) {
     notFound()
@@ -116,7 +115,7 @@ export default async function PostPage({params}: Props) {
   return (
     <div className="min-h-screen flex flex-col">
       {/* Centered layout */}
-      <div className="flex-1 max-w-[50rem] mx-auto px-6 sm:px-8 py-10 sm:py-14">
+      <div className="flex-1 w-full max-w-[50rem] mx-auto px-6 sm:px-8 py-10 sm:py-14">
         <article>
           {/* Back navigation */}
           <BackLink

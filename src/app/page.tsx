@@ -1,4 +1,4 @@
-import {sanityFetch} from '@/sanity/lib/client'
+import {sanityFetch} from '@/sanity/lib/live'
 import {POSTS_QUERY, POSTS_COUNT_QUERY} from '@/sanity/lib/queries'
 import type {PostForList} from '@/sanity/types'
 import {PostLink} from '@/components/PostLink'
@@ -16,16 +16,14 @@ export default async function IndexPage({
   const start = (currentPage - 1) * POSTS_PER_PAGE
   const end = start + POSTS_PER_PAGE
 
-  const [posts, totalPosts] = await Promise.all([
+  const [{ data: posts }, { data: totalPosts }] = await Promise.all([
     sanityFetch({
       query: POSTS_QUERY,
       params: {start, end},
-      tags: ['post'],
-    }) as Promise<PostForList[]>,
+    }) as Promise<{ data: PostForList[] }>,
     sanityFetch({
       query: POSTS_COUNT_QUERY,
-      tags: ['post'],
-    }) as Promise<number>,
+    }) as Promise<{ data: number }>,
   ])
 
   const totalPages = Math.ceil((totalPosts || 0) / POSTS_PER_PAGE)
