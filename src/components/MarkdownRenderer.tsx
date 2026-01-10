@@ -1,6 +1,7 @@
 import {MarkdownAsync} from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import remarkUnwrapImages from 'remark-unwrap-images'
+import {remarkSidenotes} from '@/plugins/remark-sidenotes.mjs'
 import rehypeShiki from '@shikijs/rehype'
 import rehypeRaw from 'rehype-raw'
 import rehypeSlug from 'rehype-slug'
@@ -88,7 +89,7 @@ export async function MarkdownRenderer({
 
   return (
     <MarkdownAsync
-      remarkPlugins={[remarkGfm, remarkUnwrapImages]}
+      remarkPlugins={[remarkGfm, remarkUnwrapImages, remarkSidenotes]}
       rehypePlugins={[
         rehypeSlug,
         [
@@ -118,7 +119,10 @@ export async function MarkdownRenderer({
               'html',
               'css',
               'markdown',
+              'text',
+              'plaintext',
             ],
+            defaultLanguage: 'text',
           },
         ],
         rehypeRaw,

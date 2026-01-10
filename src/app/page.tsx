@@ -1,4 +1,4 @@
-import {sanityFetch} from '@/sanity/lib/live'
+import {sanityFetch} from '@/sanity/lib/client'
 import {POSTS_QUERY, POSTS_COUNT_QUERY} from '@/sanity/lib/queries'
 import type {PostForList} from '@/sanity/types'
 import {PostLink} from '@/components/PostLink'
@@ -16,14 +16,14 @@ export default async function IndexPage({
   const start = (currentPage - 1) * POSTS_PER_PAGE
   const end = start + POSTS_PER_PAGE
 
-  const [{ data: posts }, { data: totalPosts }] = await Promise.all([
+  const [posts, totalPosts] = await Promise.all([
     sanityFetch({
       query: POSTS_QUERY,
       params: {start, end},
-    }) as Promise<{ data: PostForList[] }>,
+    }) as Promise<PostForList[]>,
     sanityFetch({
       query: POSTS_COUNT_QUERY,
-    }) as Promise<{ data: number }>,
+    }) as Promise<number>,
   ])
 
   const totalPages = Math.ceil((totalPosts || 0) / POSTS_PER_PAGE)
@@ -60,17 +60,17 @@ export default async function IndexPage({
           ) : (
             <div className="divide-y divide-[--rule-light]">
               {posts.map((post, index) => {
-                // Extract single line summary from markdown body
-                const summary =
-                  typeof post.body === 'string'
-                    ? post.body
-                        .replace(/^#.*$/gm, '') // Remove headers
-                        .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1') // Remove markdown links
-                        .replace(/[*_`]/g, '') // Remove markdown formatting
-                        .trim()
-                        .split('\n')
-                        .filter((line) => line.trim())[0] // Take first non-empty line
-                    : ''
+                // Use description if available, otherwise extract from body
+                const summary = post.description
+                  || (typeof post.body === 'string'
+                      ? post.body
+                          .replace(/^#.*$/gm, '') // Remove headers
+                          .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1') // Remove markdown links
+                          .replace(/[*_`]/g, '') // Remove markdown formatting
+                          .trim()
+                          .split('\n')
+                          .filter((line) => line.trim())[0] // Take first non-empty line
+                      : '')
 
                 // Format index with leading zero
                 const indexStr = String(index + 1 + start).padStart(2, '0')
@@ -137,7 +137,7 @@ export default async function IndexPage({
                     targetPage={currentPage - 1}
                     currentPage={currentPage}
                     totalPages={totalPages}
-                    className="text-[--muted] hover:text-[--accent] transition-colors"
+                    className="text-[--muted] hover:text-[--foreground] transition-colors"
                   >
                     <span className="mr-1">&larr;</span> Previous
                   </PaginationLink>
@@ -159,7 +159,7 @@ export default async function IndexPage({
                     targetPage={currentPage + 1}
                     currentPage={currentPage}
                     totalPages={totalPages}
-                    className="text-[--muted] hover:text-[--accent] transition-colors no-underline"
+                    className="text-[--muted] hover:text-[--foreground] transition-colors no-underline"
                   >
                     Next <span className="ml-1">&rarr;</span>
                   </PaginationLink>

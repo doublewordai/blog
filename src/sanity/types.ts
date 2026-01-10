@@ -35,6 +35,9 @@ export interface Post {
   slug: {current: string}
   publishedAt?: string
   body?: string
+  description?: string
+  externalSource?: string
+  canonicalUrl?: string
   authors?: Author[]
   image?: SanityImageSource
   videoUrl?: string
@@ -48,5 +51,6 @@ export interface PostForList {
   slug: {current: string}
   publishedAt?: string
   body?: string
+  description?: string
   authors?: Array<{name: string}>
 }

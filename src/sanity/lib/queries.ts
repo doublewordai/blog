@@ -10,6 +10,7 @@ export const POSTS_QUERY = defineQuery(`*[_type == "post" && defined(slug.curren
   slug,
   publishedAt,
   body,
+  description,
   "authors": authors[]->{ name }
 }`)
 
@@ -34,6 +35,9 @@ export const POST_QUERY = defineQuery(`*[_type == "post" && slug.current == $slu
   slug,
   publishedAt,
   body,
+  description,
+  externalSource,
+  canonicalUrl,
   videoUrl,
   image,
   "authors": authors[]->{

@@ -1,14 +1,20 @@
 import type {Metadata} from 'next'
 import {draftMode} from 'next/headers'
-import {Crimson_Pro, JetBrains_Mono, Source_Sans_3} from 'next/font/google'
+import {Crimson_Pro, IBM_Plex_Sans, JetBrains_Mono, Source_Sans_3} from 'next/font/google'
 import {VisualEditing} from 'next-sanity/visual-editing'
 import {Analytics} from '@vercel/analytics/react'
 import {SpeedInsights} from '@vercel/speed-insights/next'
-import {SanityLive} from '@/sanity/lib/live'
 import './globals.css'
 
 const crimsonPro = Crimson_Pro({
   variable: '--font-serif',
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700'],
+  style: ['normal', 'italic'],
+})
+
+const ibmPlexSans = IBM_Plex_Sans({
+  variable: '--font-display',
   subsets: ['latin'],
   weight: ['400', '500', '600', '700'],
   style: ['normal', 'italic'],
@@ -38,11 +44,10 @@ export default async function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${crimsonPro.variable} ${sourceSans.variable} ${jetbrainsMono.variable} antialiased`}>
+      <body className={`${crimsonPro.variable} ${ibmPlexSans.variable} ${sourceSans.variable} ${jetbrainsMono.variable}`}>
         {children}
         <Analytics />
         <SpeedInsights />
-        <SanityLive />
         {(await draftMode()).isEnabled && <VisualEditing />}
       </body>
     </html>
