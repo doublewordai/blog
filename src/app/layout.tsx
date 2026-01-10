@@ -4,6 +4,7 @@ import {Crimson_Pro, IBM_Plex_Sans, JetBrains_Mono, Source_Sans_3} from 'next/fo
 import {VisualEditing} from 'next-sanity/visual-editing'
 import {Analytics} from '@vercel/analytics/react'
 import {SpeedInsights} from '@vercel/speed-insights/next'
+import 'katex/dist/katex.min.css'
 import './globals.css'
 
 const crimsonPro = Crimson_Pro({

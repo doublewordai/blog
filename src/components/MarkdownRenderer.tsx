@@ -1,8 +1,10 @@
 import {MarkdownAsync} from 'react-markdown'
 import remarkGfm from 'remark-gfm'
+import remarkMath from 'remark-math'
 import remarkUnwrapImages from 'remark-unwrap-images'
 import {remarkSidenotes} from '@/plugins/remark-sidenotes.mjs'
 import rehypeShiki from '@shikijs/rehype'
+import rehypeKatex from 'rehype-katex'
 import rehypeRaw from 'rehype-raw'
 import rehypeSlug from 'rehype-slug'
 import rehypeAutolinkHeadings from 'rehype-autolink-headings'
@@ -89,7 +91,7 @@ export async function MarkdownRenderer({
 
   return (
     <MarkdownAsync
-      remarkPlugins={[remarkGfm, remarkUnwrapImages, remarkSidenotes]}
+      remarkPlugins={[remarkGfm, remarkMath, remarkUnwrapImages, remarkSidenotes]}
       rehypePlugins={[
         rehypeSlug,
         [
@@ -99,6 +101,7 @@ export async function MarkdownRenderer({
             properties: {className: ['anchor']},
           },
         ],
+        rehypeKatex,
         [
           rehypeShiki,
           {
