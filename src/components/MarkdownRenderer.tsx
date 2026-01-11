@@ -105,7 +105,11 @@ export async function MarkdownRenderer({
         [
           rehypeShiki,
           {
-            theme: 'github-light',
+            themes: {
+              light: 'github-light',
+              dark: 'github-dark',
+            },
+            defaultColor: false,
             langs: [
               'javascript',
               'typescript',

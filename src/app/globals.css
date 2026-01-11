@@ -40,27 +40,27 @@
   --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
 }
 
-/* Dark mode */
+/* Dark mode - softer contrast */
 html[data-theme="dark"] {
-  --background: #141414;
-  --foreground: #e5e5e5;
+  --background: #262626;
+  --foreground: #d8d8d8;
 
-  /* Warmer, lighter red for dark mode */
-  --accent: #e85555;
-  --accent-muted: rgba(232, 85, 85, 0.2);
-  --accent-subtle: rgba(232, 85, 85, 0.1);
+  /* Brighter coral red for dark mode */
+  --accent: #ff6868;
+  --accent-muted: rgba(255, 104, 104, 0.25);
+  --accent-subtle: rgba(255, 104, 104, 0.12);
 
-  /* Muted tones - lighter for dark bg */
-  --muted: #a0a0a0;
-  --muted-light: #707070;
-  --rule: #404040;
-  --rule-light: #2a2a2a;
+  /* Muted tones - softer for dark bg */
+  --muted: #9a9a9a;
+  --muted-light: #686868;
+  --rule: #383838;
+  --rule-light: #282828;
 
   /* Code colors - dark theme */
   --code-bg: #1e1e1e;
-  --code-text: #d4d4d4;
-  --pre-bg: #1a1a1a;
-  --pre-border: #2e2e2e;
+  --code-text: #c8c8c8;
+  --pre-bg: #1c1c1c;
+  --pre-border: #3a3a3a;
 }
 
 @theme inline {
@@ -415,7 +415,6 @@ a {
   font-size: 0.8rem;
   line-height: 1.35 !important;
   font-family: var(--font-mono), 'JetBrains Mono', 'Fira Code', monospace;
-  color: #24292e;
   display: block;
 }
 
@@ -429,7 +428,6 @@ a {
 }
 
 .prose pre.shiki code .line {
-  color: #24292e;
   line-height: inherit;
   min-height: 0;
   height: auto;
@@ -486,7 +484,7 @@ html[data-theme="dark"] .prose pre.shiki {
 }
 
 .copy-button:hover {
-  background: white;
+  background: var(--background);
   border-color: var(--rule);
   color: var(--foreground);
 }
@@ -665,11 +663,11 @@ html[data-theme="dark"] .prose pre.shiki {
 
 /* Post title hover */
 .post-card h2 {
-  transition: opacity 0.2s ease;
+  transition: color 0.2s ease;
 }
 
 .post-card:hover h2 {
-  opacity: 0.7;
+  color: var(--accent);
 }
 
 /* Post index number */
@@ -679,6 +677,10 @@ html[data-theme="dark"] .prose pre.shiki {
   font-weight: 600;
   color: var(--rule);
   letter-spacing: 0.05em;
+}
+
+html[data-theme="dark"] .post-index {
+  color: var(--muted-light);
 }
 
 /* ============================================
