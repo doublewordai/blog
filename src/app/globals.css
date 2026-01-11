@@ -229,7 +229,7 @@ a {
     font-size: 0.85rem;
     line-height: 1.45;
     color: var(--muted);
-    font-family: var(--font-sans), 'Source Sans 3', system-ui, sans-serif;
+    font-family: var(--font-serif), 'Crimson Pro', Georgia, serif;
     position: relative;
   }
 }
@@ -279,7 +279,7 @@ a {
     font-size: 0.9rem;
     line-height: 1.5;
     color: var(--muted);
-    font-family: var(--font-sans), 'Source Sans 3', system-ui, sans-serif;
+    font-family: var(--font-serif), 'Crimson Pro', Georgia, serif;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
     border-radius: 0 6px 6px 0;
   }
@@ -297,7 +297,7 @@ a {
     font-size: 0.9rem;
     line-height: 1.5;
     color: var(--muted);
-    font-family: var(--font-sans), 'Source Sans 3', system-ui, sans-serif;
+    font-family: var(--font-serif), 'Crimson Pro', Georgia, serif;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
     border-radius: 0 6px 6px 0;
   }
@@ -334,6 +334,15 @@ a {
   transition: opacity 0.25s var(--ease-out-quart), color 0.25s var(--ease-out-quart);
 }
 
+/* Hide anchors on small screens */
+@media (max-width: 768px) {
+  .prose h2[id] a.anchor::before,
+  .prose h3[id] a.anchor::before,
+  .prose h4[id] a.anchor::before {
+    display: none;
+  }
+}
+
 .prose h2[id]:hover a.anchor::before,
 .prose h3[id]:hover a.anchor::before,
 .prose h4[id]:hover a.anchor::before {
@@ -368,7 +377,7 @@ a {
   border: 1px solid var(--pre-border);
   border-radius: 8px;
   overflow-x: auto;
-  padding: 1.25rem 1.5rem;
+  padding: 0.9rem 1.15rem;
   margin: var(--baseline) 0;
   box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.02);
 }
@@ -376,29 +385,27 @@ a {
 .prose pre code {
   background: transparent;
   padding: 0;
-  font-size: 0.825rem;
-  line-height: 1.65;
+  font-size: 0.8rem;
+  line-height: 1.35 !important;
   font-family: var(--font-mono), 'JetBrains Mono', 'Fira Code', monospace;
   color: #24292e;
+  display: block;
 }
 
-/* Ensure code block text is always dark */
-.prose pre code span {
-  color: inherit;
-}
-
-.prose pre code .line {
-  color: #24292e;
-}
-
-/* Shiki code blocks - warm overrides */
+/* Shiki code blocks - compact overrides */
 .prose pre.shiki {
   background: var(--pre-bg) !important;
 }
 
-/* Override Shiki token colors for warmer feel */
-.prose pre.shiki .line {
+.prose pre.shiki code {
+  line-height: 1.35 !important;
+}
+
+.prose pre.shiki code .line {
   color: #24292e;
+  line-height: inherit;
+  min-height: 0;
+  height: auto;
 }
 
 /* Code block wrapper with copy button */
@@ -514,16 +521,15 @@ a {
   border: none;
   height: auto;
   text-align: center;
-  margin: calc(var(--baseline) * 2.5) 0;
+  margin: calc(var(--baseline) * 1.5) 0;
   background: transparent;
 }
 
 .prose hr::before {
-  content: "§";
+  content: "⁂";
   display: inline-block;
   color: var(--rule);
-  font-size: 1.25rem;
-  letter-spacing: 0.5em;
+  font-size: 1rem;
 }
 
 /* Simple rule variant */
