@@ -43,7 +43,7 @@
 /* Dark mode - softer contrast */
 html[data-theme="dark"] {
   --background: #262626;
-  --foreground: #d8d8d8;
+  --foreground: #f0f0f0;
 
   /* Brighter coral red for dark mode */
   --accent: #ff6868;
