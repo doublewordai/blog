@@ -3,6 +3,7 @@ import {POSTS_QUERY, POSTS_COUNT_QUERY} from '@/sanity/lib/queries'
 import type {PostForList} from '@/sanity/types'
 import {PostLink} from '@/components/PostLink'
 import {PaginationLink} from '@/components/PaginationLink'
+import {ThemeToggle} from '@/components/ThemeToggle'
 
 const POSTS_PER_PAGE = 12
 
@@ -34,16 +35,19 @@ export default async function IndexPage({
       <div className="flex-1 max-w-[50rem] mx-auto px-6 sm:px-8 py-8 sm:py-12">
         {/* Refined Header with Brand Typography */}
         <header className="mb-10">
-          <div className="flex items-center gap-4 mb-2">
-            <img
-              src="/doubleword-icon.png"
-              alt="Doubleword"
-              className="h-10 w-10 animate-header-logo"
-            />
-            <h1 className="brand-title text-[2.25rem] sm:text-[2.5rem] animate-header-title">
-              <span className="brand-title-double">Double</span>
-              <span className="brand-title-word">word</span>
-            </h1>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-4 mb-2">
+              <img
+                src="/doubleword-icon.png"
+                alt="Doubleword"
+                className="h-10 w-10 animate-header-logo"
+              />
+              <h1 className="brand-title text-[2.25rem] sm:text-[2.5rem] animate-header-title">
+                <span className="brand-title-double">Double</span>
+                <span className="brand-title-word">word</span>
+              </h1>
+            </div>
+            <ThemeToggle />
           </div>
           <p className="brand-tagline text-[--muted] text-[0.85rem] ml-[3.5rem] animate-header-tagline">
             Notes on Building AI Systems

@@ -7,6 +7,7 @@ import {MarkdownRenderer} from '@/components/MarkdownRenderer'
 import {createImageUrlBuilder, type SanityImageSource} from '@sanity/image-url'
 import {projectId, dataset} from '@/sanity/env'
 import {BackLink} from '@/components/BackLink'
+import {ThemeToggle} from '@/components/ThemeToggle'
 import {getPostHogClient} from '@/lib/posthog-server'
 
 const SITE_URL = 'https://blog.doubleword.ai'
@@ -132,24 +133,28 @@ export default async function PostPage({params}: Props) {
         <article className="xl:max-w-[42rem]">
           {/* Article Header */}
           <header className="mb-5 sm:mb-6 animate-fade-in animate-delay-1">
-            {/* Date with back arrow - both clickable */}
-            <BackLink
-              href="/"
-              fromPostSlug={slug}
-              fromPostTitle={post.title}
-              className="inline-flex items-center gap-2 text-[--muted-light] hover:text-[--accent] no-underline transition-colors group mb-4"
-            >
-              <span className="text-[1rem] transition-transform inline-block group-hover:-translate-x-0.5">&larr;</span>
-              {post.publishedAt && (
-                <time className="small-caps text-[0.85rem]">
-                  {new Date(post.publishedAt).toLocaleDateString('en-US', {
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric',
-                  })}
-                </time>
-              )}
-            </BackLink>
+            {/* Navigation row with back link and theme toggle */}
+            <div className="flex items-center justify-between mb-4">
+              {/* Date with back arrow - both clickable */}
+              <BackLink
+                href="/"
+                fromPostSlug={slug}
+                fromPostTitle={post.title}
+                className="inline-flex items-center gap-2 text-[--muted-light] hover:text-[--accent] no-underline transition-colors group"
+              >
+                <span className="text-[1rem] transition-transform inline-block group-hover:-translate-x-0.5">&larr;</span>
+                {post.publishedAt && (
+                  <time className="small-caps text-[0.85rem]">
+                    {new Date(post.publishedAt).toLocaleDateString('en-US', {
+                      year: 'numeric',
+                      month: 'long',
+                      day: 'numeric',
+                    })}
+                  </time>
+                )}
+              </BackLink>
+              <ThemeToggle />
+            </div>
 
             {/* Title */}
             <h1 className="text-[2.5rem] sm:text-[3rem] lg:text-[3.5rem] font-semibold leading-[1.1] tracking-tight mb-5 sm:mb-6">

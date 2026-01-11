@@ -40,6 +40,29 @@
   --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
 }
 
+/* Dark mode */
+html[data-theme="dark"] {
+  --background: #141414;
+  --foreground: #e5e5e5;
+
+  /* Warmer, lighter red for dark mode */
+  --accent: #e85555;
+  --accent-muted: rgba(232, 85, 85, 0.2);
+  --accent-subtle: rgba(232, 85, 85, 0.1);
+
+  /* Muted tones - lighter for dark bg */
+  --muted: #a0a0a0;
+  --muted-light: #707070;
+  --rule: #404040;
+  --rule-light: #2a2a2a;
+
+  /* Code colors - dark theme */
+  --code-bg: #1e1e1e;
+  --code-text: #d4d4d4;
+  --pre-bg: #1a1a1a;
+  --pre-border: #2e2e2e;
+}
+
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -95,6 +118,10 @@ body::before {
   opacity: 0.025;
   pointer-events: none;
   z-index: 9999;
+}
+
+html[data-theme="dark"] body::before {
+  opacity: 0.015;
 }
 
 /* ============================================
@@ -406,6 +433,26 @@ a {
   line-height: inherit;
   min-height: 0;
   height: auto;
+}
+
+/* Shiki dual theme switching */
+/* Light mode: use --shiki-light variables */
+html[data-theme="light"] .shiki,
+html[data-theme="light"] .shiki span {
+  color: var(--shiki-light) !important;
+  background-color: transparent !important;
+}
+
+/* Dark mode: use --shiki-dark variables */
+html[data-theme="dark"] .shiki,
+html[data-theme="dark"] .shiki span {
+  color: var(--shiki-dark) !important;
+  background-color: transparent !important;
+}
+
+/* Override code block background in dark mode */
+html[data-theme="dark"] .prose pre.shiki {
+  background: var(--pre-bg) !important;
 }
 
 /* Code block wrapper with copy button */
@@ -771,4 +818,24 @@ a {
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
+}
+
+/* ============================================
+   KaTeX Math Rendering
+   ============================================ */
+
+/* Scale down KaTeX to match prose text size */
+.katex {
+  font-size: 1.05em;
+}
+
+/* Display math (block equations) */
+.katex-display {
+  margin: 1.5rem 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.katex-display > .katex {
+  font-size: 1.1em;
 }
