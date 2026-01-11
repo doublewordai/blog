@@ -169,6 +169,13 @@ a {
 /* Sidenote counter for numbering */
 .prose {
   counter-reset: sidenote-counter;
+
+  /* Override Tailwind Typography defaults */
+  --tw-prose-body: var(--foreground);
+  --tw-prose-headings: var(--foreground);
+  --tw-prose-bold: var(--foreground);
+  --tw-prose-counters: var(--foreground);
+  --tw-prose-bullets: var(--muted-light);
 }
 
 /* Wrapper has display: contents to not affect layout */
