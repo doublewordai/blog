@@ -101,7 +101,8 @@ export async function MarkdownRenderer({
             properties: {className: ['anchor']},
           },
         ],
-        rehypeKatex,
+        rehypeRaw, // Parse raw HTML first (including sidenotes)
+        rehypeKatex, // Then process math (including math in sidenotes)
         [
           rehypeShiki,
           {
@@ -132,7 +133,6 @@ export async function MarkdownRenderer({
             defaultLanguage: 'text',
           },
         ],
-        rehypeRaw,
       ]}
       components={{
         img: ImageComponent,

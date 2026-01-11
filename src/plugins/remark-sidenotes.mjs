@@ -65,6 +65,9 @@ export function remarkSidenotes() {
           contentParts.push(`<em>${text}</em>`)
         } else if (child.type === 'inlineCode') {
           contentParts.push(`<code>${child.value}</code>`)
+        } else if (child.type === 'inlineMath') {
+          // Preserve math for rehype-katex to process later
+          contentParts.push(`<span class="math math-inline">${child.value}</span>`)
         }
       }
 
