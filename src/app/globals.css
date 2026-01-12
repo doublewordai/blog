@@ -95,6 +95,12 @@ html {
   }
 }
 
+@media (min-width: 1280px) {
+  html {
+    font-size: 18px;
+  }
+}
+
 html, body {
   background: var(--background);
   color: var(--foreground);
