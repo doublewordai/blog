@@ -1,6 +1,7 @@
 import {MarkdownAsync} from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import remarkMath from 'remark-math'
+import remarkFrontmatter from 'remark-frontmatter'
 import remarkUnwrapImages from 'remark-unwrap-images'
 import {remarkSidenotes} from '@/plugins/remark-sidenotes.mjs'
 import rehypeShiki from '@shikijs/rehype'
@@ -27,8 +28,11 @@ export async function MarkdownRenderer({
   content: string
   images?: ImageData[]
 }) {
+  // Strip the first H1 heading (title) from the content since it's displayed separately
+  // Handle both: content with frontmatter (---...---) and without
+  let processedContent = content.replace(/^(---[\s\S]*?---\n+)?#\s+.+\n+/, '$1')
+
   // Replace image filenames with Sanity CDN URLs
-  let processedContent = content
   if (images && images.length > 0) {
     const imageMap = new Map(images.filter((img) => img.filename).map((img) => [img.filename, img]))
 
@@ -91,7 +95,7 @@ export async function MarkdownRenderer({
 
   return (
     <MarkdownAsync
-      remarkPlugins={[remarkGfm, remarkMath, remarkUnwrapImages, remarkSidenotes]}
+      remarkPlugins={[remarkFrontmatter, remarkGfm, remarkMath, remarkUnwrapImages, remarkSidenotes]}
       rehypePlugins={[
         rehypeSlug,
         [
