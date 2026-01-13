@@ -300,6 +300,13 @@ a {
   box-shadow: none;
 }
 
+/* Dark mode: add light background for images that may have transparent backgrounds */
+html[data-theme="dark"] .sidenote img,
+html[data-theme="dark"] .sidenote-unnumbered img {
+  background: #f5f5f5;
+  padding: 0.25rem;
+}
+
 /* Below XL: convert sidenotes to toggle popup */
 @media (max-width: 1279px) {
   .sidenote-number {
