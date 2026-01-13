@@ -654,6 +654,22 @@ html[data-theme="dark"] .prose pre.shiki {
 }
 
 /* ============================================
+   Footnotes
+   ============================================ */
+
+.prose .footnotes {
+  margin-top: 3rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--rule);
+  font-size: 1rem;
+  color: var(--muted);
+}
+
+.prose .footnotes hr {
+  display: none; /* GFM adds an hr by default */
+}
+
+/* ============================================
    Selection
    ============================================ */
 
