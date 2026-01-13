@@ -1,37 +1,27 @@
 import type {Metadata} from 'next'
 import {draftMode} from 'next/headers'
-import {Crimson_Pro, IBM_Plex_Sans, JetBrains_Mono, Source_Sans_3} from 'next/font/google'
 import {VisualEditing} from 'next-sanity/visual-editing'
 import {Analytics} from '@vercel/analytics/react'
 import {SpeedInsights} from '@vercel/speed-insights/next'
+
+// Fonts via fontsource (self-hosted, full character sets)
+import '@fontsource/crimson-pro/400.css'
+import '@fontsource/crimson-pro/400-italic.css'
+import '@fontsource/crimson-pro/500.css'
+import '@fontsource/crimson-pro/600.css'
+import '@fontsource/crimson-pro/700.css'
+import '@fontsource/ibm-plex-sans/400.css'
+import '@fontsource/ibm-plex-sans/400-italic.css'
+import '@fontsource/ibm-plex-sans/500.css'
+import '@fontsource/ibm-plex-sans/600.css'
+import '@fontsource/ibm-plex-sans/700.css'
+import '@fontsource/source-sans-3/400.css'
+import '@fontsource/source-sans-3/500.css'
+import '@fontsource/source-sans-3/600.css'
+import '@fontsource-variable/jetbrains-mono'
+
 import 'katex/dist/katex.min.css'
 import './globals.css'
-
-const crimsonPro = Crimson_Pro({
-  variable: '--font-serif',
-  subsets: ['latin'],
-  weight: ['400', '500', '600', '700'],
-  style: ['normal', 'italic'],
-})
-
-const ibmPlexSans = IBM_Plex_Sans({
-  variable: '--font-display',
-  subsets: ['latin'],
-  weight: ['400', '500', '600', '700'],
-  style: ['normal', 'italic'],
-})
-
-const sourceSans = Source_Sans_3({
-  variable: '--font-sans',
-  subsets: ['latin'],
-  weight: ['400', '500', '600'],
-})
-
-const jetbrainsMono = JetBrains_Mono({
-  variable: '--font-mono',
-  subsets: ['latin'],
-  weight: ['400', '500'],
-})
 
 export const metadata: Metadata = {
   title: 'Doubleword blog',
@@ -62,7 +52,7 @@ export default async function RootLayout({
       <head>
         <script dangerouslySetInnerHTML={{__html: themeScript}} />
       </head>
-      <body className={`${crimsonPro.variable} ${ibmPlexSans.variable} ${sourceSans.variable} ${jetbrainsMono.variable}`}>
+      <body>
         {children}
         <Analytics />
         <SpeedInsights />

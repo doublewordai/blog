@@ -1,4 +1,6 @@
 import {visit} from 'unist-util-visit'
+import {toHast} from 'mdast-util-to-hast'
+import {toHtml} from 'hast-util-to-html'
 
 /**
  * Remark plugin for sidenotes with footnote-like syntax
@@ -39,40 +41,9 @@ export function remarkSidenotes() {
         node.children.shift()
       }
 
-      // Convert children to simple text/inline content
-      const contentParts = []
-      for (const child of node.children) {
-        if (child.type === 'text') {
-          contentParts.push(child.value)
-        } else if (child.type === 'link') {
-          // Convert link to HTML string
-          const linkText = child.children
-            .filter((c) => c.type === 'text')
-            .map((c) => c.value)
-            .join('')
-          contentParts.push(`<a href="${child.url}">${linkText}</a>`)
-        } else if (child.type === 'strong') {
-          const text = child.children
-            .filter((c) => c.type === 'text')
-            .map((c) => c.value)
-            .join('')
-          contentParts.push(`<strong>${text}</strong>`)
-        } else if (child.type === 'emphasis') {
-          const text = child.children
-            .filter((c) => c.type === 'text')
-            .map((c) => c.value)
-            .join('')
-          contentParts.push(`<em>${text}</em>`)
-        } else if (child.type === 'inlineCode') {
-          contentParts.push(`<code>${child.value}</code>`)
-        } else if (child.type === 'inlineMath') {
-          // Preserve math for rehype-katex to process later
-          contentParts.push(`<span class="math math-inline">${child.value}</span>`)
-        }
-      }
-
+      // Store the definition content (the rest of the paragraph's children)
       definitions.set(key, {
-        content: contentParts.join(''),
+        content: node.children,
         unnumbered: isUnnumbered,
       })
 
@@ -150,11 +121,18 @@ export function remarkSidenotes() {
 function createSidenoteNode(content, unnumbered) {
   const sidenoteId = `sidenote-${Math.random().toString(36).substring(2, 11)}`
 
+  // Convert mdast children to HTML using proper utilities
+  const wrapper = {type: 'paragraph', children: content}
+  const hast = toHast(wrapper)
+  let contentHtml = toHtml(hast)
+  // Remove wrapping <p> tags
+  contentHtml = contentHtml.replace(/^<p>/, '').replace(/<\/p>\n?$/, '')
+
   let html
   if (unnumbered) {
-    html = `<span class="sidenote-unnumbered-wrapper" data-sidenote-id="${sidenoteId}"><span class="sidenote-unnumbered">${content}</span></span>`
+    html = `<span class="sidenote-unnumbered-wrapper" data-sidenote-id="${sidenoteId}"><span class="sidenote-unnumbered">${contentHtml}</span></span>`
   } else {
-    html = `<span class="sidenote-wrapper" data-sidenote-id="${sidenoteId}"><input type="checkbox" class="margin-toggle" id="${sidenoteId}" /><label class="sidenote-number" for="${sidenoteId}"></label><span class="sidenote"><span class="sidenote-number-copy"></span>${content}</span></span>`
+    html = `<span class="sidenote-wrapper" data-sidenote-id="${sidenoteId}"><input type="checkbox" class="margin-toggle" id="${sidenoteId}" /><label class="sidenote-number" for="${sidenoteId}"></label><span class="sidenote"><span class="sidenote-number-copy"></span>${contentHtml}</span></span>`
   }
 
   return {
