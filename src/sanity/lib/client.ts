@@ -1,4 +1,5 @@
 import {createClient, type QueryParams} from 'next-sanity'
+import {draftMode} from 'next/headers'
 import {apiVersion, dataset, projectId} from '../env'
 
 const token = process.env.SANITY_API_READ_TOKEN
@@ -24,6 +25,9 @@ export const client = createClient({
  * - Pass tags array to enable tag-based cache invalidation
  * - revalidate will be set to false when tags are provided
  * - Use revalidateTag() in webhook API route to bust cache on-demand
+ *
+ * When draft mode is enabled (Sanity Presentation preview), fetches use
+ * the drafts perspective and skip caching for live updates.
  */
 export async function sanityFetch<const QueryString extends string>({
   query,
@@ -36,9 +40,16 @@ export async function sanityFetch<const QueryString extends string>({
   revalidate?: number | false
   tags?: string[]
 }) {
-  return client.fetch(query, params, {
-    cache: 'force-cache',
-    next: {
+  const isDraftMode = (await draftMode()).isEnabled
+
+  // Use drafts perspective when in draft mode (Sanity Presentation preview)
+  const fetchClient = isDraftMode && token
+    ? client.withConfig({ token, perspective: 'drafts' })
+    : client
+
+  return fetchClient.fetch(query, params, {
+    cache: isDraftMode ? 'no-store' : 'force-cache',
+    next: isDraftMode ? undefined : {
       revalidate: tags.length ? false : revalidate,
       tags,
     },
