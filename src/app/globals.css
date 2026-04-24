@@ -878,3 +878,120 @@ html[data-theme="dark"] .post-index {
 .katex-display > .katex {
   font-size: 1.1em;
 }
+
+/* ============================================
+   Startup Breakdown - stacked bar diagram
+   ============================================ */
+
+.startup-breakdown {
+  --sb-text: var(--foreground);
+  --sb-text-muted: color-mix(in srgb, var(--foreground) 55%, transparent);
+  --sb-track-bg: color-mix(in srgb, var(--foreground) 6%, transparent);
+  --sb-tip-bg: #2b2b2b;
+  --sb-tip-text: #f5f5f5;
+  position: relative;
+  font-family: var(--font-sans), system-ui, sans-serif;
+  max-width: 100%;
+  margin: 1.5rem 0;
+}
+
+html[data-theme="dark"] .startup-breakdown {
+  --sb-tip-bg: #f5f5f5;
+  --sb-tip-text: #1a1a1a;
+}
+
+.startup-breakdown .bar-group {
+  margin-bottom: 0.875rem;
+}
+
+.startup-breakdown .bar-group:last-of-type {
+  margin-bottom: 0;
+}
+
+.startup-breakdown .bar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 0.2rem;
+  gap: 0.75rem;
+}
+
+.startup-breakdown .bar-label {
+  font-size: 0.8125rem;
+  color: var(--sb-text);
+  white-space: nowrap;
+}
+
+.startup-breakdown .bar-total {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--sb-text);
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.startup-breakdown .bar-row {
+  display: flex;
+  align-items: center;
+}
+
+.startup-breakdown .bar-track {
+  flex: 1;
+  display: flex;
+  height: 2.25rem;
+  border-radius: 2px;
+  overflow: hidden;
+  background: var(--sb-track-bg);
+}
+
+.startup-breakdown .phase-segment {
+  height: 100%;
+  cursor: pointer;
+  transition: opacity 0.15s;
+  min-width: 1px;
+}
+
+.startup-breakdown .phase-segment:hover {
+  opacity: 0.75;
+}
+
+.startup-breakdown .legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.125rem 1.25rem;
+  margin-top: 1rem;
+}
+
+.startup-breakdown .legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+}
+
+.startup-breakdown .legend-swatch {
+  width: 0.625rem;
+  height: 0.625rem;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+.startup-breakdown .legend-label {
+  font-size: 0.6875rem;
+  color: var(--sb-text);
+  white-space: nowrap;
+}
+
+.startup-breakdown .phase-tooltip {
+  position: absolute;
+  background: var(--sb-tip-bg);
+  color: var(--sb-tip-text);
+  padding: 6px 10px;
+  border-radius: 4px;
+  font-family: var(--font-sans), system-ui, sans-serif;
+  font-size: 0.8125rem;
+  line-height: 1.4;
+  max-width: 320px;
+  pointer-events: none;
+  z-index: 10;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}

@@ -1,4 +1,4 @@
-import {MarkdownAsync} from 'react-markdown'
+import {MarkdownAsync, type Components} from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import remarkMath from 'remark-math'
 import remarkFrontmatter from 'remark-frontmatter'
@@ -10,6 +10,7 @@ import rehypeRaw from 'rehype-raw'
 import rehypeSlug from 'rehype-slug'
 import rehypeAutolinkHeadings from 'rehype-autolink-headings'
 import CopyButton from './CopyButton'
+import StartupBreakdown from './StartupBreakdown'
 
 type ImageData = {
   filename: string
@@ -81,6 +82,16 @@ export async function MarkdownRenderer({
     return ''
   }
 
+  // Custom <startup-breakdown bars='[...]' /> tag: JSON bars in an attribute, rendered as the React component.
+  const StartupBreakdownBlock = ({bars}: {bars?: string}) => {
+    if (!bars) return null
+    try {
+      return <StartupBreakdown bars={JSON.parse(bars)} />
+    } catch {
+      return null
+    }
+  }
+
   // Custom pre component that adds a copy button
   const PreComponent = ({children, ...props}: React.HTMLAttributes<HTMLPreElement>) => {
     const codeString = extractText(children)
@@ -138,10 +149,13 @@ export async function MarkdownRenderer({
           },
         ],
       ]}
-      components={{
-        img: ImageComponent,
-        pre: PreComponent,
-      }}
+      components={
+        {
+          img: ImageComponent,
+          pre: PreComponent,
+          'startup-breakdown': StartupBreakdownBlock,
+        } as Components
+      }
     >
       {processedContent}
     </MarkdownAsync>
