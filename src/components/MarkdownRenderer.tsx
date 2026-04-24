@@ -83,10 +83,11 @@ export async function MarkdownRenderer({
   }
 
   // Custom <startup-breakdown bars='[...]' /> tag: JSON bars in an attribute, rendered as the React component.
-  const StartupBreakdownBlock = ({bars}: {bars?: string}) => {
+  // `showlegend="false"` (HTML-lowercased) hides the legend; default is shown.
+  const StartupBreakdownBlock = ({bars, showlegend}: {bars?: string; showlegend?: string}) => {
     if (!bars) return null
     try {
-      return <StartupBreakdown bars={JSON.parse(bars)} />
+      return <StartupBreakdown bars={JSON.parse(bars)} showLegend={showlegend !== 'false'} />
     } catch {
       return null
     }
