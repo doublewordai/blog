@@ -131,6 +131,7 @@ export default function EntropyBars({title = '', defaultFormats = ['BF16']}: Pro
         responsive: true,
         maintainAspectRatio: false,
         animation: {duration: 200},
+        layout: {padding: {top: 16}},
         plugins: {
           datalabels: {display: false},
           title: {display: !!title, text: title, font: {size: 15, weight: 'normal'}, padding: {bottom: 16}},
@@ -171,7 +172,7 @@ export default function EntropyBars({title = '', defaultFormats = ['BF16']}: Pro
             grid: {display: false},
             ticks: {maxRotation: 90, minRotation: 45, autoSkip: false, font: {size: 9}},
           },
-          y: {stacked: true, title: {display: true, text: 'Bits per element'}, grid: {color: theme.grid}},
+          y: {stacked: true, title: {display: true, text: 'Bits per element'}, grid: {color: theme.grid}, grace: '8%'},
         },
       },
     })

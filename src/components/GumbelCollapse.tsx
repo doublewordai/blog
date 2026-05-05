@@ -54,7 +54,7 @@ export default function GumbelCollapse({title = '', defaultFormats = ['BF16', 'F
       const lightness = 60 - t * 25
       const hue = LAB_HUES[m.lab] ?? 0
       return {
-        label: m.label,
+        label: `${m.label} [${m.format}]`,
         data: m.gumbelData ?? [],
         backgroundColor: `hsl(${hue}, 70%, ${lightness}%)`,
         borderColor: `hsl(${hue}, 70%, ${lightness}%)`,
