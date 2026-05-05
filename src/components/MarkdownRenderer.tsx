@@ -11,6 +11,9 @@ import rehypeSlug from 'rehype-slug'
 import rehypeAutolinkHeadings from 'rehype-autolink-headings'
 import CopyButton from './CopyButton'
 import StartupBreakdown from './StartupBreakdown'
+import EntropyBars from './EntropyBars'
+import MagnitudeHistogram from './MagnitudeHistogram'
+import GumbelCollapse from './GumbelCollapse'
 
 type ImageData = {
   filename: string
@@ -93,6 +96,27 @@ export async function MarkdownRenderer({
     }
   }
 
+  // Weight-entropy chart blocks. `defaultformats` (HTML-lowercased) takes a JSON-array string of format names.
+  const parseFormats = (s?: string): string[] | undefined => {
+    if (!s) return undefined
+    try {
+      const v = JSON.parse(s)
+      return Array.isArray(v) ? v : undefined
+    } catch {
+      return undefined
+    }
+  }
+
+  const EntropyBarsBlock = ({defaultformats}: {defaultformats?: string}) => (
+    <EntropyBars defaultFormats={parseFormats(defaultformats)} />
+  )
+  const MagnitudeHistogramBlock = ({defaultformats}: {defaultformats?: string}) => (
+    <MagnitudeHistogram defaultFormats={parseFormats(defaultformats)} />
+  )
+  const GumbelCollapseBlock = ({defaultformats}: {defaultformats?: string}) => (
+    <GumbelCollapse defaultFormats={parseFormats(defaultformats)} />
+  )
+
   // Custom pre component that adds a copy button
   const PreComponent = ({children, ...props}: React.HTMLAttributes<HTMLPreElement>) => {
     const codeString = extractText(children)
@@ -155,6 +179,9 @@ export async function MarkdownRenderer({
           img: ImageComponent,
           pre: PreComponent,
           'startup-breakdown': StartupBreakdownBlock,
+          'entropy-bars': EntropyBarsBlock,
+          'magnitude-histogram': MagnitudeHistogramBlock,
+          'gumbel-collapse': GumbelCollapseBlock,
         } as Components
       }
     >
