@@ -56,16 +56,22 @@ export async function MarkdownRenderer({
     const altText = imageData?.alt || alt || ''
     const caption = imageData?.caption
 
+    // SVGs are typically diagrams: skip the photo styling (shadow, rounded, force-full-width).
+    const isSvg = !!srcString && /\.svg(\?|$)/i.test(srcString)
+    const photoClass = 'rounded-lg w-full my-6 shadow-md'
+    const diagramClass = 'block mx-auto max-w-full my-6'
+    const imgClass = isSvg ? diagramClass : photoClass
+
     if (caption) {
       return (
         <figure className="my-6">
-          <img src={srcString} alt={altText} className="rounded-lg w-full shadow-md" {...props} />
+          <img src={srcString} alt={altText} className={imgClass} {...props} />
           <figcaption className="mt-2 text-sm text-gray-600 text-center italic">{caption}</figcaption>
         </figure>
       )
     }
 
-    return <img src={srcString} alt={altText} className="rounded-lg w-full my-6 shadow-md" {...props} />
+    return <img src={srcString} alt={altText} className={imgClass} {...props} />
   }
 
   // Helper function to extract text from React children recursively
