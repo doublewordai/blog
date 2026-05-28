@@ -14,6 +14,8 @@ import StartupBreakdown from './StartupBreakdown'
 import EntropyBars from './EntropyBars'
 import MagnitudeHistogram from './MagnitudeHistogram'
 import GumbelCollapse from './GumbelCollapse'
+import AmplificationVsStreamLength from './AmplificationVsStreamLength'
+import KernelBandwidthBars from './KernelBandwidthBars'
 
 type ImageData = {
   filename: string
@@ -123,6 +125,10 @@ export async function MarkdownRenderer({
     <GumbelCollapse defaultFormats={parseFormats(defaultformats)} />
   )
 
+  // Speed-of-light post chart blocks. Data is baked into each component, no attributes.
+  const AmplificationVsStreamLengthBlock = () => <AmplificationVsStreamLength />
+  const KernelBandwidthBarsBlock = () => <KernelBandwidthBars />
+
   // Custom pre component that adds a copy button
   const PreComponent = ({children, ...props}: React.HTMLAttributes<HTMLPreElement>) => {
     const codeString = extractText(children)
@@ -188,6 +194,8 @@ export async function MarkdownRenderer({
           'entropy-bars': EntropyBarsBlock,
           'magnitude-histogram': MagnitudeHistogramBlock,
           'gumbel-collapse': GumbelCollapseBlock,
+          'amplification-vs-stream-length': AmplificationVsStreamLengthBlock,
+          'kernel-bandwidth-bars': KernelBandwidthBarsBlock,
         } as Components
       }
     >
