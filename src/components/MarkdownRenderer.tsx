@@ -16,6 +16,7 @@ import MagnitudeHistogram from './MagnitudeHistogram'
 import GumbelCollapse from './GumbelCollapse'
 import AmplificationVsStreamLength from './AmplificationVsStreamLength'
 import KernelBandwidthBars from './KernelBandwidthBars'
+import Mi300xThroughputBars from './Mi300xThroughputBars'
 
 type ImageData = {
   filename: string
@@ -128,6 +129,7 @@ export async function MarkdownRenderer({
   // Speed-of-light post chart blocks. Data is baked into each component, no attributes.
   const AmplificationVsStreamLengthBlock = () => <AmplificationVsStreamLength />
   const KernelBandwidthBarsBlock = () => <KernelBandwidthBars />
+  const Mi300xThroughputBarsBlock = () => <Mi300xThroughputBars />
 
   // Custom pre component that adds a copy button
   const PreComponent = ({children, ...props}: React.HTMLAttributes<HTMLPreElement>) => {
@@ -196,6 +198,7 @@ export async function MarkdownRenderer({
           'gumbel-collapse': GumbelCollapseBlock,
           'amplification-vs-stream-length': AmplificationVsStreamLengthBlock,
           'kernel-bandwidth-bars': KernelBandwidthBarsBlock,
+          'mi300x-throughput-bars': Mi300xThroughputBarsBlock,
         } as Components
       }
     >
