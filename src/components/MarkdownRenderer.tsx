@@ -17,6 +17,9 @@ import GumbelCollapse from './GumbelCollapse'
 import AmplificationVsStreamLength from './AmplificationVsStreamLength'
 import KernelBandwidthBars from './KernelBandwidthBars'
 import Mi300xThroughputBars from './Mi300xThroughputBars'
+import RooflineExpertStack from './RooflineExpertStack'
+import SpecDecLedger from './SpecDecLedger'
+import SpecDecOptimalGamma from './SpecDecOptimalGamma'
 
 type ImageData = {
   filename: string
@@ -131,6 +134,11 @@ export async function MarkdownRenderer({
   const KernelBandwidthBarsBlock = () => <KernelBandwidthBars />
   const Mi300xThroughputBarsBlock = () => <Mi300xThroughputBars />
 
+  // Economics-of-speculative-decoding chart blocks. Self-contained, no attributes.
+  const RooflineExpertStackBlock = () => <RooflineExpertStack />
+  const SpecDecLedgerBlock = () => <SpecDecLedger />
+  const SpecDecOptimalGammaBlock = () => <SpecDecOptimalGamma />
+
   // Custom pre component that adds a copy button
   const PreComponent = ({children, ...props}: React.HTMLAttributes<HTMLPreElement>) => {
     const codeString = extractText(children)
@@ -199,6 +207,9 @@ export async function MarkdownRenderer({
           'amplification-vs-stream-length': AmplificationVsStreamLengthBlock,
           'kernel-bandwidth-bars': KernelBandwidthBarsBlock,
           'mi300x-throughput-bars': Mi300xThroughputBarsBlock,
+          'roofline-expert-stack': RooflineExpertStackBlock,
+          'spec-dec-ledger': SpecDecLedgerBlock,
+          'spec-dec-optimal-gamma': SpecDecOptimalGammaBlock,
         } as Components
       }
     >
