@@ -44,7 +44,11 @@
     "basic-ftp": "^5.2.0",
     "uuid": "^13.0.1",
     "postcss": "^8.5.10",
-    "undici": "^6.24.0"
+    "undici": "^6.24.0",
+    "esbuild": "^0.28.1",
+    "@vercel/frameworks": {
+      "js-yaml": "^3.14.2"
+    }
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
