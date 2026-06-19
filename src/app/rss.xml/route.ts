@@ -47,6 +47,7 @@ export async function GET() {
         post.canonicalUrl
           ? `      <source url="${escapeXml(post.canonicalUrl)}">${escapeXml(post.title ?? 'Untitled')}</source>`
           : '',
+        '    </item>',
       ]
         .filter(Boolean)
         .join('\n')
