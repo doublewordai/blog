@@ -1028,9 +1028,13 @@ html[data-theme="dark"] .startup-breakdown {
     display: block;
   }
 }
-html[data-theme="dark"] .rdma-svg .label,
 html[data-theme="dark"] .rdma-svg .title {
   fill: #e5e5e5;
+}
+/* .label sits inside the light pastel boxes, whose fills don't change in dark
+   mode, so keep the label text dark for contrast. */
+html[data-theme="dark"] .rdma-svg .label {
+  fill: #2a2a2a;
 }
 html[data-theme="dark"] .rdma-svg .step {
   fill: #ddd;
