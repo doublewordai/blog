@@ -65,3 +65,15 @@ export const ALL_POSTS_SITEMAP_QUERY = defineQuery(`*[_type == "post" && defined
   "slug": slug.current,
   _updatedAt
 }`)
+
+/**
+ * Query recent posts for the RSS feed, newest first.
+ */
+export const RSS_FEED_QUERY = defineQuery(`*[_type == "post" && defined(slug.current)] | order(publishedAt desc) [0...50] {
+  title,
+  "slug": slug.current,
+  publishedAt,
+  description,
+  canonicalUrl,
+  "authors": authors[]->{ name }
+}`)

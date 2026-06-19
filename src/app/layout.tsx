@@ -26,6 +26,13 @@ import './globals.css'
 export const metadata: Metadata = {
   title: 'Doubleword blog',
   description: 'Notes on building AI systems',
+  alternates: {
+    types: {
+      'application/rss+xml': [
+        {url: '/rss.xml', title: 'Doubleword blog'},
+      ],
+    },
+  },
 }
 
 // Script to prevent flash of wrong theme
