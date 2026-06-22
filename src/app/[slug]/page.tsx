@@ -62,6 +62,8 @@ export async function generateMetadata({params}: Props): Promise<Metadata> {
             .substring(0, 160)
         : 'Notes on building AI systems')
 
+  const ogImage = post.image ? urlFor(post.image)?.width(1200).height(630).url() : null
+
   return {
     title,
     description,
@@ -74,11 +76,13 @@ export async function generateMetadata({params}: Props): Promise<Metadata> {
       url: canonicalUrl,
       siteName: 'Doubleword',
       type: 'article',
+      ...(ogImage ? {images: [{url: ogImage, width: 1200, height: 630}]} : {}),
     },
     twitter: {
-      card: 'summary',
+      card: ogImage ? 'summary_large_image' : 'summary',
       title,
       description,
+      ...(ogImage ? {images: [ogImage]} : {}),
     },
   }
 }
@@ -124,7 +128,6 @@ export default async function PostPage({params}: Props) {
     },
   })
 
-  const postImageUrl = post.image ? urlFor(post.image)?.width(1200).height(630).url() : null
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -199,19 +202,6 @@ export default async function PostPage({params}: Props) {
                 allowFullScreen
               />
             </div>
-          )}
-
-          {/* Featured Image */}
-          {postImageUrl && (
-            <figure className="mb-8 animate-fade-in animate-delay-2">
-              <img
-                src={postImageUrl}
-                alt={post.title}
-                className="w-full rounded-lg"
-                width="1200"
-                height="630"
-              />
-            </figure>
           )}
 
           {/* Article Content - Tufte prose styling */}
