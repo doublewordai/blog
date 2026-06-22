@@ -4,6 +4,7 @@ import remarkMath from 'remark-math'
 import remarkFrontmatter from 'remark-frontmatter'
 import remarkUnwrapImages from 'remark-unwrap-images'
 import {remarkSidenotes} from '@/plugins/remark-sidenotes.mjs'
+import remarkSmartypants from 'remark-smartypants'
 import rehypeShiki from '@shikijs/rehype'
 import rehypeKatex from 'rehype-katex'
 import rehypeRaw from 'rehype-raw'
@@ -161,7 +162,7 @@ export async function MarkdownRenderer({
 
   return (
     <MarkdownAsync
-      remarkPlugins={[remarkFrontmatter, remarkGfm, remarkMath, remarkUnwrapImages, remarkSidenotes]}
+      remarkPlugins={[remarkFrontmatter, remarkGfm, remarkMath, remarkUnwrapImages, remarkSidenotes, remarkSmartypants]}
       rehypePlugins={[
         rehypeSlug,
         [
