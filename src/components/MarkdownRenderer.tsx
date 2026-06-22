@@ -20,6 +20,10 @@ import Mi300xThroughputBars from './Mi300xThroughputBars'
 import RooflineExpertStack from './RooflineExpertStack'
 import SpecDecLedger from './SpecDecLedger'
 import SpecDecOptimalGamma from './SpecDecOptimalGamma'
+import DrafterCrossover from './DrafterCrossover'
+import PricingEnvelope from './PricingEnvelope'
+import AcceptanceCurve from './AcceptanceCurve'
+import ParetoFrontier from './ParetoFrontier'
 
 type ImageData = {
   filename: string
@@ -138,6 +142,10 @@ export async function MarkdownRenderer({
   const RooflineExpertStackBlock = () => <RooflineExpertStack />
   const SpecDecLedgerBlock = () => <SpecDecLedger />
   const SpecDecOptimalGammaBlock = () => <SpecDecOptimalGamma />
+  const DrafterCrossoverBlock = () => <DrafterCrossover />
+  const PricingEnvelopeBlock = () => <PricingEnvelope />
+  const AcceptanceCurveBlock = () => <AcceptanceCurve />
+  const ParetoFrontierBlock = () => <ParetoFrontier />
 
   // Custom pre component that adds a copy button
   const PreComponent = ({children, ...props}: React.HTMLAttributes<HTMLPreElement>) => {
@@ -210,6 +218,10 @@ export async function MarkdownRenderer({
           'roofline-expert-stack': RooflineExpertStackBlock,
           'spec-dec-ledger': SpecDecLedgerBlock,
           'spec-dec-optimal-gamma': SpecDecOptimalGammaBlock,
+          'drafter-crossover': DrafterCrossoverBlock,
+          'pricing-envelope': PricingEnvelopeBlock,
+          'acceptance-curve': AcceptanceCurveBlock,
+          'pareto-frontier': ParetoFrontierBlock,
         } as Components
       }
     >
