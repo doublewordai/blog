@@ -1127,3 +1127,46 @@ html[data-theme="dark"] .rdma-svg .host {
 html[data-theme="dark"] .rdma-svg .faint {
   stroke: #777;
 }
+
+/* ============================================
+   Diagram figures (.gk-svg) in dark mode
+   ============================================ */
+/* These diagrams use a light-on-light palette (pastel boxes, dark labels,
+   grey page text). The mirrored post body ships inline [data-theme='dark']
+   rules that lighten the text — but the pastel boxes stay light, so on the
+   dark page the on-box labels wash out. Instead, render each diagram as a
+   light card and restore its light-mode colours. These selectors carry
+   `.prose`, so they outrank the inline body rules. */
+html[data-theme="dark"] .prose .gk-svg {
+  background: #f7f5ee;
+  border-radius: 6px;
+  box-shadow: 0 1px 8px rgba(0, 0, 0, 0.3);
+}
+html[data-theme="dark"] .prose .gk-svg .who {
+  fill: #777;
+}
+html[data-theme="dark"] .prose .gk-svg .tag {
+  fill: #666;
+}
+html[data-theme="dark"] .prose .gk-svg .label {
+  fill: #2a2a2a;
+}
+html[data-theme="dark"] .prose .gk-svg .code {
+  fill: #555;
+}
+html[data-theme="dark"] .prose .gk-svg .line {
+  stroke: #444;
+}
+html[data-theme="dark"] .prose .gk-svg .host {
+  stroke: #bbb;
+}
+html[data-theme="dark"] .prose .gk-svg .div {
+  stroke: #bbb;
+}
+html[data-theme="dark"] .prose .gk-svg .ghost {
+  fill: #f0f0f0;
+  stroke: #bbb;
+}
+html[data-theme="dark"] .prose .gk-svg .pc {
+  fill: #444;
+}
