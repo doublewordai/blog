@@ -200,8 +200,21 @@ export async function MarkdownRenderer({
               'markdown',
               'text',
               'plaintext',
+              'c',
+              'cpp',
+              'asm',
+              'sass',
             ],
+            // map fence labels used in posts to loaded grammars
+            // (matches the personal blog's Shiki langAlias)
+            langAlias: {
+              cuda: 'cpp',
+              ptx: 'asm',
+              txt: 'text',
+            },
             defaultLanguage: 'text',
+            // any unlisted language still renders themed (never invisible)
+            fallbackLanguage: 'text',
           },
         ],
       ]}
