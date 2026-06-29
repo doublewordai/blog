@@ -404,15 +404,12 @@ html[data-theme="dark"] .sidenote-unnumbered img {
    Code Blocks - Warm Theme
    ============================================ */
 
-/* Inline code */
+/* Inline code — borderless, like the personal blog (no chip background) */
 .prose :not(pre) > code {
-  background: var(--code-bg);
-  color: var(--code-text);
-  padding: 0.15em 0.4em;
-  border-radius: 4px;
+  color: var(--foreground);
   font-size: 0.85em;
-  font-weight: 500;
-  font-family: 'JetBrains Mono Variable', 'JetBrains Mono', 'Fira Code', monospace;
+  font-weight: 600;
+  font-family: var(--font-mono), 'JetBrains Mono Variable', 'JetBrains Mono', 'Fira Code', monospace;
 }
 
 /* Remove backticks from inline code */
