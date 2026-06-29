@@ -8,6 +8,7 @@ import {createImageUrlBuilder, type SanityImageSource} from '@sanity/image-url'
 import {projectId, dataset} from '@/sanity/env'
 import {BackLink} from '@/components/BackLink'
 import {ThemeToggle} from '@/components/ThemeToggle'
+import {PostFooter} from '@/components/PostFooter'
 import {getPostHogClient} from '@/lib/posthog-server'
 
 const SITE_URL = 'https://blog.doubleword.ai'
@@ -247,8 +248,8 @@ export default async function PostPage({params}: Props) {
             )}
           </div>
 
-          {/* Footer divider */}
-          <div className="mt-12 sm:mt-16 pt-6 sm:pt-8 border-t border-[--rule-light]" />
+          {/* Branding CTA + citation */}
+          <PostFooter post={post} siteUrl={SITE_URL} />
         </article>
       </div>
 

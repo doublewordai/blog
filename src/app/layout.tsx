@@ -3,6 +3,7 @@ import {draftMode} from 'next/headers'
 import {VisualEditing} from 'next-sanity/visual-editing'
 import {Analytics} from '@vercel/analytics/react'
 import {SpeedInsights} from '@vercel/speed-insights/next'
+import {ApiLink} from '@/components/ApiLink'
 
 // Self-hosted Google fonts via next/font: build-time subsetting, automatic
 // preload, and a size-adjusted fallback face (eliminates FOUC + layout shift).
@@ -76,6 +77,7 @@ export default async function RootLayout({
         <script dangerouslySetInnerHTML={{__html: themeScript}} />
       </head>
       <body>
+        <ApiLink />
         {children}
         <Analytics />
         <SpeedInsights />
