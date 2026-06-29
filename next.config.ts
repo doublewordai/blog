@@ -3,6 +3,10 @@ import type {NextConfig} from 'next'
 const nextConfig: NextConfig = {
   reactCompiler: true,
 
+  // Allow the dev server / HMR to be reached over the LAN hostname, not just
+  // localhost (used to preview drafts remotely). Dev-only; no prod effect.
+  allowedDevOrigins: ['gotenks', 'gotenks:4446'],
+
   // Allow images from Sanity CDN
   images: {
     remotePatterns: [

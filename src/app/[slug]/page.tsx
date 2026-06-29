@@ -132,8 +132,8 @@ export default async function PostPage({params}: Props) {
   return (
     <div className="min-h-screen flex flex-col">
       {/* Tufte-style layout: wider container on xl to accommodate sidenotes */}
-      <div className="flex-1 w-full max-w-[42rem] xl:max-w-[58rem] mx-auto px-6 sm:px-8 xl:px-10 py-10 sm:py-14">
-        <article className="xl:max-w-[42rem]">
+      <div className="flex-1 w-full max-w-[40rem] xl:max-w-[56rem] mx-auto px-6 sm:px-8 xl:px-10 py-10 sm:py-14">
+        <article className="xl:max-w-[37rem]">
           {/* Article Header */}
           <header className="mb-5 sm:mb-6 animate-fade-in animate-delay-1">
             {/* Navigation row with back link and theme toggle */}
@@ -206,17 +206,17 @@ export default async function PostPage({params}: Props) {
 
           {/* Article Content - Tufte prose styling */}
           <div
-            className="prose prose-lg max-w-none animate-fade-in animate-delay-3
+            className="prose max-w-none animate-fade-in animate-delay-3
             prose-headings:font-semibold
             prose-headings:tracking-tight
             prose-headings:text-[--foreground]
             prose-h1:text-[2rem] prose-h1:mt-10 prose-h1:mb-3
-            prose-h2:text-[1.5rem] prose-h2:mt-10 prose-h2:mb-3
-            prose-h3:text-[1.25rem] prose-h3:mt-8 prose-h3:mb-2
-            prose-h4:text-[1.1rem] prose-h4:mt-6 prose-h4:mb-2
-            prose-p:text-[1.05rem]
-            prose-p:leading-[1.85]
-            prose-p:mb-[1.5em]
+            prose-h2:text-[1.5rem] prose-h2:mt-9 prose-h2:mb-2
+            prose-h3:text-[1.25rem] prose-h3:mt-7 prose-h3:mb-2
+            prose-h4:text-[1.1rem] prose-h4:mt-5 prose-h4:mb-2
+            prose-p:text-[1rem]
+            prose-p:leading-[1.6]
+            prose-p:mb-[1.1em]
             prose-p:text-[--foreground]
             prose-a:text-[--accent]
             prose-a:decoration-[--accent-muted]
@@ -229,8 +229,8 @@ export default async function PostPage({params}: Props) {
             prose-ul:my-4
             prose-ol:my-4
             prose-li:my-1
-            prose-li:text-[1.05rem]
-            prose-li:leading-[1.75]
+            prose-li:text-[1rem]
+            prose-li:leading-[1.6]
             prose-blockquote:border-l-[3px]
             prose-blockquote:border-[--rule]
             prose-blockquote:pl-6
@@ -238,9 +238,9 @@ export default async function PostPage({params}: Props) {
             prose-blockquote:text-[--muted]
             prose-blockquote:not-italic
             prose-img:rounded-lg
-            prose-img:my-6
+            prose-img:my-5
             prose-hr:border-[--rule]
-            prose-hr:my-10"
+            prose-hr:my-8"
           >
             {typeof body === 'string' && (
               <MarkdownRenderer content={body} images={post.images} />
@@ -254,8 +254,8 @@ export default async function PostPage({params}: Props) {
 
       {/* Site Footer */}
       <footer className="site-footer">
-        <div className="max-w-[42rem] xl:max-w-[58rem] mx-auto px-6 sm:px-8 xl:px-10">
-          <div className="xl:max-w-[42rem]">
+        <div className="max-w-[40rem] xl:max-w-[56rem] mx-auto px-6 sm:px-8 xl:px-10">
+          <div className="xl:max-w-[37rem]">
           <div className="footer-content flex-col sm:flex-row gap-4">
             <div className="flex items-center gap-2">
               <img src="/doubleword-icon.png" alt="" className="h-4 w-4 opacity-50" />
