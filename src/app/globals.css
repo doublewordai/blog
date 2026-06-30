@@ -799,6 +799,15 @@ html[data-theme="dark"] .post-index {
   font-weight: 600;
   letter-spacing: -0.02em;
   line-height: 1;
+  /* Full size (2.25rem) on iPhone-class widths and up, beside the header
+     controls; shrinks only on screens too narrow to fit it next to them. */
+  font-size: clamp(1.5rem, 21vw - 43px, 2.25rem);
+}
+
+@media (min-width: 640px) {
+  .brand-title {
+    font-size: 2.5rem;
+  }
 }
 
 .brand-title-double {
@@ -855,13 +864,11 @@ html[data-theme="dark"] .post-index {
    ============================================ */
 
 .api-link {
-  position: absolute;
-  top: 1.25rem;
-  right: 1.5rem;
-  z-index: 50;
   display: inline-flex;
   align-items: center;
-  gap: 0.3rem;
+  justify-content: center;
+  gap: 0.35rem;
+  height: 2rem;
   font-family: var(--font-sans), system-ui, sans-serif;
   font-size: 0.8rem;
   font-weight: 500;

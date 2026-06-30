@@ -7,8 +7,9 @@ import {MarkdownRenderer} from '@/components/MarkdownRenderer'
 import {createImageUrlBuilder, type SanityImageSource} from '@sanity/image-url'
 import {projectId, dataset} from '@/sanity/env'
 import {BackLink} from '@/components/BackLink'
-import {ThemeToggle} from '@/components/ThemeToggle'
 import {PostFooter} from '@/components/PostFooter'
+import {ApiLink} from '@/components/ApiLink'
+import {ThemeToggle} from '@/components/ThemeToggle'
 import {getPostHogClient} from '@/lib/posthog-server'
 
 const SITE_URL = 'https://blog.doubleword.ai'
@@ -157,7 +158,10 @@ export default async function PostPage({params}: Props) {
                   </time>
                 )}
               </BackLink>
-              <ThemeToggle />
+              <div className="flex items-center gap-1">
+                <ApiLink />
+                <ThemeToggle />
+              </div>
             </div>
 
             {/* Title */}
