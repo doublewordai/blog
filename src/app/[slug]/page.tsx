@@ -66,9 +66,12 @@ export async function generateMetadata({params}: Props): Promise<Metadata> {
 
   const ogImage = post.image ? urlFor(post.image)?.width(1200).height(630).url() : null
 
+  const authorNames = post.authors?.map((a) => a.name).filter(Boolean) ?? []
+
   return {
     title,
     description,
+    ...(authorNames.length ? {authors: authorNames.map((name) => ({name}))} : {}),
     alternates: {
       canonical: canonicalUrl,
     },
@@ -78,6 +81,8 @@ export async function generateMetadata({params}: Props): Promise<Metadata> {
       url: canonicalUrl,
       siteName: 'Doubleword',
       type: 'article',
+      ...(authorNames.length ? {authors: authorNames} : {}),
+      ...(post.publishedAt ? {publishedTime: post.publishedAt} : {}),
       ...(ogImage ? {images: [{url: ogImage, width: 1200, height: 630}]} : {}),
     },
     twitter: {
