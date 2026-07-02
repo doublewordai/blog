@@ -15,7 +15,15 @@ export interface ChartTheme {
   fontFamily: string
 }
 
-const FONT_FAMILY = "'Source Sans 3', sans-serif"
+// next/font registers Source Sans 3 under a hashed family name, so the literal
+// name doesn't resolve. Read the real font stack off the body (it includes the
+// hashed name via --font-sans); the literal is only an SSR/failure fallback.
+const FONT_FALLBACK = "'Source Sans 3', sans-serif"
+
+function fontFamily(): string {
+  if (typeof document === 'undefined') return FONT_FALLBACK
+  return getComputedStyle(document.body).fontFamily || FONT_FALLBACK
+}
 
 function readTheme(): ChartTheme {
   const isDark =
@@ -31,7 +39,7 @@ function readTheme(): ChartTheme {
       buttonActiveBg: 'rgba(240, 240, 240, 0.12)',
       buttonActiveText: '#f0f0f0',
       buttonInactiveText: 'rgba(240, 240, 240, 0.45)',
-      fontFamily: FONT_FAMILY,
+      fontFamily: fontFamily(),
     }
   }
   return {
@@ -43,7 +51,7 @@ function readTheme(): ChartTheme {
     buttonActiveBg: 'rgba(0, 0, 0, 0.08)',
     buttonActiveText: '#000000',
     buttonInactiveText: 'rgba(0, 0, 0, 0.4)',
-    fontFamily: FONT_FAMILY,
+    fontFamily: fontFamily(),
   }
 }
 
