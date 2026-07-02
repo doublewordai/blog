@@ -25,6 +25,11 @@ import DrafterCrossover from './DrafterCrossover'
 import PricingEnvelope from './PricingEnvelope'
 import AcceptanceCurve from './AcceptanceCurve'
 import ParetoFrontier from './ParetoFrontier'
+import ExpertPopularity from './ExpertPopularity'
+import WidthVsDepth from './WidthVsDepth'
+import AcceptLengthHist from './AcceptLengthHist'
+import AcceptJointHeatmap from './AcceptJointHeatmap'
+import GatingLadder from './GatingLadder'
 
 type ImageData = {
   filename: string
@@ -148,6 +153,42 @@ export async function MarkdownRenderer({
   const AcceptanceCurveBlock = () => <AcceptanceCurve />
   const ParetoFrontierBlock = () => <ParetoFrontier />
 
+  // Width-vs-depth (speculating-on-the-margin) chart blocks. Self-contained.
+  const ExpertPopularityBlock = () => <ExpertPopularity />
+  const WidthVsDepthBlock = () => <WidthVsDepth />
+  const AcceptLengthHistBlock = () => <AcceptLengthHist />
+  const AcceptJointHeatmapBlock = () => <AcceptJointHeatmap />
+  const GatingLadderBlock = () => <GatingLadder />
+
+  // <ghost-aside> ... </ghost-aside>: muted dashed-border aside, ported from the
+  // personal blog's Aside.astro. Open/close tags must sit on their own lines with
+  // blank lines around the content so the inner markdown still gets parsed.
+  const GhostAsideBlock = ({children}: {children?: React.ReactNode}) => (
+    <aside
+      style={{
+        margin: '1.5rem 0',
+        padding: '0.6rem 0 0.6rem 0.9rem',
+        borderLeft: '3px dashed color-mix(in srgb, var(--foreground) 25%, transparent)',
+        color: 'color-mix(in srgb, var(--foreground) 72%, transparent)',
+        fontSize: '0.95rem',
+      }}
+    >
+      <span
+        style={{
+          display: 'block',
+          fontSize: '0.75rem',
+          fontWeight: 500,
+          letterSpacing: '0.08em',
+          textTransform: 'uppercase',
+          marginBottom: '0.3rem',
+        }}
+      >
+        Note
+      </span>
+      <div>{children}</div>
+    </aside>
+  )
+
   // Custom pre component that adds a copy button
   const PreComponent = ({children, ...props}: React.HTMLAttributes<HTMLPreElement>) => {
     const codeString = extractText(children)
@@ -236,6 +277,12 @@ export async function MarkdownRenderer({
           'pricing-envelope': PricingEnvelopeBlock,
           'acceptance-curve': AcceptanceCurveBlock,
           'pareto-frontier': ParetoFrontierBlock,
+          'expert-popularity': ExpertPopularityBlock,
+          'width-vs-depth': WidthVsDepthBlock,
+          'accept-length-hist': AcceptLengthHistBlock,
+          'accept-joint-heatmap': AcceptJointHeatmapBlock,
+          'gating-ladder': GatingLadderBlock,
+          'ghost-aside': GhostAsideBlock,
         } as Components
       }
     >
