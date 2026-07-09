@@ -34,6 +34,16 @@ const COLORS: Record<string, string> = {
   'CUDA plugin': '#a07eb5',
   'Weight reload': '#8faa6e',
   'Wake + reload': '#8faa6e',
+  // cuda-checkpoint cycle anatomy
+  'Lock': '#7a8a7a',
+  'Unlock': '#7a8a7a',
+  'Checkpoint': '#cc7e7e',
+  'Restore': '#8faa6e',
+  'Utility init': '#7a8a7a',
+  'Zero staging pages': '#cc7e7e',
+  'Copy out + teardown': '#5b7b9a',
+  'Rebuild + copy in': '#8faa6e',
+  'Unmap staging': '#c4956a',
 }
 
 type TooltipState = {

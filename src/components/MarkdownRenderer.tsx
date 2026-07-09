@@ -30,6 +30,7 @@ import WidthVsDepth from './WidthVsDepth'
 import AcceptLengthHist from './AcceptLengthHist'
 import AcceptJointHeatmap from './AcceptJointHeatmap'
 import GatingLadder from './GatingLadder'
+import AnatomyFig from './AnatomyFig'
 
 type ImageData = {
   filename: string
@@ -109,10 +110,25 @@ export async function MarkdownRenderer({
 
   // Custom <startup-breakdown bars='[...]' /> tag: JSON bars in an attribute, rendered as the React component.
   // `showlegend="false"` (HTML-lowercased) hides the legend; default is shown.
-  const StartupBreakdownBlock = ({bars, showlegend}: {bars?: string; showlegend?: string}) => {
+  // `maxseconds="4.55"` pins the time axis so successive charts share a scale.
+  const StartupBreakdownBlock = ({
+    bars,
+    showlegend,
+    maxseconds,
+  }: {
+    bars?: string
+    showlegend?: string
+    maxseconds?: string
+  }) => {
     if (!bars) return null
     try {
-      return <StartupBreakdown bars={JSON.parse(bars)} showLegend={showlegend !== 'false'} />
+      return (
+        <StartupBreakdown
+          bars={JSON.parse(bars)}
+          showLegend={showlegend !== 'false'}
+          maxSeconds={maxseconds ? Number(maxseconds) : undefined}
+        />
+      )
     } catch {
       return null
     }
@@ -159,6 +175,9 @@ export async function MarkdownRenderer({
   const AcceptLengthHistBlock = () => <AcceptLengthHist />
   const AcceptJointHeatmapBlock = () => <AcceptJointHeatmap />
   const GatingLadderBlock = () => <GatingLadder />
+
+  // Checkpoint-anatomy (cuda-checkpoint post) figure. Self-contained.
+  const AnatomyFigBlock = () => <AnatomyFig />
 
   // <ghost-aside> ... </ghost-aside>: muted dashed-border aside, ported from the
   // personal blog's Aside.astro. Open/close tags must sit on their own lines with
@@ -282,6 +301,7 @@ export async function MarkdownRenderer({
           'accept-length-hist': AcceptLengthHistBlock,
           'accept-joint-heatmap': AcceptJointHeatmapBlock,
           'gating-ladder': GatingLadderBlock,
+          'anatomy-fig': AnatomyFigBlock,
           'ghost-aside': GhostAsideBlock,
         } as Components
       }
