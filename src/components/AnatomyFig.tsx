@@ -13,8 +13,8 @@ export default function AnatomyFig() {
           .ck-fig .ck-mobile {display: block;}
           .ck-fig .ck-mobile svg {max-width: 360px;}
         }
-        .ck-svg .tag {font-size:12.5px; fill:#666;}
-        .ck-svg .rl {font-size:14px; fill:#2a2a2a;}
+        .ck-svg .tag {font-size:11px; fill:#666;}
+        .ck-svg .rl {font-size:12.5px; fill:#2a2a2a;}
         .ck-svg .box {stroke:#444; stroke-width:1.4;}
         .ck-svg .seg {stroke:#444; stroke-width:1;}
         .ck-svg .div {stroke:#bbb; stroke-width:1; stroke-dasharray:4 3; fill:none;}

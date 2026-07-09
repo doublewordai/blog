@@ -208,6 +208,49 @@ export async function MarkdownRenderer({
     </aside>
   )
 
+  // CommonMark only treats a custom tag as an HTML *block* when the opening
+  // tag sits alone on its line; the one-line `<anatomy-fig></anatomy-fig>`
+  // form parses as inline HTML and gets wrapped in a <p>. The chart components
+  // render <div>s, and a <div> inside a <p> is invalid HTML: the browser
+  // reparents it while parsing, React hydration then fails, and the recovery
+  // re-render wipes the script-set data-theme attribute off <html> (killing
+  // syntax-highlight colors). Unwrap any paragraph that contains one.
+  const BLOCK_TAGS = new Set([
+    'startup-breakdown',
+    'entropy-bars',
+    'magnitude-histogram',
+    'gumbel-collapse',
+    'amplification-vs-stream-length',
+    'kernel-bandwidth-bars',
+    'mi300x-throughput-bars',
+    'roofline-expert-stack',
+    'spec-dec-ledger',
+    'spec-dec-optimal-gamma',
+    'drafter-crossover',
+    'pricing-envelope',
+    'acceptance-curve',
+    'pareto-frontier',
+    'expert-popularity',
+    'width-vs-depth',
+    'accept-length-hist',
+    'accept-joint-heatmap',
+    'gating-ladder',
+    'anatomy-fig',
+    'ghost-aside',
+  ])
+
+  const ParagraphComponent = ({
+    node,
+    children,
+    ...props
+  }: React.HTMLAttributes<HTMLParagraphElement> & {node?: {children?: Array<{type?: string; tagName?: string}>}}) => {
+    const hasBlockChild = node?.children?.some(
+      (c) => c.type === 'element' && c.tagName !== undefined && BLOCK_TAGS.has(c.tagName)
+    )
+    if (hasBlockChild) return <>{children}</>
+    return <p {...props}>{children}</p>
+  }
+
   // Custom pre component that adds a copy button
   const PreComponent = ({children, ...props}: React.HTMLAttributes<HTMLPreElement>) => {
     const codeString = extractText(children)
@@ -282,6 +325,7 @@ export async function MarkdownRenderer({
         {
           img: ImageComponent,
           pre: PreComponent,
+          p: ParagraphComponent,
           'startup-breakdown': StartupBreakdownBlock,
           'entropy-bars': EntropyBarsBlock,
           'magnitude-histogram': MagnitudeHistogramBlock,

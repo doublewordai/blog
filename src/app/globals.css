@@ -455,9 +455,11 @@ html[data-theme="dark"] .sidenote-unnumbered img {
 }
 
 /* Shiki dual theme switching */
-/* Light mode: use --shiki-light variables */
-html[data-theme="light"] .shiki,
-html[data-theme="light"] .shiki span {
+/* Light is the unconditional default (not keyed on [data-theme="light"]) so
+   highlighting survives if the data-theme attribute is ever absent — e.g. a
+   hydration-error recovery re-render wipes script-set attributes from <html>. */
+.shiki,
+.shiki span {
   color: var(--shiki-light) !important;
   background-color: transparent !important;
 }
