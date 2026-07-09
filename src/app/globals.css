@@ -1140,13 +1140,13 @@ html[data-theme="dark"] .startup-breakdown {
 }
 
 .startup-breakdown .bar-label {
-  font-size: 0.8125rem;
+  font-size: 13px; /* px: root here is 20px, personal is 16px */
   color: var(--sb-text);
   white-space: nowrap;
 }
 
 .startup-breakdown .bar-total {
-  font-size: 0.8125rem;
+  font-size: 13px; /* px: root here is 20px, personal is 16px */
   font-weight: 600;
   color: var(--sb-text);
   white-space: nowrap;
@@ -1199,7 +1199,7 @@ html[data-theme="dark"] .startup-breakdown {
 }
 
 .startup-breakdown .legend-label {
-  font-size: 0.6875rem;
+  font-size: 11px; /* px: root here is 20px, personal is 16px */
   color: var(--sb-text);
   white-space: nowrap;
 }
@@ -1211,7 +1211,7 @@ html[data-theme="dark"] .startup-breakdown {
   padding: 6px 10px;
   border-radius: 4px;
   font-family: var(--font-sans), system-ui, sans-serif;
-  font-size: 0.8125rem;
+  font-size: 13px; /* px: root here is 20px, personal is 16px */
   line-height: 1.4;
   max-width: 320px;
   pointer-events: none;
