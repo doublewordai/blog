@@ -49,7 +49,8 @@
     "esbuild": "^0.28.1",
     "@vercel/frameworks": {
       "js-yaml": "^3.14.2"
-    }
+    },
+    "adm-zip": "0.6.0"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
