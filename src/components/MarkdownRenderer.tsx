@@ -31,6 +31,8 @@ import AcceptLengthHist from './AcceptLengthHist'
 import AcceptJointHeatmap from './AcceptJointHeatmap'
 import GatingLadder from './GatingLadder'
 import AnatomyFig from './AnatomyFig'
+import ThroughputLadder from './ThroughputLadder'
+import RooflineBreakdown from './RooflineBreakdown'
 
 type ImageData = {
   filename: string
@@ -127,6 +129,45 @@ export async function MarkdownRenderer({
           bars={JSON.parse(bars)}
           showLegend={showlegend !== 'false'}
           maxSeconds={maxseconds ? Number(maxseconds) : undefined}
+        />
+      )
+    } catch {
+      return null
+    }
+  }
+
+  // Throughputmaxxing chart blocks: JSON data in attributes, like startup-breakdown.
+  const ThroughputLadderBlock = ({bars, max, unit}: {bars?: string; max?: string; unit?: string}) => {
+    if (!bars) return null
+    try {
+      return (
+        <ThroughputLadder
+          bars={JSON.parse(bars)}
+          max={max ? Number(max) : undefined}
+          unit={unit}
+        />
+      )
+    } catch {
+      return null
+    }
+  }
+
+  const RooflineBreakdownBlock = ({
+    rows,
+    unit,
+    maxvalue,
+  }: {
+    rows?: string
+    unit?: string
+    maxvalue?: string
+  }) => {
+    if (!rows) return null
+    try {
+      return (
+        <RooflineBreakdown
+          rows={JSON.parse(rows)}
+          unit={unit}
+          maxValue={maxvalue ? Number(maxvalue) : undefined}
         />
       )
     } catch {
@@ -347,6 +388,8 @@ export async function MarkdownRenderer({
           'gating-ladder': GatingLadderBlock,
           'anatomy-fig': AnatomyFigBlock,
           'ghost-aside': GhostAsideBlock,
+          'throughput-ladder': ThroughputLadderBlock,
+          'roofline-breakdown': RooflineBreakdownBlock,
         } as Components
       }
     >
