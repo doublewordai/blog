@@ -348,6 +348,7 @@ export async function MarkdownRenderer({
               'cpp',
               'asm',
               'sass',
+              'diff',
             ],
             // map fence labels used in posts to loaded grammars
             // (matches the personal blog's Shiki langAlias)
