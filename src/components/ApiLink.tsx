@@ -1,15 +1,19 @@
+import {CtaLink} from '@/components/CtaLink'
+
 /**
  * Link to the Doubleword Inference API console, shown beside the theme toggle.
  * The label collapses with available width: "Inference API" → "API" → icon-only.
+ * Post context is passed when it renders on an article page so the click and
+ * the arrival both carry the post that prompted it.
  */
-export function ApiLink() {
+export function ApiLink({postSlug, postTitle}: {postSlug?: string; postTitle?: string}) {
   return (
-    <a
-      href="https://app.doubleword.ai"
-      target="_blank"
-      rel="noopener noreferrer"
+    <CtaLink
+      ctaLocation="header"
+      postSlug={postSlug}
+      postTitle={postTitle}
       className="api-link"
-      aria-label="Doubleword Inference API"
+      ariaLabel="Doubleword Inference API"
       title="Doubleword Inference API"
     >
       <span className="hidden lg:inline">Inference API</span>
@@ -29,6 +33,6 @@ export function ApiLink() {
         <path d="M7 17 17 7" />
         <path d="M7 7h10v10" />
       </svg>
-    </a>
+    </CtaLink>
   )
 }

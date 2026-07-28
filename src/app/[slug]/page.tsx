@@ -164,7 +164,7 @@ export default async function PostPage({params}: Props) {
                 )}
               </BackLink>
               <div className="flex items-center gap-1">
-                <ApiLink />
+                <ApiLink postSlug={post.slug.current} postTitle={post.title ?? ''} />
                 <ThemeToggle />
               </div>
             </div>

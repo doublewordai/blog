@@ -1,5 +1,6 @@
 import type {Post} from '@/sanity/types'
 import {CitationBlock} from '@/components/CitationBlock'
+import {CtaLink} from '@/components/CtaLink'
 
 /**
  * End-of-post block: Doubleword branding / CTA + a copyable BibTeX citation.
@@ -47,15 +48,15 @@ export function PostFooter({post, siteUrl}: {post: Post; siteUrl: string}) {
           inference, and embeddings.
         </p>
         <div className="post-cta-actions">
-          <a
-            href="https://app.doubleword.ai"
-            target="_blank"
-            rel="noopener noreferrer"
+          <CtaLink
+            postSlug={post.slug.current}
+            postTitle={post.title ?? ''}
+            ctaLocation="post_footer"
             className="post-cta-button"
           >
             Start building with free credits
             <span aria-hidden="true">&rarr;</span>
-          </a>
+          </CtaLink>
         </div>
         <p className="post-cta-hiring">
           Interested in helping us make inference 100x more efficient? We&rsquo;re hiring&mdash;reach us
