@@ -49,6 +49,7 @@ export function PostFooter({post, siteUrl}: {post: Post; siteUrl: string}) {
         </p>
         <div className="post-cta-actions">
           <CtaLink
+            destination={post.ctaUrl}
             postSlug={post.slug.current}
             postTitle={post.title ?? ''}
             ctaLocation="post_footer"

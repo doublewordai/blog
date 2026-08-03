@@ -2,12 +2,13 @@
 
 import posthog from 'posthog-js'
 import type {ReactNode} from 'react'
-
-const CTA_DESTINATION = 'https://app.doubleword.ai'
+import {buildCtaAnalyticsDestination, buildCtaHref} from '@/lib/cta-url'
 
 interface CtaLinkProps {
   /** Where on the page this link sits, e.g. 'post_footer' or 'header'. */
   ctaLocation: string
+  /** Explicit outbound URL for CTAs with a post-specific destination. */
+  destination?: string
   /** Post context, when the link is rendered on an article page. */
   postSlug?: string
   postTitle?: string
@@ -25,6 +26,7 @@ interface CtaLinkProps {
  */
 export function CtaLink({
   ctaLocation,
+  destination,
   postSlug,
   postTitle,
   children,
@@ -32,20 +34,15 @@ export function CtaLink({
   ariaLabel,
   title,
 }: CtaLinkProps) {
-  const params = new URLSearchParams({
-    utm_source: 'blog',
-    utm_medium: 'referral',
-    utm_campaign: postSlug ?? 'site',
-    utm_content: ctaLocation,
-  })
-  const href = `${CTA_DESTINATION}?${params.toString()}`
+  const href = buildCtaHref({destination, postSlug, ctaLocation})
+  const analyticsDestination = buildCtaAnalyticsDestination(destination)
 
   const handleClick = () => {
     posthog.capture('cta_clicked', {
       cta_location: ctaLocation,
       post_slug: postSlug,
       post_title: postTitle,
-      destination: CTA_DESTINATION,
+      destination: analyticsDestination,
     })
   }
 

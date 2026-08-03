@@ -33,6 +33,13 @@ import GatingLadder from './GatingLadder'
 import AnatomyFig from './AnatomyFig'
 import ThroughputLadder from './ThroughputLadder'
 import RooflineBreakdown from './RooflineBreakdown'
+import {
+  GigatokenBpePipeline,
+  GigatokenCacheLine,
+  GigatokenMaskScanner,
+  GigatokenParallel,
+  GigatokenUnicodePath,
+} from './GigatokenDiagrams'
 
 type ImageData = {
   filename: string
@@ -278,6 +285,11 @@ export async function MarkdownRenderer({
     'gating-ladder',
     'anatomy-fig',
     'ghost-aside',
+    'gigatoken-bpe-pipeline',
+    'gigatoken-mask-scanner',
+    'gigatoken-unicode-path',
+    'gigatoken-cache-line',
+    'gigatoken-parallel',
   ])
 
   const ParagraphComponent = ({
@@ -291,6 +303,13 @@ export async function MarkdownRenderer({
     if (hasBlockChild) return <>{children}</>
     return <p {...props}>{children}</p>
   }
+
+  // Gigatoken post flow diagrams. Geometry and labels are baked into the components.
+  const GigatokenBpePipelineBlock = () => <GigatokenBpePipeline />
+  const GigatokenMaskScannerBlock = () => <GigatokenMaskScanner />
+  const GigatokenUnicodePathBlock = () => <GigatokenUnicodePath />
+  const GigatokenCacheLineBlock = () => <GigatokenCacheLine />
+  const GigatokenParallelBlock = () => <GigatokenParallel />
 
   // Custom pre component that adds a copy button
   const PreComponent = ({children, ...props}: React.HTMLAttributes<HTMLPreElement>) => {
@@ -391,6 +410,11 @@ export async function MarkdownRenderer({
           'ghost-aside': GhostAsideBlock,
           'throughput-ladder': ThroughputLadderBlock,
           'roofline-breakdown': RooflineBreakdownBlock,
+          'gigatoken-bpe-pipeline': GigatokenBpePipelineBlock,
+          'gigatoken-mask-scanner': GigatokenMaskScannerBlock,
+          'gigatoken-unicode-path': GigatokenUnicodePathBlock,
+          'gigatoken-cache-line': GigatokenCacheLineBlock,
+          'gigatoken-parallel': GigatokenParallelBlock,
         } as Components
       }
     >
