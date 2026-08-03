@@ -2,7 +2,7 @@
 
 import posthog from 'posthog-js'
 import type {ReactNode} from 'react'
-import {buildCtaHref} from '@/lib/cta-url'
+import {buildCtaAnalyticsDestination, buildCtaHref} from '@/lib/cta-url'
 
 interface CtaLinkProps {
   /** Where on the page this link sits, e.g. 'post_footer' or 'header'. */
@@ -35,13 +35,14 @@ export function CtaLink({
   title,
 }: CtaLinkProps) {
   const href = buildCtaHref({destination, postSlug, ctaLocation})
+  const analyticsDestination = buildCtaAnalyticsDestination(destination)
 
   const handleClick = () => {
     posthog.capture('cta_clicked', {
       cta_location: ctaLocation,
       post_slug: postSlug,
       post_title: postTitle,
-      destination: href,
+      destination: analyticsDestination,
     })
   }
 

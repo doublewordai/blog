@@ -6,6 +6,10 @@ type CtaHrefOptions = {
 
 const CTA_DESTINATION = 'https://app.doubleword.ai'
 
+export function buildCtaAnalyticsDestination(destination?: string): string {
+  return destination || CTA_DESTINATION
+}
+
 export function buildCtaHref({destination, postSlug, ctaLocation}: CtaHrefOptions): string {
   if (destination) return destination
   const params = new URLSearchParams({
