@@ -38,6 +38,7 @@ export const POST_QUERY = defineQuery(`*[_type == "post" && slug.current == $slu
   description,
   externalSource,
   canonicalUrl,
+  ctaUrl,
   videoUrl,
   image,
   "authors": authors[]->{

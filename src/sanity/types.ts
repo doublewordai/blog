@@ -38,6 +38,7 @@ export interface Post {
   description?: string
   externalSource?: string
   canonicalUrl?: string
+  ctaUrl?: string
   authors?: Author[]
   image?: SanityImageSource
   videoUrl?: string
