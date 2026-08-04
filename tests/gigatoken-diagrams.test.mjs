@@ -22,6 +22,9 @@ const workedExampleDiagrams = [
 const arrowMarkers = [...source.matchAll(/<marker\b[^>]*>/g)].map((match) =>
   match[0].replaceAll('\\"', '"'),
 )
+const arrowConnectors = [
+  ...source.matchAll(/<path\b[^>]*marker-end=(?:\\)?"[^>]*\/>/g),
+].map((match) => match[0].replaceAll('\\"', '"'))
 
 test('keeps accent fills off text boxes in the final diagram', () => {
   assert.ok(parallelDiagram, 'expected the final Gigatoken diagram source')
@@ -43,17 +46,30 @@ test('switches worked-example layouts with compiled responsive utilities', () =>
   assert.match(source, /className="block md:hidden"/)
 })
 
-test('uses fixed-size arrowheads with their tips at connector endpoints', () => {
+test('uses separate dart heads and trims connector shafts at their bases', () => {
   assert.equal(arrowMarkers.length, 7)
-  assert.equal(source.match(/M0,0 L9,4 L0,8 Z/g)?.length, 7)
+  assert.equal(arrowConnectors.length, 32)
+  assert.equal(source.match(/M0,0 L12,6 L0,12 L4,6 Z/g)?.length, 7)
 
   for (const marker of arrowMarkers) {
     assert.match(marker, /markerUnits="userSpaceOnUse"/)
-    assert.match(marker, /markerWidth="9"/)
-    assert.match(marker, /markerHeight="8"/)
-    assert.match(marker, /refX="9"/)
-    assert.match(marker, /refY="4"/)
+    assert.match(marker, /markerWidth="12"/)
+    assert.match(marker, /markerHeight="12"/)
+    assert.match(marker, /refX="12"/)
+    assert.match(marker, /refY="6"/)
   }
+
+  for (const connector of arrowConnectors) {
+    assert.match(connector, /stroke-dasharray="\d+(?:\.\d+)? 1000"/)
+  }
+})
+
+test('keeps final merge arrowheads clear of the output box', () => {
+  assert.ok(parallelDiagram, 'expected the final Gigatoken diagram source')
+  assert.match(parallelDiagram, /M170 418 V438 H380 L390 448/)
+  assert.match(parallelDiagram, /M450 418 V448/)
+  assert.match(parallelDiagram, /M730 418 V438 H520 L510 448/)
+  assert.doesNotMatch(parallelDiagram, /M(?:170|450|730) 418 V451/)
 })
 
 test('wraps the pretoken text example without horizontal scrolling', () => {
