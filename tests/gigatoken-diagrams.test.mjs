@@ -43,15 +43,16 @@ test('switches worked-example layouts with compiled responsive utilities', () =>
   assert.match(source, /className="block md:hidden"/)
 })
 
-test('uses fixed-size arrowheads so connectors retain visible stems', () => {
+test('uses fixed-size arrowheads with their tips at connector endpoints', () => {
   assert.equal(arrowMarkers.length, 7)
+  assert.equal(source.match(/M0,0 L9,4 L0,8 Z/g)?.length, 7)
 
   for (const marker of arrowMarkers) {
     assert.match(marker, /markerUnits="userSpaceOnUse"/)
-    assert.match(marker, /markerWidth="8"/)
-    assert.match(marker, /markerHeight="6"/)
-    assert.match(marker, /refX="7\.5"/)
-    assert.match(marker, /refY="3"/)
+    assert.match(marker, /markerWidth="9"/)
+    assert.match(marker, /markerHeight="8"/)
+    assert.match(marker, /refX="9"/)
+    assert.match(marker, /refY="4"/)
   }
 })
 
