@@ -1,13 +1,196 @@
 'use client'
 
+const bpePipelineSvg = `<svg id="bpe-pipeline" viewBox="0 0 640 410" width="100%" style="height:auto;max-width:100%;display:block;margin:0 auto;font-family:-apple-system,'Segoe UI',system-ui,sans-serif" role="img" aria-labelledby="bpe-pipeline-title bpe-pipeline-desc">
+<title id="bpe-pipeline-title">One GPT-2 pretoken becomes four model tokens</title>
+<desc id="bpe-pipeline-desc">A 64-byte sentence splits into seven GPT-2 pretokens. The microarchitectures pretoken is then shown passing through BPE and becoming four model tokens.</desc>
+<defs><marker id="arrow-pipeline-desktop" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 Z" fill="var(--accent)"/></marker></defs>
+<rect x="16" y="14" width="608" height="72" rx="8" fill="var(--background)" stroke="var(--rule)" stroke-width="2"/>
+<text x="320" y="39" text-anchor="middle" fill="var(--foreground)" font-size="15" font-weight="650">One 64-byte GPT-2 input block</text>
+<text x="320" y="62" text-anchor="middle" fill="var(--foreground)" font-size="9.5" font-family="ui-monospace,'SFMono-Regular',Consolas,monospace">·Gigatoken·optimises·pretokenisation·for·CPU·microarchitectures.</text>
+<text x="320" y="79" text-anchor="middle" fill="var(--muted)" font-size="10">· = space byte</text>
+<path d="M320 86 V109" fill="none" stroke="var(--accent)" stroke-width="2.5" marker-end="url(#arrow-pipeline-desktop)"/>
+<text x="16" y="128" fill="var(--foreground)" font-size="14" font-weight="650">GPT-2 regex: 7 pretokens</text>
+<rect x="16" y="138" width="95" height="44" rx="5" fill="var(--background)" stroke="var(--rule)" stroke-width="2"/>
+<rect x="111" y="138" width="95" height="44" rx="5" fill="var(--background)" stroke="var(--rule)" stroke-width="2"/>
+<rect x="206" y="138" width="152" height="44" rx="5" fill="var(--background)" stroke="var(--rule)" stroke-width="2"/>
+<rect x="358" y="138" width="38" height="44" rx="5" fill="var(--background)" stroke="var(--rule)" stroke-width="2"/>
+<rect x="396" y="138" width="38" height="44" rx="5" fill="var(--background)" stroke="var(--rule)" stroke-width="2"/>
+<rect x="434" y="138" width="180.5" height="44" rx="5" fill="var(--background)" stroke="var(--foreground)" stroke-width="2.5"/>
+<rect x="614.5" y="138" width="9.5" height="44" rx="3" fill="var(--background)" stroke="var(--rule)" stroke-width="2"/>
+<text x="63.5" y="165" text-anchor="middle" fill="var(--foreground)" font-size="8.5" font-family="ui-monospace,'SFMono-Regular',Consolas,monospace">·Gigatoken</text>
+<text x="158.5" y="165" text-anchor="middle" fill="var(--foreground)" font-size="8.5" font-family="ui-monospace,'SFMono-Regular',Consolas,monospace">·optimises</text>
+<text x="282" y="165" text-anchor="middle" fill="var(--foreground)" font-size="9" font-family="ui-monospace,'SFMono-Regular',Consolas,monospace">·pretokenisation</text>
+<text x="377" y="165" text-anchor="middle" fill="var(--foreground)" font-size="7.5" font-family="ui-monospace,'SFMono-Regular',Consolas,monospace">·for</text>
+<text x="415" y="165" text-anchor="middle" fill="var(--foreground)" font-size="7.5" font-family="ui-monospace,'SFMono-Regular',Consolas,monospace">·CPU</text>
+<text x="524.25" y="165" text-anchor="middle" fill="var(--foreground)" font-size="9" font-family="ui-monospace,'SFMono-Regular',Consolas,monospace">·microarchitectures</text>
+<text x="619.25" y="165" text-anchor="middle" fill="var(--foreground)" font-size="8" font-family="ui-monospace,'SFMono-Regular',Consolas,monospace">.</text>
+<path d="M524.25 182 V207 H320 V224" fill="none" stroke="var(--accent)" stroke-width="2.5" marker-end="url(#arrow-pipeline-desktop)"/>
+<text x="458" y="202" text-anchor="middle" fill="var(--muted)" font-size="10.5">focus one pretoken</text>
+<rect x="36" y="230" width="568" height="148" rx="8" fill="var(--background)" stroke="var(--foreground)" stroke-width="2"/>
+<text x="320" y="255" text-anchor="middle" fill="var(--foreground)" font-size="15" font-weight="650">BPE inside one pretoken</text>
+<text x="320" y="279" text-anchor="middle" fill="var(--foreground)" font-size="12.5" font-family="ui-monospace,'SFMono-Regular',Consolas,monospace">·microarchitectures</text>
+<text x="320" y="302" text-anchor="middle" fill="var(--muted)" font-size="11.5">late merge: [it] + [ect] → [itect]</text>
+<rect x="58" y="315" width="120" height="44" rx="6" fill="var(--rule-light)" stroke="var(--rule)" stroke-width="1.5"/>
+<rect x="190" y="315" width="100" height="44" rx="6" fill="var(--rule-light)" stroke="var(--rule)" stroke-width="1.5"/>
+<rect x="302" y="315" width="120" height="44" rx="6" fill="var(--rule-light)" stroke="var(--rule)" stroke-width="1.5"/>
+<rect x="434" y="315" width="120" height="44" rx="6" fill="var(--rule-light)" stroke="var(--rule)" stroke-width="1.5"/>
+<text x="118" y="334" text-anchor="middle" fill="var(--foreground)" font-size="11" font-family="ui-monospace,'SFMono-Regular',Consolas,monospace">[·micro]</text>
+<text x="240" y="334" text-anchor="middle" fill="var(--foreground)" font-size="11" font-family="ui-monospace,'SFMono-Regular',Consolas,monospace">[arch]</text>
+<text x="362" y="334" text-anchor="middle" fill="var(--foreground)" font-size="11" font-family="ui-monospace,'SFMono-Regular',Consolas,monospace">[itect]</text>
+<text x="494" y="334" text-anchor="middle" fill="var(--foreground)" font-size="11" font-family="ui-monospace,'SFMono-Regular',Consolas,monospace">[ures]</text>
+<text x="118" y="351" text-anchor="middle" fill="var(--muted)" font-size="9.5">ID 4580</text>
+<text x="240" y="351" text-anchor="middle" fill="var(--muted)" font-size="9.5">ID 998</text>
+<text x="362" y="351" text-anchor="middle" fill="var(--muted)" font-size="9.5">ID 5712</text>
+<text x="494" y="351" text-anchor="middle" fill="var(--muted)" font-size="9.5">ID 942</text>
+<text x="320" y="402" text-anchor="middle" fill="var(--foreground)" font-size="12.5" font-weight="650">1 pretoken → 4 model tokens · 7 pretokens → 15 model tokens overall</text>
+</svg>`
+
+const bpePipelineMobileSvg = `<svg id="bpe-pipeline-mobile" viewBox="0 0 360 445" width="100%" style="height:auto;max-width:100%;display:block;margin:0 auto;font-family:-apple-system,'Segoe UI',system-ui,sans-serif" role="img" aria-labelledby="bpe-pipeline-mobile-title bpe-pipeline-mobile-desc">
+<title id="bpe-pipeline-mobile-title">One GPT-2 pretoken becomes four model tokens</title>
+<desc id="bpe-pipeline-mobile-desc">A mobile layout showing a 64-byte sentence split into seven GPT-2 pretokens, with the microarchitectures pretoken becoming four model tokens.</desc>
+<defs><marker id="arrow-pipeline-mobile" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 Z" fill="var(--accent)"/></marker></defs>
+<rect x="10" y="12" width="340" height="88" rx="8" fill="var(--background)" stroke="var(--rule)" stroke-width="2"/>
+<text x="180" y="36" text-anchor="middle" fill="var(--foreground)" font-size="15" font-weight="650">One 64-byte GPT-2 input block</text>
+<text x="180" y="59" text-anchor="middle" fill="var(--foreground)" font-size="9.5" font-family="ui-monospace,'SFMono-Regular',Consolas,monospace">·Gigatoken·optimises·pretokenisation</text>
+<text x="180" y="76" text-anchor="middle" fill="var(--foreground)" font-size="9.5" font-family="ui-monospace,'SFMono-Regular',Consolas,monospace">·for·CPU·microarchitectures.</text>
+<text x="180" y="93" text-anchor="middle" fill="var(--muted)" font-size="9.5">· = space byte</text>
+<path d="M180 100 V122" fill="none" stroke="var(--accent)" stroke-width="2.5" marker-end="url(#arrow-pipeline-mobile)"/>
+<text x="12" y="141" fill="var(--foreground)" font-size="13.5" font-weight="650">GPT-2 regex: 7 pretokens</text>
+<rect x="12" y="151" width="52.5" height="42" rx="4" fill="var(--background)" stroke="var(--rule)" stroke-width="2"/>
+<rect x="64.5" y="151" width="52.5" height="42" rx="4" fill="var(--background)" stroke="var(--rule)" stroke-width="2"/>
+<rect x="117" y="151" width="84" height="42" rx="4" fill="var(--background)" stroke="var(--rule)" stroke-width="2"/>
+<rect x="201" y="151" width="21" height="42" rx="4" fill="var(--background)" stroke="var(--rule)" stroke-width="2"/>
+<rect x="222" y="151" width="21" height="42" rx="4" fill="var(--background)" stroke="var(--rule)" stroke-width="2"/>
+<rect x="243" y="151" width="99.75" height="42" rx="4" fill="var(--background)" stroke="var(--foreground)" stroke-width="2.5"/>
+<rect x="342.75" y="151" width="5.25" height="42" rx="2" fill="var(--background)" stroke="var(--rule)" stroke-width="2"/>
+<text x="38.25" y="176" text-anchor="middle" fill="var(--foreground)" font-size="8" font-family="ui-monospace,'SFMono-Regular',Consolas,monospace">Gig</text>
+<text x="90.75" y="176" text-anchor="middle" fill="var(--foreground)" font-size="8" font-family="ui-monospace,'SFMono-Regular',Consolas,monospace">optim</text>
+<text x="159" y="176" text-anchor="middle" fill="var(--foreground)" font-size="8" font-family="ui-monospace,'SFMono-Regular',Consolas,monospace">pretoken</text>
+<text x="211.5" y="176" text-anchor="middle" fill="var(--foreground)" font-size="6.5" font-family="ui-monospace,'SFMono-Regular',Consolas,monospace">for</text>
+<text x="232.5" y="176" text-anchor="middle" fill="var(--foreground)" font-size="6.5" font-family="ui-monospace,'SFMono-Regular',Consolas,monospace">CPU</text>
+<text x="292.875" y="176" text-anchor="middle" fill="var(--foreground)" font-size="8" font-family="ui-monospace,'SFMono-Regular',Consolas,monospace">micro…</text>
+<text x="345.375" y="176" text-anchor="middle" fill="var(--foreground)" font-size="7">.</text>
+<path d="M292.875 193 V216 H180 V230" fill="none" stroke="var(--accent)" stroke-width="2.5" marker-end="url(#arrow-pipeline-mobile)"/>
+<text x="258" y="212" text-anchor="middle" fill="var(--muted)" font-size="9.5">selected span</text>
+<rect x="10" y="235" width="340" height="155" rx="8" fill="var(--background)" stroke="var(--foreground)" stroke-width="2"/>
+<text x="180" y="260" text-anchor="middle" fill="var(--foreground)" font-size="14.5" font-weight="650">BPE inside one pretoken</text>
+<text x="180" y="283" text-anchor="middle" fill="var(--foreground)" font-size="12" font-family="ui-monospace,'SFMono-Regular',Consolas,monospace">·microarchitectures</text>
+<text x="180" y="306" text-anchor="middle" fill="var(--muted)" font-size="10.5">late merge: [it] + [ect] → [itect]</text>
+<rect x="20" y="320" width="75" height="48" rx="5" fill="var(--rule-light)" stroke="var(--rule)" stroke-width="1.5"/>
+<rect x="101" y="320" width="75" height="48" rx="5" fill="var(--rule-light)" stroke="var(--rule)" stroke-width="1.5"/>
+<rect x="182" y="320" width="75" height="48" rx="5" fill="var(--rule-light)" stroke="var(--rule)" stroke-width="1.5"/>
+<rect x="263" y="320" width="75" height="48" rx="5" fill="var(--rule-light)" stroke="var(--rule)" stroke-width="1.5"/>
+<text x="57.5" y="340" text-anchor="middle" fill="var(--foreground)" font-size="9" font-family="ui-monospace,'SFMono-Regular',Consolas,monospace">[·micro]</text>
+<text x="138.5" y="340" text-anchor="middle" fill="var(--foreground)" font-size="9" font-family="ui-monospace,'SFMono-Regular',Consolas,monospace">[arch]</text>
+<text x="219.5" y="340" text-anchor="middle" fill="var(--foreground)" font-size="9" font-family="ui-monospace,'SFMono-Regular',Consolas,monospace">[itect]</text>
+<text x="300.5" y="340" text-anchor="middle" fill="var(--foreground)" font-size="9" font-family="ui-monospace,'SFMono-Regular',Consolas,monospace">[ures]</text>
+<text x="57.5" y="358" text-anchor="middle" fill="var(--muted)" font-size="8.5">4580</text>
+<text x="138.5" y="358" text-anchor="middle" fill="var(--muted)" font-size="8.5">998</text>
+<text x="219.5" y="358" text-anchor="middle" fill="var(--muted)" font-size="8.5">5712</text>
+<text x="300.5" y="358" text-anchor="middle" fill="var(--muted)" font-size="8.5">942</text>
+<text x="180" y="415" text-anchor="middle" fill="var(--foreground)" font-size="13" font-weight="650">1 pretoken → 4 model tokens</text>
+<text x="180" y="435" text-anchor="middle" fill="var(--muted)" font-size="11">whole sentence: 7 pretokens → 15 tokens</text>
+</svg>`
+
+const maskScannerSvg = `<svg id="gigatoken-mask-scanner" viewBox="0 0 640 585" width="100%" style="height:auto;max-width:100%;display:block;margin:0 auto;font-family:-apple-system,'Segoe UI',system-ui,sans-serif" role="img" aria-labelledby="gigatoken-mask-title gigatoken-mask-desc">
+<title id="gigatoken-mask-title">The common 64-byte mask-scanner path</title>
+<desc id="gigatoken-mask-desc">A 64-byte ASCII sentence passes through SIMD classification and tokeniser-specific boundary rules. Seven start offsets partition the block into proportional pretoken spans.</desc>
+<defs><marker id="arrow-mask-desktop" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 Z" fill="var(--accent)"/></marker></defs>
+<rect x="30" y="14" width="580" height="76" rx="8" fill="var(--background)" stroke="var(--rule)" stroke-width="2"/>
+<text x="320" y="39" text-anchor="middle" fill="var(--foreground)" font-size="15" font-weight="650">One complete 64-byte ASCII block</text>
+<text x="320" y="62" text-anchor="middle" fill="var(--foreground)" font-size="9.5" font-family="ui-monospace,'SFMono-Regular',Consolas,monospace">·Gigatoken·optimises·pretokenisation·for·CPU·microarchitectures.</text>
+<text x="320" y="80" text-anchor="middle" fill="var(--muted)" font-size="10">byte positions 0 to 63 · · = space byte</text>
+<path d="M320 90 V110" fill="none" stroke="var(--accent)" stroke-width="2.5" marker-end="url(#arrow-mask-desktop)"/>
+<rect x="90" y="115" width="460" height="62" rx="8" fill="var(--background)" stroke="var(--rule)" stroke-width="2"/>
+<text x="320" y="140" text-anchor="middle" fill="var(--foreground)" font-size="15" font-weight="650">SIMD byte comparisons</text>
+<text x="320" y="161" text-anchor="middle" fill="var(--muted)" font-size="11.5">classify many positions as letters, spaces and other byte classes</text>
+<path d="M320 177 V198" fill="none" stroke="var(--accent)" stroke-width="2.5" marker-end="url(#arrow-mask-desktop)"/>
+<rect x="90" y="202" width="460" height="62" rx="8" fill="var(--background)" stroke="var(--rule)" stroke-width="2"/>
+<text x="320" y="227" text-anchor="middle" fill="var(--foreground)" font-size="15" font-weight="650">64-bit class masks</text>
+<text x="320" y="248" text-anchor="middle" fill="var(--muted)" font-size="11.5">one mask per class · bit i describes byte i</text>
+<path d="M320 264 V285" fill="none" stroke="var(--accent)" stroke-width="2.5" marker-end="url(#arrow-mask-desktop)"/>
+<rect x="90" y="289" width="460" height="68" rx="8" fill="var(--background)" stroke="var(--rule)" stroke-width="2"/>
+<text x="320" y="315" text-anchor="middle" fill="var(--foreground)" font-size="15" font-weight="650">Tokeniser-specific boundary rules in Rust</text>
+<text x="320" y="338" text-anchor="middle" fill="var(--muted)" font-size="11.5">shift masks to align neighbours · combine them with AND, OR and NOT</text>
+<path d="M320 357 V378" fill="none" stroke="var(--accent)" stroke-width="2.5" marker-end="url(#arrow-mask-desktop)"/>
+<rect x="105" y="382" width="430" height="68" rx="8" fill="var(--background)" stroke="var(--rule)" stroke-width="2"/>
+<text x="320" y="408" text-anchor="middle" fill="var(--foreground)" font-size="15" font-weight="650">Pretoken-start mask</text>
+<text x="320" y="432" text-anchor="middle" fill="var(--foreground)" font-size="11.5" font-family="ui-monospace,'SFMono-Regular',Consolas,monospace">start offsets: 0 · 10 · 20 · 36 · 40 · 44 · 63</text>
+<path d="M320 450 V471" fill="none" stroke="var(--accent)" stroke-width="2.5" marker-end="url(#arrow-mask-desktop)"/>
+<text x="16" y="490" fill="var(--foreground)" font-size="13.5" font-weight="650">Seven ordered pretokens, scaled by byte length</text>
+<rect x="16" y="500" width="95" height="48" rx="5" fill="var(--background)" stroke="var(--rule)" stroke-width="2"/>
+<rect x="111" y="500" width="95" height="48" rx="5" fill="var(--background)" stroke="var(--rule)" stroke-width="2"/>
+<rect x="206" y="500" width="152" height="48" rx="5" fill="var(--background)" stroke="var(--rule)" stroke-width="2"/>
+<rect x="358" y="500" width="38" height="48" rx="5" fill="var(--background)" stroke="var(--rule)" stroke-width="2"/>
+<rect x="396" y="500" width="38" height="48" rx="5" fill="var(--background)" stroke="var(--rule)" stroke-width="2"/>
+<rect x="434" y="500" width="180.5" height="48" rx="5" fill="var(--background)" stroke="var(--foreground)" stroke-width="2"/>
+<rect x="614.5" y="500" width="9.5" height="48" rx="3" fill="var(--background)" stroke="var(--rule)" stroke-width="2"/>
+<text x="63.5" y="529" text-anchor="middle" fill="var(--foreground)" font-size="8.5" font-family="ui-monospace,'SFMono-Regular',Consolas,monospace">·Gigatoken</text>
+<text x="158.5" y="529" text-anchor="middle" fill="var(--foreground)" font-size="8.5" font-family="ui-monospace,'SFMono-Regular',Consolas,monospace">·optimises</text>
+<text x="282" y="529" text-anchor="middle" fill="var(--foreground)" font-size="9" font-family="ui-monospace,'SFMono-Regular',Consolas,monospace">·pretokenisation</text>
+<text x="377" y="529" text-anchor="middle" fill="var(--foreground)" font-size="7.5" font-family="ui-monospace,'SFMono-Regular',Consolas,monospace">·for</text>
+<text x="415" y="529" text-anchor="middle" fill="var(--foreground)" font-size="7.5" font-family="ui-monospace,'SFMono-Regular',Consolas,monospace">·CPU</text>
+<text x="524.25" y="529" text-anchor="middle" fill="var(--foreground)" font-size="9" font-family="ui-monospace,'SFMono-Regular',Consolas,monospace">·microarchitectures</text>
+<text x="619.25" y="529" text-anchor="middle" fill="var(--foreground)" font-size="8">.</text>
+<text x="320" y="575" text-anchor="middle" fill="var(--muted)" font-size="11">segment lengths in bytes: 10 · 10 · 16 · 4 · 4 · 19 · 1</text>
+</svg>`
+
+const maskScannerMobileSvg = `<svg id="gigatoken-mask-scanner-mobile" viewBox="0 0 360 650" width="100%" style="height:auto;max-width:100%;display:block;margin:0 auto;font-family:-apple-system,'Segoe UI',system-ui,sans-serif" role="img" aria-labelledby="gigatoken-mask-mobile-title gigatoken-mask-mobile-desc">
+<title id="gigatoken-mask-mobile-title">The common 64-byte mask-scanner path</title>
+<desc id="gigatoken-mask-mobile-desc">A mobile layout showing a 64-byte ASCII sentence pass through SIMD classification and boundary rules before seven start offsets partition it into pretokens.</desc>
+<defs><marker id="arrow-mask-mobile" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 Z" fill="var(--accent)"/></marker></defs>
+<rect x="10" y="12" width="340" height="92" rx="8" fill="var(--background)" stroke="var(--rule)" stroke-width="2"/>
+<text x="180" y="37" text-anchor="middle" fill="var(--foreground)" font-size="15" font-weight="650">One complete 64-byte ASCII block</text>
+<text x="180" y="60" text-anchor="middle" fill="var(--foreground)" font-size="9.5" font-family="ui-monospace,'SFMono-Regular',Consolas,monospace">·Gigatoken·optimises·pretokenisation</text>
+<text x="180" y="77" text-anchor="middle" fill="var(--foreground)" font-size="9.5" font-family="ui-monospace,'SFMono-Regular',Consolas,monospace">·for·CPU·microarchitectures.</text>
+<text x="180" y="95" text-anchor="middle" fill="var(--muted)" font-size="9.5">byte positions 0 to 63 · · = space</text>
+<path d="M180 104 V125" fill="none" stroke="var(--accent)" stroke-width="2.5" marker-end="url(#arrow-mask-mobile)"/>
+<rect x="16" y="130" width="328" height="72" rx="8" fill="var(--background)" stroke="var(--rule)" stroke-width="2"/>
+<text x="180" y="157" text-anchor="middle" fill="var(--foreground)" font-size="15" font-weight="650">SIMD byte comparisons</text>
+<text x="180" y="181" text-anchor="middle" fill="var(--muted)" font-size="11">classify many byte positions at once</text>
+<path d="M180 202 V223" fill="none" stroke="var(--accent)" stroke-width="2.5" marker-end="url(#arrow-mask-mobile)"/>
+<rect x="16" y="228" width="328" height="64" rx="8" fill="var(--background)" stroke="var(--rule)" stroke-width="2"/>
+<text x="180" y="254" text-anchor="middle" fill="var(--foreground)" font-size="15" font-weight="650">64-bit class masks</text>
+<text x="180" y="277" text-anchor="middle" fill="var(--muted)" font-size="11">one bit describes each byte position</text>
+<path d="M180 292 V313" fill="none" stroke="var(--accent)" stroke-width="2.5" marker-end="url(#arrow-mask-mobile)"/>
+<rect x="16" y="318" width="328" height="76" rx="8" fill="var(--background)" stroke="var(--rule)" stroke-width="2"/>
+<text x="180" y="345" text-anchor="middle" fill="var(--foreground)" font-size="14" font-weight="650">Tokeniser-specific rules in Rust</text>
+<text x="180" y="369" text-anchor="middle" fill="var(--muted)" font-size="10.5">align neighbours with shifts</text>
+<text x="180" y="385" text-anchor="middle" fill="var(--muted)" font-size="10.5">combine masks with AND, OR and NOT</text>
+<path d="M180 394 V415" fill="none" stroke="var(--accent)" stroke-width="2.5" marker-end="url(#arrow-mask-mobile)"/>
+<rect x="24" y="420" width="312" height="72" rx="8" fill="var(--background)" stroke="var(--rule)" stroke-width="2"/>
+<text x="180" y="447" text-anchor="middle" fill="var(--foreground)" font-size="15" font-weight="650">Pretoken-start mask</text>
+<text x="180" y="472" text-anchor="middle" fill="var(--foreground)" font-size="10.5" font-family="ui-monospace,'SFMono-Regular',Consolas,monospace">0 · 10 · 20 · 36 · 40 · 44 · 63</text>
+<path d="M180 492 V513" fill="none" stroke="var(--accent)" stroke-width="2.5" marker-end="url(#arrow-mask-mobile)"/>
+<text x="12" y="533" fill="var(--foreground)" font-size="13" font-weight="650">Seven ordered pretokens, scaled by length</text>
+<rect x="12" y="545" width="52.5" height="42" rx="4" fill="var(--background)" stroke="var(--rule)" stroke-width="2"/>
+<rect x="64.5" y="545" width="52.5" height="42" rx="4" fill="var(--background)" stroke="var(--rule)" stroke-width="2"/>
+<rect x="117" y="545" width="84" height="42" rx="4" fill="var(--background)" stroke="var(--rule)" stroke-width="2"/>
+<rect x="201" y="545" width="21" height="42" rx="4" fill="var(--background)" stroke="var(--rule)" stroke-width="2"/>
+<rect x="222" y="545" width="21" height="42" rx="4" fill="var(--background)" stroke="var(--rule)" stroke-width="2"/>
+<rect x="243" y="545" width="99.75" height="42" rx="4" fill="var(--background)" stroke="var(--foreground)" stroke-width="2"/>
+<rect x="342.75" y="545" width="5.25" height="42" rx="2" fill="var(--background)" stroke="var(--rule)" stroke-width="2"/>
+<text x="38.25" y="570" text-anchor="middle" fill="var(--foreground)" font-size="8" font-family="ui-monospace,'SFMono-Regular',Consolas,monospace">Gig</text>
+<text x="90.75" y="570" text-anchor="middle" fill="var(--foreground)" font-size="8" font-family="ui-monospace,'SFMono-Regular',Consolas,monospace">optim</text>
+<text x="159" y="570" text-anchor="middle" fill="var(--foreground)" font-size="8" font-family="ui-monospace,'SFMono-Regular',Consolas,monospace">pretoken</text>
+<text x="211.5" y="570" text-anchor="middle" fill="var(--foreground)" font-size="6.5" font-family="ui-monospace,'SFMono-Regular',Consolas,monospace">for</text>
+<text x="232.5" y="570" text-anchor="middle" fill="var(--foreground)" font-size="6.5" font-family="ui-monospace,'SFMono-Regular',Consolas,monospace">CPU</text>
+<text x="292.875" y="570" text-anchor="middle" fill="var(--foreground)" font-size="8" font-family="ui-monospace,'SFMono-Regular',Consolas,monospace">micro…</text>
+<text x="345.375" y="570" text-anchor="middle" fill="var(--foreground)" font-size="7">.</text>
+<text x="180" y="616" text-anchor="middle" fill="var(--muted)" font-size="10.5">byte lengths: 10 · 10 · 16 · 4 · 4 · 19 · 1</text>
+<text x="180" y="637" text-anchor="middle" fill="var(--foreground)" font-size="11.5" font-weight="650">start offsets partition the block in order</text>
+</svg>`
+
 const diagrams = {
   "bpe-pipeline": {
-    "svg": "<svg id=\"bpe-pipeline\" viewBox=\"0 0 860 260\" width=\"100%\" style=\"height:auto;min-width:640px;display:block;margin:0 auto;font-family:-apple-system,'Segoe UI',system-ui,sans-serif\" role=\"img\" aria-labelledby=\"bpe-pipeline-title bpe-pipeline-desc\">\n<title id=\"bpe-pipeline-title\">How BPE turns bytes into token IDs</title>\n<desc id=\"bpe-pipeline-desc\">UTF-8 bytes are split into independent pretokens. Each pretoken passes through repeated byte-pair merges before the remaining vocabulary entries become token IDs.</desc>\n<defs><marker id=\"arrow-pipeline\" markerWidth=\"9\" markerHeight=\"9\" refX=\"8\" refY=\"4.5\" orient=\"auto\"><path d=\"M0,0 L9,4.5 L0,9 Z\" fill=\"var(--accent)\"/></marker></defs>\n<rect x=\"20\" y=\"42\" width=\"150\" height=\"76\" rx=\"10\" fill=\"var(--accent-subtle)\" stroke=\"var(--rule)\" stroke-width=\"2\"/>\n<text x=\"95\" y=\"72\" text-anchor=\"middle\" fill=\"var(--foreground)\" font-size=\"16\" font-weight=\"650\">UTF-8 bytes</text>\n<text x=\"95\" y=\"96\" text-anchor=\"middle\" fill=\"var(--muted)\" font-size=\"13\">input text</text>\n<path d=\"M170 80 H220\" fill=\"none\" stroke=\"var(--accent)\" stroke-width=\"2.5\" marker-end=\"url(#arrow-pipeline)\"/>\n<rect x=\"225\" y=\"42\" width=\"170\" height=\"76\" rx=\"10\" fill=\"var(--background)\" stroke=\"var(--rule)\" stroke-width=\"2\"/>\n<text x=\"310\" y=\"72\" text-anchor=\"middle\" fill=\"var(--foreground)\" font-size=\"16\" font-weight=\"650\">Pretokenise</text>\n<text x=\"310\" y=\"96\" text-anchor=\"middle\" fill=\"var(--muted)\" font-size=\"13\">find model-defined spans</text>\n<path d=\"M395 80 H445\" fill=\"none\" stroke=\"var(--accent)\" stroke-width=\"2.5\" marker-end=\"url(#arrow-pipeline)\"/>\n<rect x=\"450\" y=\"25\" width=\"180\" height=\"110\" rx=\"10\" fill=\"var(--background)\" stroke=\"var(--rule)\" stroke-width=\"2\"/>\n<text x=\"540\" y=\"54\" text-anchor=\"middle\" fill=\"var(--foreground)\" font-size=\"16\" font-weight=\"650\">BPE within each span</text>\n<text x=\"540\" y=\"82\" text-anchor=\"middle\" fill=\"var(--muted)\" font-size=\"13\">[l] [o] [w] [e] [r]</text>\n<text x=\"540\" y=\"108\" text-anchor=\"middle\" fill=\"var(--accent)\" font-size=\"13\">[lo] [w] [e] [r]</text>\n<path d=\"M630 80 H680\" fill=\"none\" stroke=\"var(--accent)\" stroke-width=\"2.5\" marker-end=\"url(#arrow-pipeline)\"/>\n<rect x=\"685\" y=\"42\" width=\"155\" height=\"76\" rx=\"10\" fill=\"var(--accent-subtle)\" stroke=\"var(--rule)\" stroke-width=\"2\"/>\n<text x=\"762\" y=\"72\" text-anchor=\"middle\" fill=\"var(--foreground)\" font-size=\"16\" font-weight=\"650\">Token IDs</text>\n<text x=\"762\" y=\"96\" text-anchor=\"middle\" fill=\"var(--muted)\" font-size=\"13\">vocabulary entries</text>\n<rect x=\"225\" y=\"174\" width=\"405\" height=\"54\" rx=\"9\" fill=\"var(--background)\" stroke=\"var(--accent-muted)\" stroke-width=\"2\" stroke-dasharray=\"6 5\"/>\n<text x=\"427\" y=\"198\" text-anchor=\"middle\" fill=\"var(--foreground)\" font-size=\"14\">Across pretokens: independent</text>\n<text x=\"427\" y=\"217\" text-anchor=\"middle\" fill=\"var(--muted)\" font-size=\"12\">Within one: each merge changes the next choice</text>\n</svg>",
-    "caption": "Pretokenisation divides the byte stream into model-defined spans. BPE may merge only within a span, so different spans can be processed independently. Within one span, each merge changes the candidates for the next merge."
+    "svg": bpePipelineSvg,
+    "mobileSvg": bpePipelineMobileSvg,
+    "caption": "The 64-byte example splits into seven GPT-2 pretokens, then BPE turns them into fifteen model tokens. The selected pretoken alone produces four: IDs 4580, 998, 5712 and 942."
   },
   "gigatoken-mask-scanner": {
-    "svg": "<svg id=\"gigatoken-mask-scanner\" viewBox=\"0 0 900 620\" width=\"100%\" style=\"height:auto;min-width:640px;display:block;margin:0 auto;font-family:-apple-system,'Segoe UI',system-ui,sans-serif\" role=\"img\" aria-labelledby=\"gigatoken-mask-title gigatoken-mask-desc\">\n<title id=\"gigatoken-mask-title\">The common 64-byte mask-scanner path</title>\n<desc id=\"gigatoken-mask-desc\">A clean ASCII block passes through SIMD byte comparisons, 64-bit class masks and tokeniser-specific boundary rules. The resulting start-bit mask identifies the pretokens in input order.</desc>\n<defs><marker id=\"arrow-mask\" markerWidth=\"9\" markerHeight=\"9\" refX=\"8\" refY=\"4.5\" orient=\"auto\"><path d=\"M0,0 L9,4.5 L0,9 Z\" fill=\"var(--accent)\"/></marker></defs>\n<rect x=\"150\" y=\"18\" width=\"600\" height=\"66\" rx=\"10\" fill=\"var(--accent-subtle)\" stroke=\"var(--rule)\" stroke-width=\"2\"/>\n<text x=\"450\" y=\"45\" text-anchor=\"middle\" fill=\"var(--foreground)\" font-size=\"16\" font-weight=\"650\">64-byte block</text>\n<text x=\"450\" y=\"68\" text-anchor=\"middle\" fill=\"var(--muted)\" font-size=\"13\">common ASCII path</text>\n<path d=\"M450 84 V111\" fill=\"none\" stroke=\"var(--accent)\" stroke-width=\"2.5\" marker-end=\"url(#arrow-mask)\"/>\n<rect x=\"150\" y=\"115\" width=\"600\" height=\"72\" rx=\"10\" fill=\"var(--background)\" stroke=\"var(--rule)\" stroke-width=\"2\"/>\n<text x=\"450\" y=\"144\" text-anchor=\"middle\" fill=\"var(--foreground)\" font-size=\"16\" font-weight=\"650\">SIMD byte comparisons</text>\n<text x=\"450\" y=\"168\" text-anchor=\"middle\" fill=\"var(--muted)\" font-size=\"13\">compare many positions as letters, digits, spaces and other classes</text>\n<path d=\"M450 187 V214\" fill=\"none\" stroke=\"var(--accent)\" stroke-width=\"2.5\" marker-end=\"url(#arrow-mask)\"/>\n<rect x=\"150\" y=\"218\" width=\"600\" height=\"72\" rx=\"10\" fill=\"var(--background)\" stroke=\"var(--rule)\" stroke-width=\"2\"/>\n<text x=\"450\" y=\"247\" text-anchor=\"middle\" fill=\"var(--foreground)\" font-size=\"16\" font-weight=\"650\">64-bit class masks</text>\n<text x=\"450\" y=\"271\" text-anchor=\"middle\" fill=\"var(--muted)\" font-size=\"13\">one mask per class · bit i describes byte i</text>\n<path d=\"M450 290 V317\" fill=\"none\" stroke=\"var(--accent)\" stroke-width=\"2.5\" marker-end=\"url(#arrow-mask)\"/>\n<rect x=\"150\" y=\"321\" width=\"600\" height=\"78\" rx=\"10\" fill=\"var(--background)\" stroke=\"var(--rule)\" stroke-width=\"2\"/>\n<text x=\"450\" y=\"350\" text-anchor=\"middle\" fill=\"var(--foreground)\" font-size=\"16\" font-weight=\"650\">Tokeniser-specific boundary rules in Rust</text>\n<text x=\"450\" y=\"375\" text-anchor=\"middle\" fill=\"var(--muted)\" font-size=\"13\">shift masks to align neighbours · combine conditions with AND, OR and NOT</text>\n<path d=\"M450 399 V426\" fill=\"none\" stroke=\"var(--accent)\" stroke-width=\"2.5\" marker-end=\"url(#arrow-mask)\"/>\n<rect x=\"110\" y=\"430\" width=\"680\" height=\"100\" rx=\"10\" fill=\"var(--background)\" stroke=\"var(--rule)\" stroke-width=\"2\"/>\n<text x=\"450\" y=\"457\" text-anchor=\"middle\" fill=\"var(--foreground)\" font-size=\"16\" font-weight=\"650\">Pretoken-start mask</text>\n<text x=\"450\" y=\"485\" text-anchor=\"middle\" fill=\"var(--foreground)\" font-size=\"13\" font-family=\"ui-monospace,'SFMono-Regular',Consolas,monospace\">bytes    ·   g   o   ·   4   2   !</text>\n<text x=\"450\" y=\"510\" text-anchor=\"middle\" fill=\"var(--accent)\" font-size=\"13\" font-family=\"ui-monospace,'SFMono-Regular',Consolas,monospace\">starts   1   0   0   1   0   0   1</text>\n<path d=\"M450 530 V557\" fill=\"none\" stroke=\"var(--accent)\" stroke-width=\"2.5\" marker-end=\"url(#arrow-mask)\"/>\n<rect x=\"210\" y=\"561\" width=\"480\" height=\"48\" rx=\"10\" fill=\"var(--accent-subtle)\" stroke=\"var(--rule)\" stroke-width=\"2\"/>\n<text x=\"450\" y=\"591\" text-anchor=\"middle\" fill=\"var(--foreground)\" font-size=\"15\" font-weight=\"650\">Ordered pretokens: [·go] [·42] [!]</text>\n</svg>",
-    "caption": "Here <code>·</code> is the space byte <code>0x20</code>. The scanner works in 64-byte blocks, with carry and lookahead allowing pretokens to continue across block edges."
+    "svg": maskScannerSvg,
+    "mobileSvg": maskScannerMobileSvg,
+    "caption": "The sentence fills one 64-byte block. Its seven start offsets partition the input into ordered pretokens; <code>·</code> represents the space byte <code>0x20</code>. Carry and lookahead allow other pretokens to continue across block edges."
   },
   "gigatoken-unicode-path": {
     "svg": "<svg id=\"gigatoken-unicode-path\" viewBox=\"0 0 900 745\" width=\"100%\" style=\"height:auto;min-width:640px;display:block;margin:0 auto;font-family:-apple-system,'Segoe UI',system-ui,sans-serif\" role=\"img\" aria-labelledby=\"gigatoken-unicode-title gigatoken-unicode-desc\">\n<title id=\"gigatoken-unicode-title\">How Unicode rejoins the mask path</title>\n<desc id=\"gigatoken-unicode-desc\">SIMD creates ASCII class masks and a mask of non-ASCII byte positions. If that second mask is non-empty, Gigatoken decodes UTF-8 code points, looks up their classes and stamps each class across the character's bytes. Updated masks feed the tokeniser's boundary rules. An ordered walker reads proven start bits and uses exact scalar advance only through uncertain gaps.</desc>\n<defs><marker id=\"arrow-unicode\" markerWidth=\"9\" markerHeight=\"9\" refX=\"8\" refY=\"4.5\" orient=\"auto\"><path d=\"M0,0 L9,4.5 L0,9 Z\" fill=\"var(--accent)\"/></marker></defs>\n<rect x=\"215\" y=\"18\" width=\"470\" height=\"70\" rx=\"10\" fill=\"var(--accent-subtle)\" stroke=\"var(--rule)\" stroke-width=\"2\"/>\n<text x=\"450\" y=\"46\" text-anchor=\"middle\" fill=\"var(--foreground)\" font-size=\"16\" font-weight=\"650\">SIMD byte classification</text>\n<text x=\"450\" y=\"70\" text-anchor=\"middle\" fill=\"var(--muted)\" font-size=\"13\">ASCII class masks + non-ASCII-byte mask</text>\n<path d=\"M450 88 V114\" fill=\"none\" stroke=\"var(--accent)\" stroke-width=\"2.5\" marker-end=\"url(#arrow-unicode)\"/>\n<polygon points=\"450,118 575,163 450,208 325,163\" fill=\"var(--background)\" stroke=\"var(--rule)\" stroke-width=\"2\"/>\n<text x=\"450\" y=\"157\" text-anchor=\"middle\" fill=\"var(--foreground)\" font-size=\"14\" font-weight=\"650\">Any byte at or</text>\n<text x=\"450\" y=\"178\" text-anchor=\"middle\" fill=\"var(--foreground)\" font-size=\"14\">above 0x80?</text>\n<path d=\"M325 163 H170 V252\" fill=\"none\" stroke=\"var(--accent)\" stroke-width=\"2.5\" marker-end=\"url(#arrow-unicode)\"/>\n<text x=\"239\" y=\"150\" text-anchor=\"middle\" fill=\"var(--muted)\" font-size=\"12\">no</text>\n<rect x=\"35\" y=\"256\" width=\"270\" height=\"70\" rx=\"10\" fill=\"var(--background)\" stroke=\"var(--rule)\" stroke-width=\"2\"/>\n<text x=\"170\" y=\"284\" text-anchor=\"middle\" fill=\"var(--foreground)\" font-size=\"15\" font-weight=\"650\">Use the ASCII class masks</text>\n<text x=\"170\" y=\"308\" text-anchor=\"middle\" fill=\"var(--muted)\" font-size=\"12.5\">nothing else to classify</text>\n<path d=\"M575 163 H720 V222\" fill=\"none\" stroke=\"var(--accent)\" stroke-width=\"2.5\" marker-end=\"url(#arrow-unicode)\"/>\n<text x=\"646\" y=\"150\" text-anchor=\"middle\" fill=\"var(--muted)\" font-size=\"12\">yes</text>\n<rect x=\"550\" y=\"226\" width=\"340\" height=\"142\" rx=\"10\" fill=\"var(--background)\" stroke=\"var(--rule)\" stroke-width=\"2\"/>\n<text x=\"720\" y=\"254\" text-anchor=\"middle\" fill=\"var(--foreground)\" font-size=\"15\" font-weight=\"650\">Extend the masks for Unicode</text>\n<text x=\"720\" y=\"281\" text-anchor=\"middle\" fill=\"var(--muted)\" font-size=\"12.5\">1. find UTF-8 leads and decode code points</text>\n<text x=\"720\" y=\"307\" text-anchor=\"middle\" fill=\"var(--muted)\" font-size=\"12.5\">2. look up each character's packed class</text>\n<text x=\"720\" y=\"333\" text-anchor=\"middle\" fill=\"var(--muted)\" font-size=\"12.5\">3. stamp that class across its UTF-8 bytes</text>\n<text x=\"720\" y=\"354\" text-anchor=\"middle\" fill=\"var(--accent)\" font-size=\"12\">letter · number · whitespace · other</text>\n<path d=\"M170 326 V399 H330\" fill=\"none\" stroke=\"var(--accent)\" stroke-width=\"2.5\" marker-end=\"url(#arrow-unicode)\"/>\n<path d=\"M720 368 V399 H570\" fill=\"none\" stroke=\"var(--accent)\" stroke-width=\"2.5\" marker-end=\"url(#arrow-unicode)\"/>\n<rect x=\"330\" y=\"374\" width=\"240\" height=\"58\" rx=\"10\" fill=\"var(--accent-subtle)\" stroke=\"var(--rule)\" stroke-width=\"2\"/>\n<text x=\"450\" y=\"409\" text-anchor=\"middle\" fill=\"var(--foreground)\" font-size=\"15\" font-weight=\"650\">Updated class masks</text>\n<path d=\"M450 432 V459\" fill=\"none\" stroke=\"var(--accent)\" stroke-width=\"2.5\" marker-end=\"url(#arrow-unicode)\"/>\n<rect x=\"275\" y=\"463\" width=\"350\" height=\"66\" rx=\"10\" fill=\"var(--background)\" stroke=\"var(--rule)\" stroke-width=\"2\"/>\n<text x=\"450\" y=\"490\" text-anchor=\"middle\" fill=\"var(--foreground)\" font-size=\"15\" font-weight=\"650\">Tokeniser-specific boundary rules</text>\n<text x=\"450\" y=\"513\" text-anchor=\"middle\" fill=\"var(--muted)\" font-size=\"12.5\">operate over all 64 byte positions</text>\n<path d=\"M450 529 V556\" fill=\"none\" stroke=\"var(--accent)\" stroke-width=\"2.5\" marker-end=\"url(#arrow-unicode)\"/>\n<rect x=\"250\" y=\"560\" width=\"400\" height=\"66\" rx=\"10\" fill=\"var(--background)\" stroke=\"var(--rule)\" stroke-width=\"2\"/>\n<text x=\"450\" y=\"587\" text-anchor=\"middle\" fill=\"var(--foreground)\" font-size=\"15\" font-weight=\"650\">Batch result</text>\n<text x=\"450\" y=\"610\" text-anchor=\"middle\" fill=\"var(--muted)\" font-size=\"12.5\">proven start bits + bad-zone bits</text>\n<path d=\"M450 626 V653\" fill=\"none\" stroke=\"var(--accent)\" stroke-width=\"2.5\" marker-end=\"url(#arrow-unicode)\"/>\n<rect x=\"90\" y=\"657\" width=\"720\" height=\"70\" rx=\"10\" fill=\"var(--accent-subtle)\" stroke=\"var(--rule)\" stroke-width=\"2\"/>\n<text x=\"450\" y=\"684\" text-anchor=\"middle\" fill=\"var(--foreground)\" font-size=\"15\" font-weight=\"650\">One ordered boundary walker</text>\n<text x=\"450\" y=\"708\" text-anchor=\"middle\" fill=\"var(--muted)\" font-size=\"12.5\">read proven start bits · scalar-advance exactly through any uncertain gap · emit pretoken spans</text>\n</svg>",
@@ -25,13 +208,21 @@ const diagrams = {
 
 type DiagramProps = {
   svg: string
+  mobileSvg?: string
   caption: string
 }
 
-function GigatokenDiagram({svg, caption}: DiagramProps) {
+function GigatokenDiagram({svg, mobileSvg, caption}: DiagramProps) {
   return (
     <figure className="my-10 w-full overflow-x-auto">
-      <div dangerouslySetInnerHTML={{__html: svg}} />
+      {mobileSvg ? (
+        <>
+          <div className="hidden md:block" dangerouslySetInnerHTML={{__html: svg}} />
+          <div className="block md:hidden" dangerouslySetInnerHTML={{__html: mobileSvg}} />
+        </>
+      ) : (
+        <div dangerouslySetInnerHTML={{__html: svg}} />
+      )}
       <figcaption
         className="mt-3 text-sm leading-6"
         style={{color: 'var(--muted)'}}

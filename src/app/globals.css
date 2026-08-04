@@ -486,6 +486,21 @@ html[data-theme="dark"] .prose pre.shiki {
   margin: 0;
 }
 
+.gigatoken-pretoken-example pre {
+  overflow-x: hidden;
+}
+
+.gigatoken-pretoken-example pre code {
+  font-size: 0.7rem;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.gigatoken-pretoken-example pre code .line {
+  white-space: inherit;
+  overflow-wrap: inherit;
+}
+
 .copy-button {
   position: absolute;
   top: 0.625rem;
