@@ -314,9 +314,15 @@ export async function MarkdownRenderer({
   // Custom pre component that adds a copy button
   const PreComponent = ({children, ...props}: React.HTMLAttributes<HTMLPreElement>) => {
     const codeString = extractText(children)
+    const isGigatokenPretokenExample = codeString.startsWith(
+      '" Gigatoken optimises pretokenisation for CPU microarchitectures."',
+    )
+    const wrapperClassName = isGigatokenPretokenExample
+      ? 'code-block-wrapper gigatoken-pretoken-example'
+      : 'code-block-wrapper'
 
     return (
-      <div className="code-block-wrapper">
+      <div className={wrapperClassName}>
         <pre {...props}>{children}</pre>
         {codeString && <CopyButton />}
       </div>
