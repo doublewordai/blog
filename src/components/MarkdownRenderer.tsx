@@ -33,6 +33,8 @@ import GatingLadder from './GatingLadder'
 import AnatomyFig from './AnatomyFig'
 import ThroughputLadder from './ThroughputLadder'
 import RooflineBreakdown from './RooflineBreakdown'
+import CriuDataPath from './CriuDataPath'
+import CriuResults, {CriuBlockSizeResults} from './CriuResults'
 import {
   GigatokenBpePipeline,
   GigatokenCacheLine,
@@ -227,6 +229,12 @@ export async function MarkdownRenderer({
   // Checkpoint-anatomy (cuda-checkpoint post) figure. Self-contained.
   const AnatomyFigBlock = () => <AnatomyFig />
 
+  // CRIU memory-compression post figures. They render their own accessible
+  // static explanation before adding client-side controls or charts.
+  const CriuDataPathBlock = () => <CriuDataPath />
+  const CriuResultsBlock = () => <CriuResults />
+  const CriuBlockSizeResultsBlock = () => <CriuBlockSizeResults />
+
   // <ghost-aside> ... </ghost-aside>: muted dashed-border aside, ported from the
   // personal blog's Aside.astro. Open/close tags must sit on their own lines with
   // blank lines around the content so the inner markdown still gets parsed.
@@ -284,6 +292,9 @@ export async function MarkdownRenderer({
     'accept-joint-heatmap',
     'gating-ladder',
     'anatomy-fig',
+    'criu-data-path',
+    'criu-results',
+    'criu-block-size-results',
     'ghost-aside',
     'gigatoken-bpe-pipeline',
     'gigatoken-mask-scanner',
@@ -413,6 +424,9 @@ export async function MarkdownRenderer({
           'accept-joint-heatmap': AcceptJointHeatmapBlock,
           'gating-ladder': GatingLadderBlock,
           'anatomy-fig': AnatomyFigBlock,
+          'criu-data-path': CriuDataPathBlock,
+          'criu-results': CriuResultsBlock,
+          'criu-block-size-results': CriuBlockSizeResultsBlock,
           'ghost-aside': GhostAsideBlock,
           'throughput-ladder': ThroughputLadderBlock,
           'roofline-breakdown': RooflineBreakdownBlock,
