@@ -372,6 +372,10 @@ path.routeActive {
   font-variant-numeric: tabular-nums;
 }
 
+.compactEquation {
+  font-size: 16px;
+}
+
 .legend text {
   fill: var(--muted);
   font-size: var(--diagram-copy-size);
