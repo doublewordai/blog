@@ -378,7 +378,7 @@ path.routeActive {
 
 .legend text {
   fill: var(--muted);
-  font-size: var(--diagram-copy-size);
+  font-size: calc(var(--diagram-copy-size) + 4px);
 }
 
 .figure[data-active-phase='dump'] .restorePhase,

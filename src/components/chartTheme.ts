@@ -89,7 +89,7 @@ export function useChartTheme(): ChartTheme {
 
 export function applyChartDefaults(theme: ChartTheme) {
   Chart.defaults.font.family = theme.fontFamily
-  Chart.defaults.font.size = theme.fontSize
+  Chart.defaults.font.size = 13
   Chart.defaults.color = theme.foreground
   Chart.defaults.borderColor = theme.grid
 }
