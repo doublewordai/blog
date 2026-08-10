@@ -217,39 +217,88 @@ type MotionSegment = {
   routes?: Route[]
 }
 
+const CHECKPOINT_PATHS = {
+  memoryToPipe: 'M 210 139 H 252',
+  pipeToCompression: 'M 404 139 H 452',
+  compressionToPages: 'M 644 139 H 724',
+  compressionToMetadata: 'M 548 177 V 228 H 724',
+} as const
+
+const REPRESENTATION_LAYOUT = {
+  x: 670,
+  width: 176,
+  centerX: 758,
+  inputBranchX: 646,
+  outputBranchX: 856,
+} as const
+
+const representationRight = REPRESENTATION_LAYOUT.x + REPRESENTATION_LAYOUT.width
+
+const RESTORE_PATHS = {
+  inventoryToValidation: 'M 216 390 H 250',
+  validationToPlan: 'M 426 390 H 460',
+  planToZero: `M 636 390 H ${REPRESENTATION_LAYOUT.inputBranchX} V 364 H ${REPRESENTATION_LAYOUT.x}`,
+  planToStoredData: 'M 548 436 V 486',
+  pagesToStoredData: 'M 216 524 H 460',
+  storedDataToRaw: `M 636 524 H ${REPRESENTATION_LAYOUT.inputBranchX} V 478 H ${REPRESENTATION_LAYOUT.x}`,
+  storedDataToLz4: `M 636 524 H ${REPRESENTATION_LAYOUT.inputBranchX} V 592 H ${REPRESENTATION_LAYOUT.x}`,
+  zeroToMemory: `M ${representationRight} 364 H ${REPRESENTATION_LAYOUT.outputBranchX} V 458 H 878`,
+  rawToMemory: `M ${representationRight} 478 H ${REPRESENTATION_LAYOUT.outputBranchX} V 488 H 878`,
+  lz4ToMemory: `M ${representationRight} 592 H ${REPRESENTATION_LAYOUT.outputBranchX} V 518 H 878`,
+} as const
+
 const CHECKPOINT_MOTION: MotionSegment[] = [
-  {kind: 'checkpoint', path: 'M 204 139 H 252', delay: 0, duration: 0.38},
-  {kind: 'checkpoint', path: 'M 404 139 H 452', delay: 0.4, duration: 0.38},
-  {kind: 'checkpoint', path: 'M 644 139 H 724', delay: 0.8, duration: 0.48},
-  {kind: 'control', path: 'M 548 177 V 228 H 724', delay: 1.3, duration: 0.52},
+  {kind: 'checkpoint', path: CHECKPOINT_PATHS.memoryToPipe, delay: 0, duration: 0.38},
+  {kind: 'checkpoint', path: CHECKPOINT_PATHS.pipeToCompression, delay: 0.4, duration: 0.38},
+  {kind: 'checkpoint', path: CHECKPOINT_PATHS.compressionToPages, delay: 0.8, duration: 0.48},
+  {kind: 'control', path: CHECKPOINT_PATHS.compressionToMetadata, delay: 1.3, duration: 0.52},
 ]
 
 const RESTORE_MOTION: MotionSegment[] = [
-  {kind: 'control', path: 'M 216 390 H 250', delay: 0, duration: 0.32, routes: ['zero', 'raw', 'lz4']},
-  {kind: 'control', path: 'M 426 390 H 460', delay: 0.33, duration: 0.32, routes: ['zero', 'raw', 'lz4']},
-  {kind: 'control', path: 'M 636 390 H 654 V 358 H 674', delay: 0.66, duration: 0.4, routes: ['zero']},
-  {kind: 'control', path: 'M 548 428 V 486', delay: 0.66, duration: 0.4, routes: ['raw', 'lz4']},
-  {kind: 'read', path: 'M 216 524 H 460', delay: 0.94, duration: 0.46, routes: ['raw', 'lz4']},
-  {kind: 'write', path: 'M 824 358 H 840 V 458 H 878', delay: 1.08, duration: 0.46, routes: ['zero']},
-  {kind: 'read', path: 'M 636 524 H 654 V 472 H 674', delay: 1.42, duration: 0.4, routes: ['raw']},
-  {kind: 'read', path: 'M 636 524 H 654 V 586 H 674', delay: 1.42, duration: 0.4, routes: ['lz4']},
-  {kind: 'write', path: 'M 824 472 H 850 V 488 H 878', delay: 1.84, duration: 0.46, routes: ['raw']},
-  {kind: 'write', path: 'M 824 586 H 860 V 518 H 878', delay: 1.84, duration: 0.46, routes: ['lz4']},
+  {kind: 'control', path: RESTORE_PATHS.inventoryToValidation, delay: 0, duration: 0.32, routes: ['zero', 'raw', 'lz4']},
+  {kind: 'control', path: RESTORE_PATHS.validationToPlan, delay: 0.33, duration: 0.32, routes: ['zero', 'raw', 'lz4']},
+  {kind: 'control', path: RESTORE_PATHS.planToZero, delay: 0.66, duration: 0.4, routes: ['zero']},
+  {kind: 'control', path: RESTORE_PATHS.planToStoredData, delay: 0.66, duration: 0.4, routes: ['raw', 'lz4']},
+  {kind: 'read', path: RESTORE_PATHS.pagesToStoredData, delay: 0.94, duration: 0.46, routes: ['raw', 'lz4']},
+  {kind: 'write', path: RESTORE_PATHS.zeroToMemory, delay: 1.08, duration: 0.46, routes: ['zero']},
+  {kind: 'read', path: RESTORE_PATHS.storedDataToRaw, delay: 1.42, duration: 0.4, routes: ['raw']},
+  {kind: 'read', path: RESTORE_PATHS.storedDataToLz4, delay: 1.42, duration: 0.4, routes: ['lz4']},
+  {kind: 'write', path: RESTORE_PATHS.rawToMemory, delay: 1.84, duration: 0.46, routes: ['raw']},
+  {kind: 'write', path: RESTORE_PATHS.lz4ToMemory, delay: 1.84, duration: 0.46, routes: ['lz4']},
 ]
 
 function MotionParticles({motion}: {motion: MotionState}) {
+  const groupRef = useRef<SVGGElement>(null)
   const segments = motion.phase === 'dump' ? CHECKPOINT_MOTION : RESTORE_MOTION
   const visible = motion.route
     ? segments.filter((segment) => !segment.routes || segment.routes.includes(motion.route!))
     : segments
 
+  useEffect(() => {
+    const frame = window.requestAnimationFrame(() => {
+      groupRef.current
+        ?.querySelectorAll<SVGAnimationElement>('animate, animateMotion')
+        .forEach((animation) => {
+          const delay = Number(animation.dataset.delay ?? 0)
+          animation.beginElementAt(delay)
+        })
+    })
+
+    return () => window.cancelAnimationFrame(frame)
+  }, [motion])
+
   return (
-    <g key={`${motion.phase}-${motion.route ?? 'all'}-${motion.run}`} className={styles.particles} aria-hidden="true">
+    <g
+      ref={groupRef}
+      key={`${motion.phase}-${motion.route ?? 'all'}-${motion.run}`}
+      className={styles.particles}
+      aria-hidden="true"
+    >
       {visible.map((segment, index) => (
         <circle
           key={`${segment.path}-${index}`}
           className={joinClasses(styles.particle, styles[`particle${segment.kind[0].toUpperCase()}${segment.kind.slice(1)}`])}
-          r={segment.kind === 'control' ? 4 : 5}
+          r={segment.kind === 'control' ? 5 : 6}
           opacity="0"
         >
           <animate
@@ -257,13 +306,15 @@ function MotionParticles({motion}: {motion: MotionState}) {
             values="0;1;1;0"
             keyTimes="0;0.08;0.9;1"
             dur={`${segment.duration}s`}
-            begin={`${segment.delay}s`}
+            begin="indefinite"
+            data-delay={segment.delay}
             fill="remove"
           />
           <animateMotion
             path={segment.path}
             dur={`${segment.duration}s`}
-            begin={`${segment.delay}s`}
+            begin="indefinite"
+            data-delay={segment.delay}
             fill="remove"
           />
         </circle>
@@ -557,14 +608,14 @@ export default function CriuDataPath() {
           </g>
 
           <g className={joinClasses(styles.edges, styles.dumpPhase)}>
-            <path className={styles.dumpEdge} markerEnd={`url(#${dumpMarkerId})`} d="M 204 139 H 252" />
-            <path className={styles.dumpEdge} markerEnd={`url(#${dumpMarkerId})`} d="M 404 139 H 452" />
-            <path className={styles.dumpEdge} markerEnd={`url(#${dumpMarkerId})`} d="M 644 139 H 724" />
-            <path className={styles.controlEdge} markerEnd={`url(#${controlMarkerId})`} d="M 548 177 V 228 H 724" />
+            <path className={styles.dumpEdge} markerEnd={`url(#${dumpMarkerId})`} d={CHECKPOINT_PATHS.memoryToPipe} />
+            <path className={styles.dumpEdge} markerEnd={`url(#${dumpMarkerId})`} d={CHECKPOINT_PATHS.pipeToCompression} />
+            <path className={styles.dumpEdge} markerEnd={`url(#${dumpMarkerId})`} d={CHECKPOINT_PATHS.compressionToPages} />
+            <path className={styles.controlEdge} markerEnd={`url(#${controlMarkerId})`} d={CHECKPOINT_PATHS.compressionToMetadata} />
           </g>
 
           <SvgStage id="process-memory" selected={selected} onSelect={chooseStage}>
-            <rect x="52" y="100" width="152" height="78" rx="12" />
+            <rect x="46" y="100" width="164" height="78" rx="12" />
             <circle cx="76" cy="104" r="12" /><text className={styles.step} x="76" y="109" textAnchor="middle">1</text>
             <text className={styles.label} x="128" y="140" textAnchor="middle">Process memory</text>
             <text className={styles.meta} x="128" y="162" textAnchor="middle">process mappings</text>
@@ -588,44 +639,50 @@ export default function CriuDataPath() {
             <text className={styles.meta} x="850" y="162" textAnchor="middle">memory page data</text>
           </SvgStage>
           <SvgStage id="pagemap-metadata" selected={selected} onSelect={chooseStage} className={styles.metadataNode}>
-            <rect x="724" y="204" width="252" height="48" rx="12" />
-            <text className={styles.label} x="850" y="224" textAnchor="middle">Pagemap metadata</text>
-            <text className={styles.meta} x="850" y="243" textAnchor="middle">sizes + pages/block</text>
+            <rect x="724" y="196" width="252" height="64" rx="12" />
+            <text className={styles.label} x="850" y="221" textAnchor="middle">Pagemap metadata</text>
+            <text className={styles.meta} x="850" y="246" textAnchor="middle">sizes + pages/block</text>
           </SvgStage>
 
           <g className={joinClasses(styles.edges, styles.restorePhase)}>
-            <path className={joinClasses(styles.controlEdge, routeClass(['zero']))} markerEnd={`url(#${controlMarkerId})`} d="M 636 390 H 654 V 358 H 674" />
-            <path className={joinClasses(styles.controlEdge, routeClass(['raw', 'lz4']))} markerEnd={`url(#${controlMarkerId})`} d="M 548 428 V 486" />
-            <path className={joinClasses(styles.controlEdge, routeClass(['zero', 'raw', 'lz4']))} markerEnd={`url(#${controlMarkerId})`} d="M 216 390 H 250" />
-            <path className={joinClasses(styles.controlEdge, routeClass(['zero', 'raw', 'lz4']))} markerEnd={`url(#${controlMarkerId})`} d="M 426 390 H 460" />
-            <path className={joinClasses(styles.readEdge, routeClass(['raw', 'lz4']))} markerEnd={`url(#${restoreMarkerId})`} d="M 216 524 H 460" />
-            <path className={joinClasses(styles.readEdge, routeClass(['raw']))} markerEnd={`url(#${restoreMarkerId})`} d="M 636 524 H 654 V 472 H 674" />
-            <path className={joinClasses(styles.readEdge, routeClass(['lz4']))} markerEnd={`url(#${restoreMarkerId})`} d="M 636 524 H 654 V 586 H 674" />
-            <path className={joinClasses(styles.writeEdge, routeClass(['zero']))} markerEnd={`url(#${writeMarkerId})`} d="M 824 358 H 840 V 458 H 878" />
-            <path className={joinClasses(styles.writeEdge, routeClass(['raw']))} markerEnd={`url(#${writeMarkerId})`} d="M 824 472 H 850 V 488 H 878" />
-            <path className={joinClasses(styles.writeEdge, routeClass(['lz4']))} markerEnd={`url(#${writeMarkerId})`} d="M 824 586 H 860 V 518 H 878" />
+            <path className={joinClasses(styles.controlEdge, routeClass(['zero']))} markerEnd={`url(#${controlMarkerId})`} d={RESTORE_PATHS.planToZero} />
+            <path className={joinClasses(styles.controlEdge, routeClass(['raw', 'lz4']))} markerEnd={`url(#${controlMarkerId})`} d={RESTORE_PATHS.planToStoredData} />
+            <path className={joinClasses(styles.controlEdge, routeClass(['zero', 'raw', 'lz4']))} markerEnd={`url(#${controlMarkerId})`} d={RESTORE_PATHS.inventoryToValidation} />
+            <path className={joinClasses(styles.controlEdge, routeClass(['zero', 'raw', 'lz4']))} markerEnd={`url(#${controlMarkerId})`} d={RESTORE_PATHS.validationToPlan} />
+            <path className={joinClasses(styles.readEdge, routeClass(['raw', 'lz4']))} markerEnd={`url(#${restoreMarkerId})`} d={RESTORE_PATHS.pagesToStoredData} />
+            <path className={joinClasses(styles.readEdge, routeClass(['raw']))} markerEnd={`url(#${restoreMarkerId})`} d={RESTORE_PATHS.storedDataToRaw} />
+            <path className={joinClasses(styles.readEdge, routeClass(['lz4']))} markerEnd={`url(#${restoreMarkerId})`} d={RESTORE_PATHS.storedDataToLz4} />
+            <path className={joinClasses(styles.writeEdge, routeClass(['zero']))} markerEnd={`url(#${writeMarkerId})`} d={RESTORE_PATHS.zeroToMemory} />
+            <path className={joinClasses(styles.writeEdge, routeClass(['raw']))} markerEnd={`url(#${writeMarkerId})`} d={RESTORE_PATHS.rawToMemory} />
+            <path className={joinClasses(styles.writeEdge, routeClass(['lz4']))} markerEnd={`url(#${writeMarkerId})`} d={RESTORE_PATHS.lz4ToMemory} />
             <text className={joinClasses(styles.edgeLabel, styles.edgeLabelRead, routeClass(['raw', 'lz4']))} x="338" y="514" textAnchor="middle">total stored bytes</text>
-            <text className={joinClasses(styles.edgeLabel, styles.edgeLabelRead, routeClass(['raw']))} x="648" y="462" textAnchor="end">read N</text>
-            <text className={joinClasses(styles.edgeLabel, styles.edgeLabelRead, routeClass(['lz4']))} x="640" y="578" textAnchor="end">read S</text>
+            <text className={joinClasses(styles.edgeLabel, styles.edgeLabelRead, routeClass(['raw']))} x="638" y="466" textAnchor="end">read N</text>
+            <text className={joinClasses(styles.edgeLabel, styles.edgeLabelRead, routeClass(['lz4']))} x="638" y="580" textAnchor="end">read S</text>
           </g>
 
           <SvgStage id="inventory-pagemap" selected={selected} onSelect={chooseStage} className={styles.metadataNode}>
-            <rect x="44" y="352" width="172" height="76" rx="12" />
-            <circle cx="68" cy="356" r="12" /><text className={styles.step} x="68" y="361" textAnchor="middle">1</text>
-            <text className={styles.label} x="130" y="388" textAnchor="middle">Inventory + pagemap</text>
-            <text className={styles.meta} x="130" y="410" textAnchor="middle">block metadata</text>
+            <rect x="44" y="344" width="172" height="92" rx="12" />
+            <circle cx="68" cy="348" r="12" /><text className={styles.step} x="68" y="354" textAnchor="middle">1</text>
+            <text className={styles.label} x="130" y="377" textAnchor="middle">
+              <tspan x="130">Inventory +</tspan><tspan x="130" dy="20">pagemap</tspan>
+            </text>
+            <text className={styles.meta} x="130" y="422" textAnchor="middle">block metadata</text>
           </SvgStage>
           <SvgStage id="validate-layout" selected={selected} onSelect={chooseStage} className={styles.metadataNode}>
-            <rect x="250" y="352" width="176" height="76" rx="12" />
-            <circle cx="274" cy="356" r="12" /><text className={styles.step} x="274" y="361" textAnchor="middle">2</text>
-            <text className={styles.label} x="338" y="388" textAnchor="middle">Validate metadata</text>
-            <text className={styles.meta} x="338" y="410" textAnchor="middle">counts · sizes · offsets</text>
+            <rect x="250" y="344" width="176" height="92" rx="12" />
+            <circle cx="274" cy="348" r="12" /><text className={styles.step} x="274" y="354" textAnchor="middle">2</text>
+            <text className={styles.label} x="338" y="377" textAnchor="middle">
+              <tspan x="338">Validate</tspan><tspan x="338" dy="20">metadata</tspan>
+            </text>
+            <text className={styles.meta} x="338" y="422" textAnchor="middle">counts · sizes · offsets</text>
           </SvgStage>
           <SvgStage id="plan-batch" selected={selected} onSelect={chooseStage}>
-            <rect x="460" y="352" width="176" height="76" rx="12" />
-            <circle cx="484" cy="356" r="12" /><text className={styles.step} x="484" y="361" textAnchor="middle">3</text>
-            <text className={styles.label} x="548" y="388" textAnchor="middle">Build restore batches</text>
-            <text className={styles.meta} x="548" y="410" textAnchor="middle">zero · raw · LZ4 paths</text>
+            <rect x="460" y="344" width="176" height="92" rx="12" />
+            <circle cx="484" cy="348" r="12" /><text className={styles.step} x="484" y="354" textAnchor="middle">3</text>
+            <text className={styles.label} x="548" y="377" textAnchor="middle">
+              <tspan x="548">Build restore</tspan><tspan x="548" dy="20">batches</tspan>
+            </text>
+            <text className={styles.meta} x="548" y="422" textAnchor="middle">zero · raw · LZ4 paths</text>
           </SvgStage>
           <SvgStage id="restore-pages-image" selected={selected} onSelect={chooseStage} className={styles.storageNode}>
             <rect x="44" y="486" width="172" height="76" rx="12" />
@@ -639,22 +696,22 @@ export default function CriuDataPath() {
             <text className={joinClasses(styles.meta, styles.equation)} x="548" y="544" textAnchor="middle">sum(block_sizes)</text>
           </SvgStage>
           <SvgStage id="zero" selected={selected} onSelect={chooseStage} className={joinClasses(styles.representationNode, styles.zeroNode)}>
-            <rect x="674" y="322" width="150" height="72" rx="18" />
-            <text className={styles.label} x="749" y="348" textAnchor="middle">ZERO</text>
-            <text className={joinClasses(styles.meta, styles.equation)} x="749" y="369" textAnchor="middle">S = 0</text>
-            <text className={styles.operation} x="749" y="386" textAnchor="middle">read 0 · fill N</text>
+            <rect x={REPRESENTATION_LAYOUT.x} y="322" width={REPRESENTATION_LAYOUT.width} height="84" rx="18" />
+            <text className={styles.label} x={REPRESENTATION_LAYOUT.centerX} y="348" textAnchor="middle">ZERO</text>
+            <text className={joinClasses(styles.meta, styles.equation)} x={REPRESENTATION_LAYOUT.centerX} y="371" textAnchor="middle">S = 0</text>
+            <text className={styles.operation} x={REPRESENTATION_LAYOUT.centerX} y="395" textAnchor="middle">fill N</text>
           </SvgStage>
           <SvgStage id="raw" selected={selected} onSelect={chooseStage} className={joinClasses(styles.representationNode, styles.rawNode)}>
-            <rect x="674" y="436" width="150" height="72" rx="18" />
-            <text className={styles.label} x="749" y="462" textAnchor="middle">RAW</text>
-            <text className={joinClasses(styles.meta, styles.equation)} x="749" y="483" textAnchor="middle">S = N</text>
-            <text className={styles.operation} x="749" y="500" textAnchor="middle">no decompression</text>
+            <rect x={REPRESENTATION_LAYOUT.x} y="436" width={REPRESENTATION_LAYOUT.width} height="84" rx="18" />
+            <text className={styles.label} x={REPRESENTATION_LAYOUT.centerX} y="462" textAnchor="middle">RAW</text>
+            <text className={joinClasses(styles.meta, styles.equation)} x={REPRESENTATION_LAYOUT.centerX} y="485" textAnchor="middle">S = N</text>
+            <text className={styles.operation} x={REPRESENTATION_LAYOUT.centerX} y="509" textAnchor="middle">no decompression</text>
           </SvgStage>
           <SvgStage id="lz4" selected={selected} onSelect={chooseStage} className={joinClasses(styles.representationNode, styles.lz4Node)}>
-            <rect x="674" y="550" width="150" height="72" rx="18" />
-            <text className={styles.label} x="749" y="576" textAnchor="middle">LZ4</text>
-            <text className={joinClasses(styles.meta, styles.equation)} x="749" y="597" textAnchor="middle">0 &lt; S &lt; N</text>
-            <text className={styles.operation} x="749" y="614" textAnchor="middle">read S · decompress N</text>
+            <rect x={REPRESENTATION_LAYOUT.x} y="550" width={REPRESENTATION_LAYOUT.width} height="84" rx="18" />
+            <text className={styles.label} x={REPRESENTATION_LAYOUT.centerX} y="576" textAnchor="middle">LZ4</text>
+            <text className={joinClasses(styles.meta, styles.equation)} x={REPRESENTATION_LAYOUT.centerX} y="599" textAnchor="middle">0 &lt; S &lt; N</text>
+            <text className={styles.operation} x={REPRESENTATION_LAYOUT.centerX} y="623" textAnchor="middle">decompress N</text>
           </SvgStage>
           <SvgStage id="restored-memory" selected={selected} onSelect={chooseStage}>
             <rect x="878" y="440" width="130" height="96" rx="12" />
@@ -665,13 +722,13 @@ export default function CriuDataPath() {
           </SvgStage>
 
           <g className={joinClasses(styles.legend, styles.restorePhase)}>
-            <text x="44" y="657">Per block: <tspan className={styles.equation}>S</tspan> = stored bytes · <tspan className={styles.equation}>N</tspan> = bytes in memory</text>
-            <path className={styles.controlEdge} d="M 426 652 H 456" />
-            <text x="466" y="657">metadata / control</text>
-            <path className={styles.readEdge} d="M 620 652 H 650" />
-            <text x="660" y="657">image read</text>
-            <path className={styles.writeEdge} d="M 760 652 H 790" />
-            <text x="800" y="657">memory write</text>
+            <text x="44" y="650">Per block: <tspan className={styles.equation}>S</tspan> = stored bytes · <tspan className={styles.equation}>N</tspan> = bytes in memory</text>
+            <path className={styles.controlEdge} d="M 44 670 H 74" />
+            <text x="84" y="675">metadata / control</text>
+            <path className={styles.readEdge} d="M 300 670 H 330" />
+            <text x="340" y="675">image read</text>
+            <path className={styles.writeEdge} d="M 500 670 H 530" />
+            <text x="540" y="675">memory write</text>
           </g>
 
           {motion && <MotionParticles motion={motion} />}

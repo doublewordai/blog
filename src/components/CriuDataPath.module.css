@@ -13,6 +13,8 @@
   --text: #183447;
   --muted: #526776;
   --focus: #a00000;
+  --diagram-title-size: 20px;
+  --diagram-copy-size: 18px;
   display: block;
   width: 100%;
   max-width: 100%;
@@ -176,7 +178,7 @@
 
 .phaseLabel text {
   fill: var(--dump);
-  font-size: 12px;
+  font-size: var(--diagram-copy-size);
   font-weight: 750;
   letter-spacing: 0.08em;
 }
@@ -221,7 +223,7 @@
 
 .edgeLabel {
   fill: var(--muted);
-  font-size: 11px;
+  font-size: var(--diagram-copy-size);
   transition: opacity 180ms ease;
 }
 
@@ -339,27 +341,28 @@ path.routeActive {
 
 .step {
   fill: #fff;
-  font-size: 11px;
+  font-size: var(--diagram-copy-size);
   font-weight: 750;
   pointer-events: none;
 }
 
 .label {
   fill: var(--text);
-  font-size: 14px;
+  font-size: var(--diagram-title-size);
   font-weight: 700;
   pointer-events: none;
 }
 
 .meta {
   fill: var(--muted);
-  font-size: 11px;
+  font-size: var(--diagram-copy-size);
   pointer-events: none;
 }
 
 .operation {
   fill: var(--muted);
-  font-size: 10px;
+  font-size: var(--diagram-copy-size);
+  font-weight: 600;
   pointer-events: none;
 }
 
@@ -371,7 +374,7 @@ path.routeActive {
 
 .legend text {
   fill: var(--muted);
-  font-size: 10.5px;
+  font-size: var(--diagram-copy-size);
 }
 
 .figure[data-active-phase='dump'] .restorePhase,
@@ -385,6 +388,8 @@ path.routeActive {
 }
 
 .particle {
+  stroke: var(--surface-raised);
+  stroke-width: 2;
   pointer-events: none;
 }
 
@@ -743,7 +748,7 @@ button.mobileNode:hover,
 
 @media (min-width: 1280px) {
   .figure {
-    width: min(52rem, calc(100vw - 5rem));
+    width: min(36rem, calc(100vw - 5rem));
     max-width: none;
   }
 
