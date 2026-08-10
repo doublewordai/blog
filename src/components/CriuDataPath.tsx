@@ -693,7 +693,7 @@ export default function CriuDataPath() {
             <rect x="460" y="486" width="176" height="76" rx="12" />
             <circle cx="484" cy="490" r="12" /><text className={styles.step} x="484" y="495" textAnchor="middle">4</text>
             <text className={styles.label} x="548" y="522" textAnchor="middle">Read stored bytes</text>
-            <text className={joinClasses(styles.meta, styles.equation)} x="548" y="544" textAnchor="middle">sum(block_sizes)</text>
+            <text className={joinClasses(styles.meta, styles.equation, styles.compactEquation)} x="548" y="544" textAnchor="middle">sum(block_sizes)</text>
           </SvgStage>
           <SvgStage id="zero" selected={selected} onSelect={chooseStage} className={joinClasses(styles.representationNode, styles.zeroNode)}>
             <rect x={REPRESENTATION_LAYOUT.x} y="322" width={REPRESENTATION_LAYOUT.width} height="84" rx="18" />

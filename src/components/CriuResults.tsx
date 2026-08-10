@@ -3,7 +3,11 @@
 import {useEffect, useId, useMemo, useRef, useState, useSyncExternalStore} from 'react'
 import {Chart, registerables} from 'chart.js'
 import ChartDataLabels from 'chartjs-plugin-datalabels'
-import {applyChartDefaults, useChartTheme, type ChartTheme} from './chartTheme'
+import {
+  applyChartDefaults,
+  useChartTheme,
+  type ChartTheme,
+} from './chartTheme'
 import {
   CRIU_BASELINE_RESULTS,
   CRIU_BLOCK_METRICS,
@@ -214,7 +218,7 @@ function createBaselineChart(
       maintainAspectRatio: false,
       animation: reducedMotion ? false : {duration: 220, easing: 'easeOutQuart'},
       events: [],
-      layout: {padding: {top: 4, right: 52}},
+      layout: {padding: {top: 4, right: Math.round(theme.fontSize * 5)}},
       datasets: {
         bar: {
           barPercentage: 0.84,
@@ -226,11 +230,11 @@ function createBaselineChart(
           position: 'top',
           align: 'start',
           labels: {
-            boxWidth: 12,
-            boxHeight: 8,
+            boxWidth: Math.round(theme.fontSize * 0.75),
+            boxHeight: Math.round(theme.fontSize * 0.5),
             color: theme.foreground,
-            font: {family: theme.fontFamily, size: 12},
-            padding: 14,
+            font: {family: theme.fontFamily, size: theme.fontSize},
+            padding: Math.round(theme.fontSize * 0.9),
             usePointStyle: true,
             pointStyle: 'rectRounded',
           },
@@ -243,7 +247,7 @@ function createBaselineChart(
           clip: false,
           offset: 4,
           color: theme.foreground,
-          font: {family: theme.fontFamily, size: 11, weight: 600},
+          font: {family: theme.fontFamily, size: theme.fontSize, weight: 600},
           formatter: (value: number) => label(value),
         },
       },
@@ -257,11 +261,11 @@ function createBaselineChart(
             display: true,
             text: spec.axisTitle,
             color: theme.mutedForeground,
-            font: {family: theme.fontFamily, size: 11},
+            font: {family: theme.fontFamily, size: theme.fontSize},
           },
           ticks: {
             color: theme.mutedForeground,
-            font: {family: theme.fontFamily, size: 11},
+            font: {family: theme.fontFamily, size: theme.fontSize},
             maxTicksLimit: 6,
           },
         },
@@ -271,7 +275,7 @@ function createBaselineChart(
           ticks: {
             autoSkip: false,
             color: theme.foreground,
-            font: {family: theme.fontFamily, size: 11, weight: 500},
+            font: {family: theme.fontFamily, size: theme.fontSize, weight: 500},
           },
         },
       },
@@ -397,7 +401,7 @@ function createBlockSizeChart(
           clip: false,
           offset: 3,
           color: theme.foreground,
-          font: {family: theme.fontFamily, size: 11, weight: 600},
+          font: {family: theme.fontFamily, size: theme.fontSize, weight: 600},
           formatter: (value: number) => `${value.toFixed(metric.decimals)} ${metric.unit}`,
         },
       },
@@ -408,7 +412,7 @@ function createBlockSizeChart(
           ticks: {
             autoSkip: false,
             color: theme.foreground,
-            font: {family: theme.fontFamily, size: 11, weight: 500},
+            font: {family: theme.fontFamily, size: theme.fontSize, weight: 500},
           },
         },
         y: {
@@ -420,11 +424,11 @@ function createBlockSizeChart(
             display: true,
             text: metric.axisTitle,
             color: theme.mutedForeground,
-            font: {family: theme.fontFamily, size: 11},
+            font: {family: theme.fontFamily, size: theme.fontSize},
           },
           ticks: {
             color: theme.mutedForeground,
-            font: {family: theme.fontFamily, size: 11},
+            font: {family: theme.fontFamily, size: theme.fontSize},
             maxTicksLimit: 6,
           },
         },
@@ -487,7 +491,7 @@ export function CriuBlockSizeResults() {
         {enhanced && (
           <>
             <p className={styles.liveStatus} aria-live="polite">
-              Showing {metric.chartTitle.toLowerCase()} in {metric.unit}.
+              Showing {metric.chartTitle.toLowerCase()} in {metric.unitName}.
             </p>
             <div className={`${styles.chartFrame} ${styles.blockChartFrame}`}>
               <canvas
