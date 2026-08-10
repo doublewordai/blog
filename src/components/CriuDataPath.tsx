@@ -722,13 +722,12 @@ export default function CriuDataPath() {
           </SvgStage>
 
           <g className={joinClasses(styles.legend, styles.restorePhase)}>
-            <text x="44" y="650">Per block: <tspan className={styles.equation}>S</tspan> = stored bytes · <tspan className={styles.equation}>N</tspan> = bytes in memory</text>
-            <path className={styles.controlEdge} d="M 44 670 H 74" />
-            <text x="84" y="675">metadata / control</text>
-            <path className={styles.readEdge} d="M 300 670 H 330" />
-            <text x="340" y="675">image read</text>
-            <path className={styles.writeEdge} d="M 500 670 H 530" />
-            <text x="540" y="675">memory write</text>
+            <path className={styles.controlEdge} d="M 44 660 H 74" />
+            <text x="84" y="665">metadata / control</text>
+            <path className={styles.readEdge} d="M 300 660 H 330" />
+            <text x="340" y="665">image read</text>
+            <path className={styles.writeEdge} d="M 500 660 H 530" />
+            <text x="540" y="665">memory write</text>
           </g>
 
           {motion && <MotionParticles motion={motion} />}
