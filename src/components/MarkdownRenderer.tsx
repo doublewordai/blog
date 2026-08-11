@@ -21,6 +21,7 @@ import KernelBandwidthBars from './KernelBandwidthBars'
 import Mi300xThroughputBars from './Mi300xThroughputBars'
 import RooflineExpertStack from './RooflineExpertStack'
 import SpecDecLedger from './SpecDecLedger'
+import ShockRegimeMap from './ShockRegimeMap'
 import SpecDecOptimalGamma from './SpecDecOptimalGamma'
 import DrafterCrossover from './DrafterCrossover'
 import PricingEnvelope from './PricingEnvelope'
@@ -302,6 +303,7 @@ export async function MarkdownRenderer({
     'gigatoken-unicode-path',
     'gigatoken-cache-line',
     'gigatoken-parallel',
+    'shock-regime-map',
   ])
 
   const ParagraphComponent = ({
@@ -315,6 +317,9 @@ export async function MarkdownRenderer({
     if (hasBlockChild) return <>{children}</>
     return <p {...props}>{children}</p>
   }
+
+  // Shock-regime heatmap for the disaggregated-serving post.
+  const ShockRegimeMapBlock = () => <ShockRegimeMap />
 
   // Gigatoken post flow diagrams. Geometry and labels are baked into the components.
   const GigatokenBpePipelineBlock = () => <GigatokenBpePipeline />
@@ -437,6 +442,7 @@ export async function MarkdownRenderer({
           'gigatoken-unicode-path': GigatokenUnicodePathBlock,
           'gigatoken-cache-line': GigatokenCacheLineBlock,
           'gigatoken-parallel': GigatokenParallelBlock,
+          'shock-regime-map': ShockRegimeMapBlock,
         } as Components
       }
     >
