@@ -74,8 +74,8 @@ export function TableOfContents({content}: {content: string}) {
 
   return (
     <nav aria-label="Table of contents" className="font-ui">
-      <div className="small-caps text-[0.85rem] text-[--muted-light] mb-3">Contents</div>
-      <ul className="space-y-2 text-[0.85rem] leading-snug">
+      <div className="small-caps text-[0.75rem] text-[--muted-light] mb-2.5">Contents</div>
+      <ul className="space-y-1.5 text-[0.75rem] leading-snug">
         {toc.map((h2) => (
           <li
             key={h2.id}
@@ -93,12 +93,12 @@ export function TableOfContents({content}: {content: string}) {
               {h2.text}
             </a>
             {h2.children.length > 0 && (
-              <ul className="ml-3 mt-1.5 space-y-1.5 border-l border-[--rule] pl-3">
+              <ul className="ml-2.5 mt-1 space-y-1 border-l border-[--rule] pl-2.5">
                 {h2.children.map((h3) => (
                   <li key={h3.id}>
                     <a
                       href={`#${h3.id}`}
-                      className="text-[0.8rem] text-[--muted-light] hover:text-[--accent] no-underline transition-colors"
+                      className="text-[0.7rem] text-[--muted-light] hover:text-[--accent] no-underline transition-colors"
                     >
                       {h3.text}
                     </a>

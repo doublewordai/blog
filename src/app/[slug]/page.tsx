@@ -141,15 +141,7 @@ export default async function PostPage({params}: Props) {
     <div className="min-h-screen flex flex-col">
       {/* Tufte-style layout: wider container on xl to accommodate sidenotes */}
       <div className="flex-1 w-full max-w-[40rem] xl:max-w-[56rem] mx-auto px-6 sm:px-8 xl:px-10 py-10 sm:py-14">
-        <article className="relative xl:max-w-[37rem]">
-          {/* Table of contents in the left margin on wide screens */}
-          {typeof body === 'string' && (
-            <aside className="hidden min-[1400px]:block absolute right-full top-0 bottom-0 mr-12 w-52">
-              <div className="sticky top-10 max-h-[calc(100vh-5rem)] overflow-y-auto">
-                <TableOfContents content={body} />
-              </div>
-            </aside>
-          )}
+        <article className="xl:max-w-[37rem]">
           {/* Article Header */}
           <header className="mb-5 sm:mb-6 animate-fade-in animate-delay-1">
             {/* Navigation row with back link and theme toggle */}
@@ -223,7 +215,15 @@ export default async function PostPage({params}: Props) {
             </div>
           )}
 
-          {/* Article Content - Tufte prose styling */}
+          {/* Article Content - Tufte prose styling, with a margin ToC on wide screens */}
+          <div className="relative">
+          {typeof body === 'string' && (
+            <aside className="hidden min-[1400px]:block absolute right-full top-0 bottom-0 mr-10 w-44">
+              <div className="sticky top-10 max-h-[calc(100vh-5rem)] overflow-y-auto">
+                <TableOfContents content={body} />
+              </div>
+            </aside>
+          )}
           <div
             className="prose max-w-none animate-fade-in animate-delay-3
             prose-headings:font-semibold
@@ -264,6 +264,7 @@ export default async function PostPage({params}: Props) {
             {typeof body === 'string' && (
               <MarkdownRenderer content={body} images={post.images} />
             )}
+          </div>
           </div>
 
           {/* Branding CTA + citation */}
