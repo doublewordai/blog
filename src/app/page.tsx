@@ -37,7 +37,7 @@ export default async function IndexPage({
         {/* Refined Header with Brand Typography */}
         <header className="mb-10">
           <div className="flex items-center justify-between gap-2">
-            <div className="flex items-center gap-4 mb-2">
+            <a href="/" className="flex items-center gap-4 mb-2">
               <img
                 src="/doubleword-icon.png"
                 alt="Doubleword"
@@ -47,7 +47,7 @@ export default async function IndexPage({
                 <span className="brand-title-double">Double</span>
                 <span className="brand-title-word">word</span>
               </h1>
-            </div>
+            </a>
             <div className="flex items-center gap-1">
               <ApiLink />
               <ThemeToggle />
