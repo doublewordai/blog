@@ -4,6 +4,7 @@ import {sanityFetch, client} from '@/sanity/lib/client'
 import {POST_QUERY, POST_SLUGS_QUERY} from '@/sanity/lib/queries'
 import type {Post} from '@/sanity/types'
 import {MarkdownRenderer} from '@/components/MarkdownRenderer'
+import {TableOfContents} from '@/components/TableOfContents'
 import {createImageUrlBuilder, type SanityImageSource} from '@sanity/image-url'
 import {projectId, dataset} from '@/sanity/env'
 import {BackLink} from '@/components/BackLink'
@@ -140,7 +141,15 @@ export default async function PostPage({params}: Props) {
     <div className="min-h-screen flex flex-col">
       {/* Tufte-style layout: wider container on xl to accommodate sidenotes */}
       <div className="flex-1 w-full max-w-[40rem] xl:max-w-[56rem] mx-auto px-6 sm:px-8 xl:px-10 py-10 sm:py-14">
-        <article className="xl:max-w-[37rem]">
+        <article className="relative xl:max-w-[37rem]">
+          {/* Table of contents in the left margin on wide screens */}
+          {typeof body === 'string' && (
+            <aside className="hidden min-[1400px]:block absolute right-full top-0 bottom-0 mr-12 w-52">
+              <div className="sticky top-10 max-h-[calc(100vh-5rem)] overflow-y-auto">
+                <TableOfContents content={body} />
+              </div>
+            </aside>
+          )}
           {/* Article Header */}
           <header className="mb-5 sm:mb-6 animate-fade-in animate-delay-1">
             {/* Navigation row with back link and theme toggle */}
