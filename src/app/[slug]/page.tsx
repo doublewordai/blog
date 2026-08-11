@@ -219,7 +219,7 @@ export default async function PostPage({params}: Props) {
           <div className="relative">
           {typeof body === 'string' && (
             <aside className="hidden min-[1400px]:block absolute right-full top-0 bottom-0 mr-10 w-44">
-              <div className="sticky top-10 max-h-[calc(100vh-5rem)] overflow-y-auto">
+              <div className="sticky top-10">
                 <TableOfContents content={body} />
               </div>
             </aside>
