@@ -4,7 +4,7 @@ import {sanityFetch, client} from '@/sanity/lib/client'
 import {POST_QUERY, POST_SLUGS_QUERY} from '@/sanity/lib/queries'
 import type {Post} from '@/sanity/types'
 import {MarkdownRenderer} from '@/components/MarkdownRenderer'
-import {TableOfContents} from '@/components/TableOfContents'
+import {TableOfContents, extractToc} from '@/components/TableOfContents'
 import {createImageUrlBuilder, type SanityImageSource} from '@sanity/image-url'
 import {projectId, dataset} from '@/sanity/env'
 import {BackLink} from '@/components/BackLink'
@@ -122,6 +122,10 @@ export default async function PostPage({params}: Props) {
     ? await fetchExternalContent(post.externalSource) || post.body
     : post.body
 
+  // Margin table of contents (wide screens), for posts with enough structure
+  const toc = typeof body === 'string' ? extractToc(body) : []
+  const hasToc = toc.length >= 3
+
   // Capture server-side post_viewed event
   const posthog = getPostHogClient()
   posthog.capture({
@@ -140,10 +144,14 @@ export default async function PostPage({params}: Props) {
   return (
     <div className="min-h-screen flex flex-col">
       {/* Tufte-style layout: wider container on xl to accommodate sidenotes */}
-      <div className="flex-1 w-full max-w-[40rem] xl:max-w-[56rem] mx-auto px-6 sm:px-8 xl:px-10 py-10 sm:py-14">
-        <article className="xl:max-w-[37rem]">
+      <div
+        className={`flex-1 w-full max-w-[40rem] ${hasToc ? 'xl:max-w-[64rem]' : 'xl:max-w-[56rem]'} mx-auto px-6 sm:px-8 xl:px-10 py-10 sm:py-14`}
+      >
+        <article className={hasToc ? '' : 'xl:max-w-[37rem]'}>
           {/* Article Header */}
-          <header className="mb-5 sm:mb-6 animate-fade-in animate-delay-1">
+          <header
+            className={`mb-5 sm:mb-6 animate-fade-in animate-delay-1 ${hasToc ? 'xl:max-w-[37rem] xl:ml-[13rem]' : ''}`}
+          >
             {/* Navigation row with back link and theme toggle */}
             <div className="flex items-center justify-between mb-4">
               {/* Date with back arrow - both clickable */}
@@ -203,6 +211,18 @@ export default async function PostPage({params}: Props) {
             )}
           </header>
 
+          {/* Body row: margin ToC column + content, so the ToC top-aligns
+              with the start of the body text rather than the page header */}
+          <div className={hasToc ? 'xl:flex xl:gap-8' : ''}>
+          {hasToc && (
+            <aside className="hidden xl:block w-44 shrink-0">
+              <div className="sticky top-8">
+                <TableOfContents toc={toc} />
+              </div>
+            </aside>
+          )}
+          <div className={hasToc ? 'xl:max-w-[37rem] min-w-0' : ''}>
+
           {/* Video Embed */}
           {post.videoUrl && (
             <div className="mb-8 aspect-video animate-fade-in animate-delay-2">
@@ -215,15 +235,7 @@ export default async function PostPage({params}: Props) {
             </div>
           )}
 
-          {/* Article Content - Tufte prose styling, with a margin ToC on wide screens */}
-          <div className="relative">
-          {typeof body === 'string' && (
-            <aside className="hidden min-[1400px]:block absolute right-full top-0 bottom-0 mr-10 w-44">
-              <div className="sticky top-10">
-                <TableOfContents content={body} />
-              </div>
-            </aside>
-          )}
+          {/* Article Content - Tufte prose styling */}
           <div
             className="prose max-w-none animate-fade-in animate-delay-3
             prose-headings:font-semibold
@@ -265,17 +277,20 @@ export default async function PostPage({params}: Props) {
               <MarkdownRenderer content={body} images={post.images} />
             )}
           </div>
-          </div>
 
           {/* Branding CTA + citation */}
           <PostFooter post={post} siteUrl={SITE_URL} />
+          </div>
+          </div>
         </article>
       </div>
 
       {/* Site Footer */}
       <footer className="site-footer">
-        <div className="max-w-[40rem] xl:max-w-[56rem] mx-auto px-6 sm:px-8 xl:px-10">
-          <div className="xl:max-w-[37rem]">
+        <div
+          className={`max-w-[40rem] ${hasToc ? 'xl:max-w-[64rem]' : 'xl:max-w-[56rem]'} mx-auto px-6 sm:px-8 xl:px-10`}
+        >
+          <div className={`xl:max-w-[37rem] ${hasToc ? 'xl:ml-[13rem]' : ''}`}>
           <div className="footer-content flex-col sm:flex-row gap-4">
             <div className="flex items-center gap-2">
               <img src="/doubleword-icon.png" alt="" className="h-4 w-4 opacity-50" />

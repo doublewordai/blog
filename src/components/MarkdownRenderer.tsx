@@ -4,6 +4,7 @@ import remarkMath from 'remark-math'
 import remarkFrontmatter from 'remark-frontmatter'
 import remarkUnwrapImages from 'remark-unwrap-images'
 import {remarkSidenotes} from '@/plugins/remark-sidenotes.mjs'
+import {rehypeAppendix} from '@/plugins/rehype-appendix.mjs'
 import remarkSmartypants from 'remark-smartypants'
 import rehypeShiki from '@shikijs/rehype'
 import rehypeKatex from 'rehype-katex'
@@ -353,6 +354,7 @@ export async function MarkdownRenderer({
           },
         ],
         rehypeRaw, // Parse raw HTML first (including sidenotes)
+        rehypeAppendix,
         rehypeKatex, // Then process math (including math in sidenotes)
         [
           rehypeShiki,

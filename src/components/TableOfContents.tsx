@@ -5,7 +5,7 @@ interface TocChild {
   id: string
 }
 
-interface TocEntry {
+export interface TocEntry {
   text: string
   id: string
   children: TocChild[]
@@ -68,9 +68,8 @@ export function extractToc(markdown: string): TocEntry[] {
   return toc
 }
 
-export function TableOfContents({content}: {content: string}) {
-  const toc = extractToc(content)
-  if (toc.length < 3) return null
+export function TableOfContents({toc}: {toc: TocEntry[]}) {
+  if (toc.length === 0) return null
 
   return (
     <nav aria-label="Table of contents" className="font-ui">

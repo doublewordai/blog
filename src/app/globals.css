@@ -105,7 +105,9 @@ html, body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-serif), 'Crimson Pro', Georgia, serif;
-  overflow-x: hidden;
+  /* clip, not hidden: hidden makes body a scroll container, which breaks
+     position:sticky for every descendant (the margin ToC relies on it) */
+  overflow-x: clip;
   width: 100%;
   max-width: 100vw;
 }
@@ -1576,4 +1578,21 @@ html[data-theme="dark"] .roofline-breakdown {
     grid-area: value;
     text-align: right;
   }
+}
+
+/* Back matter: an h2 starting with "Appendix" (tagged by rehype-appendix)
+   opens a demoted register — separator rule, muted and smaller headings —
+   for itself and everything after it. Dark mode follows the vars. */
+.prose h2.appendix-start {
+  margin-top: 5rem;
+  padding-top: 2.5rem;
+  border-top: 1px solid var(--rule);
+}
+.prose h2.appendix-start,
+.prose h2.appendix-start ~ h2 {
+  font-size: 1.35rem;
+  color: var(--muted);
+}
+.prose h2.appendix-start ~ h3 {
+  color: var(--muted);
 }

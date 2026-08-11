@@ -278,6 +278,7 @@ export default function DrafterCrossover() {
         <div style={{position: 'relative', height: '1.05rem', marginTop: '3px'}}>
           {BAR_TICKS.map((t) => (
             <span
+              key={t.f}
               style={{position: 'absolute', left: `${t.f * 100}%`, transform: `translateX(${
                 t.f === 0 ? '0' : t.f === 1 ? '-100%' : '-50%'
               })`, fontSize: '0.72rem', fontVariantNumeric: 'tabular-nums', color: theme.mutedForeground, whiteSpace: 'nowrap'}}
