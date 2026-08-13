@@ -253,8 +253,10 @@ a {
   display: none;
 }
 
-/* XL screens: show sidenotes in the right margin */
-@media (min-width: 1280px) {
+/* Wide screens: show sidenotes in the right margin.
+   1400px, not the xl breakpoint: the float overhangs the 64rem container by
+   14rem, which only clears the viewport edge from ~1380px. */
+@media (min-width: 1400px) {
   .sidenote,
   .sidenote-unnumbered {
     display: block;
@@ -312,8 +314,8 @@ html[data-theme="dark"] .sidenote-unnumbered img {
   padding: 0.25rem;
 }
 
-/* Below XL: convert sidenotes to toggle popup */
-@media (max-width: 1279px) {
+/* Below the margin-fit width: convert sidenotes to toggle popup */
+@media (max-width: 1399px) {
   .sidenote-number {
     cursor: pointer;
   }
