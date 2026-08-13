@@ -37,6 +37,10 @@ import ThroughputLadder from './ThroughputLadder'
 import RooflineBreakdown from './RooflineBreakdown'
 import CriuDataPath from './CriuDataPath'
 import CriuResults, {CriuBlockSizeResults} from './CriuResults'
+import GpuStationMap from './GpuStationMap'
+import GpuDramMap from './GpuDramMap'
+import GpuCellSim from './GpuCellSim'
+import GpuFullSim from './GpuFullSim'
 import {
   GigatokenBpePipeline,
   GigatokenCacheLine,
@@ -304,6 +308,10 @@ export async function MarkdownRenderer({
     'gigatoken-cache-line',
     'gigatoken-parallel',
     'shock-regime-map',
+    'station-map',
+    'dram-map',
+    'cell-sim',
+    'full-sim',
   ])
 
   const ParagraphComponent = ({
@@ -317,6 +325,13 @@ export async function MarkdownRenderer({
     if (hasBlockChild) return <>{children}</>
     return <p {...props}>{children}</p>
   }
+
+  // gpuread post (reading one number from GPU memory) figures. The station map
+  // takes a plain `at` string attribute; the others are self-contained.
+  const GpuStationMapBlock = ({at}: {at?: string}) => <GpuStationMap at={at} />
+  const GpuDramMapBlock = () => <GpuDramMap />
+  const GpuCellSimBlock = () => <GpuCellSim />
+  const GpuFullSimBlock = () => <GpuFullSim />
 
   // Shock-regime heatmap for the disaggregated-serving post.
   const ShockRegimeMapBlock = () => <ShockRegimeMap />
@@ -443,6 +458,10 @@ export async function MarkdownRenderer({
           'gigatoken-cache-line': GigatokenCacheLineBlock,
           'gigatoken-parallel': GigatokenParallelBlock,
           'shock-regime-map': ShockRegimeMapBlock,
+          'station-map': GpuStationMapBlock,
+          'dram-map': GpuDramMapBlock,
+          'cell-sim': GpuCellSimBlock,
+          'full-sim': GpuFullSimBlock,
         } as Components
       }
     >
