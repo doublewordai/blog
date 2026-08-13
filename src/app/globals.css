@@ -624,7 +624,7 @@ html[data-theme="dark"] .prose details {
   list-style: none;
   padding: 0.55rem 0.9rem;
   font-family: var(--font-sans), system-ui, sans-serif;
-  font-size: 0.9rem;
+  font-size: 0.75rem;
   font-weight: 600;
   color: var(--accent);
   user-select: none;
@@ -655,6 +655,17 @@ html[data-theme="dark"] .prose details {
 .prose summary strong {
   color: inherit;
   font-weight: 600;
+}
+
+/* Disclosed body: smaller than running text, like the personal blog */
+.prose details {
+  font-size: 0.75rem;
+  line-height: 1.5;
+}
+
+.prose details :is(p, li) {
+  font-size: inherit;
+  line-height: inherit;
 }
 
 /* Inset the disclosed body so it reads as part of the box */
@@ -760,8 +771,16 @@ html[data-theme="dark"] .prose details {
   margin-top: 3rem;
   padding-top: 1.5rem;
   border-top: 1px solid var(--rule);
-  font-size: 1rem;
+  font-size: 0.75rem;
+  line-height: 1.5;
   color: var(--muted);
+}
+
+/* Paragraphs and list items carry their own prose-p/prose-li size;
+   pull them back down */
+.prose .footnotes :is(p, li) {
+  font-size: inherit;
+  line-height: inherit;
 }
 
 .prose .footnotes hr {

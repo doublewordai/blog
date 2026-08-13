@@ -38,6 +38,7 @@ export function extractToc(markdown: string): TocEntry[] {
   let last: TocEntry | null = null
   let inAppendix = false
   let inFence = false
+  let hasFootnotes = false
 
   for (const line of content.split('\n')) {
     if (/^\s*(```|~~~)/.test(line)) {
@@ -45,6 +46,8 @@ export function extractToc(markdown: string): TocEntry[] {
       continue
     }
     if (inFence) continue
+
+    if (/^\[\^[^\]]+\]:/.test(line)) hasFootnotes = true
 
     const m = /^(#{1,6})\s+(.+?)\s*$/.exec(line)
     if (!m) continue
@@ -63,6 +66,18 @@ export function extractToc(markdown: string): TocEntry[] {
     } else if (depth === 3 && last) {
       last.children.push({text, id})
     }
+  }
+
+  // remark-gfm renders footnote definitions as a trailing section with a
+  // generated h2#footnote-label, which never appears in the raw markdown.
+  if (hasFootnotes) {
+    toc.push({
+      text: 'Footnotes',
+      id: 'footnote-label',
+      children: [],
+      appendix: inAppendix,
+      appendixStart: false,
+    })
   }
 
   return toc
