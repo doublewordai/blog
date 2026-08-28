@@ -41,6 +41,9 @@ import GpuStationMap from './GpuStationMap'
 import GpuDramMap from './GpuDramMap'
 import GpuCellSim from './GpuCellSim'
 import GpuFullSim from './GpuFullSim'
+import GpuWriteStationMap from './GpuWriteStationMap'
+import GpuSetSim from './GpuSetSim'
+import GpuChipSim from './GpuChipSim'
 import {
   GigatokenBpePipeline,
   GigatokenCacheLine,
@@ -312,6 +315,9 @@ export async function MarkdownRenderer({
     'dram-map',
     'cell-sim',
     'full-sim',
+    'write-station-map',
+    'set-sim',
+    'chip-sim',
   ])
 
   const ParagraphComponent = ({
@@ -332,6 +338,11 @@ export async function MarkdownRenderer({
   const GpuDramMapBlock = () => <GpuDramMap />
   const GpuCellSimBlock = () => <GpuCellSim />
   const GpuFullSimBlock = () => <GpuFullSim />
+
+  // gpuwrite post (what happens when a GPU writes memory) figures.
+  const GpuWriteStationMapBlock = ({at}: {at?: string}) => <GpuWriteStationMap at={at} />
+  const GpuSetSimBlock = () => <GpuSetSim />
+  const GpuChipSimBlock = () => <GpuChipSim />
 
   // Shock-regime heatmap for the disaggregated-serving post.
   const ShockRegimeMapBlock = () => <ShockRegimeMap />
@@ -462,6 +473,9 @@ export async function MarkdownRenderer({
           'dram-map': GpuDramMapBlock,
           'cell-sim': GpuCellSimBlock,
           'full-sim': GpuFullSimBlock,
+          'write-station-map': GpuWriteStationMapBlock,
+          'set-sim': GpuSetSimBlock,
+          'chip-sim': GpuChipSimBlock,
         } as Components
       }
     >
