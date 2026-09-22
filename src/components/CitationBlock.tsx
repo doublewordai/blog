@@ -15,9 +15,11 @@ export function CitationBlock({bibtex}: {bibtex: string}) {
     await navigator.clipboard.writeText(bibtex)
     setCopied(true)
     setTimeout(() => setCopied(false), 2000)
-    posthog.capture('citation_copied', {
-      current_url: typeof window !== 'undefined' ? window.location.href : undefined,
-    })
+    if (process.env.NEXT_PUBLIC_POSTHOG_KEY) {
+      posthog.capture('citation_copied', {
+        current_url: typeof window !== 'undefined' ? window.location.href : undefined,
+      })
+    }
   }
 
   return (

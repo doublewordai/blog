@@ -22,12 +22,14 @@ export function PaginationLink({
   className,
 }: PaginationLinkProps) {
   const handleClick = () => {
-    posthog.capture('pagination_clicked', {
-      target_page: targetPage,
-      from_page: currentPage,
-      total_pages: totalPages,
-      direction: targetPage > currentPage ? 'next' : targetPage < currentPage ? 'previous' : 'same',
-    })
+    if (process.env.NEXT_PUBLIC_POSTHOG_KEY) {
+      posthog.capture('pagination_clicked', {
+        target_page: targetPage,
+        from_page: currentPage,
+        total_pages: totalPages,
+        direction: targetPage > currentPage ? 'next' : targetPage < currentPage ? 'previous' : 'same',
+      })
+    }
   }
 
   return (

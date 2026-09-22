@@ -128,7 +128,7 @@ export default async function PostPage({params}: Props) {
 
   // Capture server-side post_viewed event
   const posthog = getPostHogClient()
-  posthog.capture({
+  posthog?.capture({
     distinctId: 'anonymous',
     event: 'post_viewed',
     properties: {

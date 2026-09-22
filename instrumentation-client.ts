@@ -1,14 +1,18 @@
 import posthog from "posthog-js"
 
-posthog.init(process.env.NEXT_PUBLIC_POSTHOG_KEY!, {
-  api_host: "/ingest",
-  ui_host: "https://eu.posthog.com",
-  defaults: '2025-05-24',
-  cross_subdomain_cookie: true,
-  person_profiles: 'always',
-  capture_exceptions: true,
-  debug: process.env.NODE_ENV === "development",
-});
+const posthogKey = process.env.NEXT_PUBLIC_POSTHOG_KEY
+
+if (posthogKey) {
+  posthog.init(posthogKey, {
+    api_host: "/ingest",
+    ui_host: "https://eu.posthog.com",
+    defaults: '2025-05-24',
+    cross_subdomain_cookie: true,
+    person_profiles: 'always',
+    capture_exceptions: true,
+    debug: process.env.NODE_ENV === "development",
+  });
+}
 
 // IMPORTANT: Never combine this approach with other client-side PostHog initialization approaches,
 // especially components like a PostHogProvider. instrumentation-client.ts is the correct solution

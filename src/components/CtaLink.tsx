@@ -38,12 +38,14 @@ export function CtaLink({
   const analyticsDestination = buildCtaAnalyticsDestination(destination)
 
   const handleClick = () => {
-    posthog.capture('cta_clicked', {
-      cta_location: ctaLocation,
-      post_slug: postSlug,
-      post_title: postTitle,
-      destination: analyticsDestination,
-    })
+    if (process.env.NEXT_PUBLIC_POSTHOG_KEY) {
+      posthog.capture('cta_clicked', {
+        cta_location: ctaLocation,
+        post_slug: postSlug,
+        post_title: postTitle,
+        destination: analyticsDestination,
+      })
+    }
   }
 
   return (
