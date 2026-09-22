@@ -123,8 +123,8 @@ function createSidenoteNode(content, unnumbered) {
 
   // Convert mdast children to HTML using proper utilities
   const wrapper = {type: 'paragraph', children: content}
-  const hast = toHast(wrapper)
-  let contentHtml = toHtml(hast)
+  const hast = toHast(wrapper, {allowDangerousHtml: true})
+  let contentHtml = toHtml(hast, {allowDangerousHtml: true})
   // Remove wrapping <p> tags
   contentHtml = contentHtml.replace(/^<p>/, '').replace(/<\/p>\n?$/, '')
 
