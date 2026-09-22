@@ -428,6 +428,15 @@ export async function MarkdownRenderer({
       ]}
       components={
         {
+          table: ({children, ...props}: React.TableHTMLAttributes<HTMLTableElement> & {node?: unknown}) => {
+            // The Markdown syntax-tree node is metadata, not a DOM attribute.
+            delete props.node
+            return (
+              <div className="table-scroll" role="region" aria-label="Scrollable table" tabIndex={0}>
+                <table {...props}>{children}</table>
+              </div>
+            )
+          },
           img: ImageComponent,
           pre: PreComponent,
           p: ParagraphComponent,
