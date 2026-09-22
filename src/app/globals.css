@@ -1665,5 +1665,5 @@ html[data-theme="dark"] .prose .attention-background {
 }
 
 /* Pass the selected page theme to embedded SVG color palettes. */
-html[data-theme="light"] .prose img { color-scheme: light; }
-html[data-theme="dark"] .prose img { color-scheme: dark; }
+html[data-theme="light"] .prose img:is([src$=".svg"], [src*=".svg?"], [src*=".svg#"]) { color-scheme: light; }
+html[data-theme="dark"] .prose img:is([src$=".svg"], [src*=".svg?"], [src*=".svg#"]) { color-scheme: dark; }

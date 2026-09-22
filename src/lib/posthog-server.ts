@@ -2,7 +2,7 @@ import { PostHog } from 'posthog-node';
 
 let posthogClient: PostHog | null = null;
 
-export function getPostHogClient() {
+export function getPostHogClient(): PostHog | null {
   const apiKey = process.env.NEXT_PUBLIC_POSTHOG_KEY;
   if (!apiKey) return null;
 
