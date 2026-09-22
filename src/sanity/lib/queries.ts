@@ -54,6 +54,10 @@ export const POST_QUERY = defineQuery(`*[_type == "post" && slug.current == $slu
       _id,
       url
     },
+    darkAsset-> {
+      _id,
+      url
+    },
     alt,
     caption
   }

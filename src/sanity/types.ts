@@ -25,6 +25,11 @@ export interface PostImage {
     _id: string
     url: string
   }
+  /** Optional fixed-palette asset selected by the page theme. */
+  darkAsset?: {
+    _id: string
+    url: string
+  } | null
   alt?: string
   caption?: string
 }
