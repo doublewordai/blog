@@ -17,10 +17,12 @@ export default function CopyButton() {
     setTimeout(() => setCopied(false), 2000)
 
     // Capture code copy event in PostHog
-    posthog.capture('code_copied', {
-      code_length: code.length,
-      current_url: window.location.href,
-    })
+    if (process.env.NEXT_PUBLIC_POSTHOG_KEY) {
+      posthog.capture('code_copied', {
+        code_length: code.length,
+        current_url: window.location.href,
+      })
+    }
   }
 
   return (

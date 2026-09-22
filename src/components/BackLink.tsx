@@ -14,10 +14,12 @@ interface BackLinkProps {
 
 export function BackLink({href, fromPostSlug, fromPostTitle, children, className}: BackLinkProps) {
   const handleClick = () => {
-    posthog.capture('back_to_articles_clicked', {
-      from_post_slug: fromPostSlug,
-      from_post_title: fromPostTitle,
-    })
+    if (process.env.NEXT_PUBLIC_POSTHOG_KEY) {
+      posthog.capture('back_to_articles_clicked', {
+        from_post_slug: fromPostSlug,
+        from_post_title: fromPostTitle,
+      })
+    }
   }
 
   return (
