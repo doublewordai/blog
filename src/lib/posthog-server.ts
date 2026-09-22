@@ -3,9 +3,12 @@ import { PostHog } from 'posthog-node';
 let posthogClient: PostHog | null = null;
 
 export function getPostHogClient() {
+  const apiKey = process.env.NEXT_PUBLIC_POSTHOG_KEY;
+  if (!apiKey) return null;
+
   if (!posthogClient) {
     posthogClient = new PostHog(
-      process.env.NEXT_PUBLIC_POSTHOG_KEY!,
+      apiKey,
       {
         host: process.env.NEXT_PUBLIC_POSTHOG_HOST,
         flushAt: 1,

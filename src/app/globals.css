@@ -783,6 +783,22 @@ html[data-theme="dark"] .prose details {
   line-height: inherit;
 }
 
+/* Keep supporting tables at the surrounding footnote scale. */
+.prose .footnotes table {
+  font-size: inherit;
+  line-height: 1.4;
+  margin: 0.75rem 0;
+}
+
+.prose .footnotes :is(th, td) {
+  padding: 0.25rem 0.6rem 0.25rem 0;
+}
+
+.prose .footnotes td code {
+  font-size: 0.95em;
+  font-weight: 400;
+}
+
 .prose .footnotes hr {
   display: none; /* GFM adds an hr by default */
 }
@@ -1617,3 +1633,37 @@ html[data-theme="dark"] .roofline-breakdown {
 .prose h2.appendix-start ~ h3 {
   color: var(--muted);
 }
+
+/* Expanded attention background panel for the SWE-bench article. */
+.prose .attention-background {
+  --background-inset: 1rem;
+  margin: 2.75rem calc(-1 * var(--background-inset));
+  padding: 1.5rem var(--background-inset) 1.6rem;
+  border-radius: 0.5rem;
+  background: color-mix(in srgb, var(--foreground) 4%, var(--background));
+  color: var(--foreground);
+}
+
+html[data-theme="dark"] .prose .attention-background {
+  background: color-mix(in srgb, var(--foreground) 7%, var(--background));
+}
+
+.prose .attention-background > h2 {
+  margin-top: 0;
+}
+
+.prose .attention-background > :last-child {
+  margin-bottom: 0;
+}
+
+@media (min-width: 640px) {
+  .prose .attention-background {
+    --background-inset: 1.5rem;
+    padding-top: 1.75rem;
+    padding-bottom: 1.9rem;
+  }
+}
+
+/* Pass the selected page theme to embedded SVG color palettes. */
+html[data-theme="light"] .prose img { color-scheme: light; }
+html[data-theme="dark"] .prose img { color-scheme: dark; }
