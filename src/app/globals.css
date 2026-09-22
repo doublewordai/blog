@@ -1681,3 +1681,15 @@ html[data-theme="dark"] .prose img:is([src$=".svg"], [src*=".svg?"], [src*=".svg
   white-space: nowrap;
 }
 .sidenote .math-keep { white-space: nowrap; }
+
+/* Fixed-palette pairs avoid Safari's embedded SVG color-scheme limitation.
+   display:none also removes the inactive image from the accessibility tree. */
+.prose img[data-figure-theme="dark"] {
+  display: none;
+}
+html[data-theme="dark"] .prose img[data-figure-theme="light"] {
+  display: none;
+}
+html[data-theme="dark"] .prose img[data-figure-theme="dark"] {
+  display: block;
+}

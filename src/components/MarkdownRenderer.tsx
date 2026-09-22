@@ -1,4 +1,6 @@
 import {MarkdownAsync, type Components} from 'react-markdown'
+import {ThemedImage} from './ThemedImage'
+import type {PostImage} from '@/sanity/types'
 import remarkGfm from 'remark-gfm'
 import remarkMath from 'remark-math'
 import remarkFrontmatter from 'remark-frontmatter'
@@ -52,15 +54,7 @@ import {
   GigatokenUnicodePath,
 } from './GigatokenDiagrams'
 
-type ImageData = {
-  filename: string
-  asset: {
-    _id: string
-    url: string
-  }
-  alt?: string
-  caption?: string
-}
+type ImageData = Omit<PostImage, '_key'>
 
 export async function MarkdownRenderer({
   content,
@@ -102,13 +96,13 @@ export async function MarkdownRenderer({
     if (caption) {
       return (
         <figure className="my-6">
-          <img src={srcString} alt={altText} className={imgClass} {...props} />
+          <ThemedImage src={srcString} alt={altText} className={imgClass} {...props} darkSrc={imageData?.darkAsset?.url} />
           <figcaption className="mt-2 text-sm text-gray-600 text-center italic">{caption}</figcaption>
         </figure>
       )
     }
 
-    return <img src={srcString} alt={altText} className={imgClass} {...props} />
+    return <ThemedImage src={srcString} alt={altText} className={imgClass} {...props} darkSrc={imageData?.darkAsset?.url} />
   }
 
   // Helper function to extract text from React children recursively
