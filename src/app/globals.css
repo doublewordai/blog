@@ -1148,6 +1148,8 @@ html[data-theme="dark"] .post-cta {
 /* Display math (block equations) */
 .katex-display {
   margin: 1.5rem 0;
+  /* Leave room for fraction numerators and accents inside the scroll area. */
+  padding: 0.35em 0.1em;
   overflow-x: auto;
   overflow-y: hidden;
 }
@@ -1667,3 +1669,15 @@ html[data-theme="dark"] .prose .attention-background {
 /* Pass the selected page theme to embedded SVG color palettes. */
 html[data-theme="light"] .prose img:is([src$=".svg"], [src*=".svg?"], [src*=".svg#"]) { color-scheme: light; }
 html[data-theme="dark"] .prose img:is([src$=".svg"], [src*=".svg?"], [src*=".svg#"]) { color-scheme: dark; }
+
+/* Keep sidenote equations aligned and inline symbols with their punctuation. */
+.sidenote .sidenote-equation {
+  display: block;
+  margin: 0.65em 0;
+  line-height: 1.4;
+}
+.sidenote .sidenote-equation .katex {
+  font-size: 0.98em;
+  white-space: nowrap;
+}
+.sidenote .math-keep { white-space: nowrap; }
