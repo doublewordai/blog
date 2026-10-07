@@ -51,7 +51,7 @@
     "@vercel/frameworks": {
       "js-yaml": "^3.14.2"
     },
-    "adm-zip": "0.6.0"
+    "adm-zip": "0.6.1"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
